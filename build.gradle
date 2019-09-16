@@ -13,4 +13,5 @@ repositories {
 }
 dependencies {
 	testCompile 'org.junit.jupiter:junit-jupiter:5.5.2'
+	testCompile 'org.hamcrest:hamcrest-all:1.3'
 }
