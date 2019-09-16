@@ -50,7 +50,6 @@ public class PointImpl implements Point {
 
 	@Override
 	public boolean equals(Point other) {
-		return (getRow() == other.getRow() && getColumn() == other.getColumn()) ? true : false;
+		return (row == other.getRow() && column == other.getColumn()) ? true : false;
 	}
-
 }

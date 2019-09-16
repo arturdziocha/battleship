@@ -31,8 +31,7 @@ public class ShipImpl implements Ship {
 
 	@Override
 	public ShipClass getShipClass() {
-		// TODO Auto-generated method stub
-		return null;
+		return shipClass;
 	}
 
 	@Override
