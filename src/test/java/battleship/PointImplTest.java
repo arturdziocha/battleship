@@ -55,6 +55,11 @@ class PointImplTest {
 		point.hit();
 		assertTrue(point.isHit());
 	}
+	@Test
+	void IsTheSameReturnTrueWhenThisSamePoint() {
+		Point p = new PointImpl(5, 7);
+		assertTrue(point.isTheSame(p));
+	}
 
 	@Test
 	void equalsReturnTrueWhenThisSamePoint() {

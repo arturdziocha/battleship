@@ -7,7 +7,7 @@ public interface Point {
 
 	boolean isNeighbor(Point other);
 
-	boolean equals(Point other);
+	boolean isTheSame(Point other);
 
 	boolean isOccupied();
 

@@ -20,13 +20,23 @@ public class ShipImpl implements Ship {
 		this.direction = direction;
 		this.point = point;
 		this.points = new ArrayList<>();
+		calculatePoints();
 
+	}
+
+	private void calculatePoints() {
 		switch (direction) {
 		case North:
-			for (int i = shipClass.getSize(); i > 0; i--) {
-				this.points.add(new PointImpl(point.getRow() + 1 - i, point.getColumn()));
-			}
+			fillNorth();
+			break;
+		case South:
+			fillSouth();
+			break;
+		case East:
+			fillEast();
+			break;
 		}
+
 	}
 
 	@Override
@@ -36,8 +46,7 @@ public class ShipImpl implements Ship {
 
 	@Override
 	public int getSize() {
-		// TODO Auto-generated method stub
-		return 0;
+		return size;
 	}
 
 	@Override
@@ -71,6 +80,24 @@ public class ShipImpl implements Ship {
 	public void shoot(Point point) {
 		// TODO Auto-generated method stub
 
+	}
+
+	private void fillNorth() {
+		for (int i = 0; i < size; i++) {
+			this.points.add(new PointImpl(point.getRow() - i, point.getColumn()));
+		}
+	}
+
+	private void fillSouth() {
+		for (int i = 0; i < shipClass.getSize(); i++) {
+			this.points.add(new PointImpl(point.getRow() + i, point.getColumn()));
+		}
+	}
+
+	private void fillEast() {
+		for (int i = 0; i < shipClass.getSize(); i++) {
+			this.points.add(new PointImpl(point.getRow(), point.getColumn() - i));
+		}
 	}
 
 }
