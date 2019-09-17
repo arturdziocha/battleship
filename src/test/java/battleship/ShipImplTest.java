@@ -2,11 +2,9 @@ package battleship;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.util.Arrays;
-import java.util.List;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -52,7 +50,7 @@ class ShipImplTest {
 	}
 
 	@Test
-	void nortPointsBarcaCreated() {
+	void northPointsBarcaCreated() {
 		Point[] points = { new PointImpl(5, 6) };
 		ship = new ShipImpl(ShipClass.Barca, direction, point);
 		assertThat(ship.getPoints(), containsInAnyOrder(points));
@@ -136,10 +134,86 @@ class ShipImplTest {
 		ship = new ShipImpl(ShipClass.Carrier, Direction.East, point);
 		assertThat(ship.getPoints(), containsInAnyOrder(points));
 	}
+
 	@Test
 	void westPointsBarcaCreated() {
 		Point[] points = { new PointImpl(5, 6) };
 		ship = new ShipImpl(ShipClass.Barca, Direction.West, point);
 		assertThat(ship.getPoints(), containsInAnyOrder(points));
+	}
+
+	@Test
+	void westPointsDestroyerCreated() {
+		Point[] points = { new PointImpl(5, 6), new PointImpl(5, 7), new PointImpl(5, 8) };
+		ship = new ShipImpl(ShipClass.Destroyer, Direction.West, point);
+		assertThat(ship.getPoints(), containsInAnyOrder(points));
+	}
+
+	@Test
+	void westPointsCarrierCreated() {
+		Point[] points = { new PointImpl(5, 5), new PointImpl(5, 6), new PointImpl(5, 7), new PointImpl(5, 8),
+		        new PointImpl(5, 9) };
+		ship = new ShipImpl(ShipClass.Carrier, Direction.West, new PointImpl(5, 5));
+		assertThat(ship.getPoints(), containsInAnyOrder(points));
+	}
+
+	@Test
+	void shipShotShouldSetPointHit() {
+		Point p = new PointImpl(4, 6);
+		ship.shoot(p);
+		assertTrue(ship.getPointAt(p)
+		        .isPresent());
+		assertTrue(ship.getPointAt(p)
+		        .get()
+		        .isHit());
+	}
+
+	@Test
+	void isSunkReturnFalseWithoutShot() {
+		ship.shoot(new PointImpl(4, 6));
+		assertFalse(ship.isSunk());
+	}
+
+	@Test
+	void isSunkReturnFalseWithOneShot() {
+		ship.shoot(new PointImpl(4, 6));
+		assertFalse(ship.isSunk());
+	}
+
+	@Test
+	void isSunkReturnFalseWithTwoShots() {
+		ship.shoot(new PointImpl(3, 6));
+		ship.shoot(new PointImpl(5, 6));
+		assertFalse(ship.isSunk());
+	}
+
+	@Test
+	void isSunkReturnTrue() {
+		ship.shoot(new PointImpl(4, 6));
+		ship.shoot(new PointImpl(5, 6));
+		ship.shoot(new PointImpl(3, 6));
+		assertTrue(ship.isSunk());
+	}
+
+	@Test
+	void otherShipIsNorthAndToCloseReturnTrue() {
+		Ship toCloseShip = new ShipImpl(shipClass, direction, new PointImpl(6, 6));
+		assertTrue(ship.toCloseTo(toCloseShip));
+	}
+
+	@Test
+	void otherShipIsNorthAndNotToCloseReturnFalse() {
+		Ship notToCloseShip = new ShipImpl(shipClass, direction, new PointImpl(5, 4));
+		assertFalse(ship.toCloseTo(notToCloseShip));
+	}
+	@Test
+	void otherShipIsSouthAndToCloseReturnTrue() {
+		Ship toCloseShip = new ShipImpl(shipClass, Direction.South, new PointImpl(6, 5));
+		assertTrue(ship.toCloseTo(toCloseShip));
+	}
+	@Test
+	void otherShipIsSouthAndNotToCloseReturnFalse() {
+		Ship notToCloseShip = new ShipImpl(shipClass, Direction.South, new PointImpl(7, 5));
+		assertFalse(ship.toCloseTo(notToCloseShip));
 	}
 }

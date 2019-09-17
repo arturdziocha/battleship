@@ -55,10 +55,11 @@ class PointImplTest {
 		point.hit();
 		assertTrue(point.isHit());
 	}
+
 	@Test
 	void IsTheSameReturnTrueWhenThisSamePoint() {
 		Point p = new PointImpl(5, 7);
-		assertTrue(point.isTheSame(p));
+		assertTrue(point.equals(p));
 	}
 
 	@Test
@@ -74,20 +75,56 @@ class PointImplTest {
 	}
 
 	@Test
-	void isNeighborReturnTrueWhenOtherIsNeighbor() {
+	void isNeighborReturnTrueWhenOtherIs67() {
 		Point p = new PointImpl(6, 7);
 		assertTrue(point.isNeighbor(p));
 	}
 
 	@Test
-	void isNeighborReturnTrueWhenOtherIsNeigbor2() {
+	void isNeighborReturnTrueWhenOtherIs68() {
+		Point p = new PointImpl(6, 8);
+		assertTrue(point.isNeighbor(p));
+	}
+
+	@Test
+	void isNeighborReturnTrueWhenOtherIs58() {
 		Point p = new PointImpl(5, 8);
 		assertTrue(point.isNeighbor(p));
 	}
 
 	@Test
+	void isNeighborReturnTrueWhenOtherIs48() {
+		Point p = new PointImpl(4, 8);
+		assertTrue(point.isNeighbor(p));
+	}
+
+	@Test
+	void isNeighborReturnTrueWhenOtherIs47() {
+		Point p = new PointImpl(4, 7);
+		assertTrue(point.isNeighbor(p));
+	}
+
+	@Test
+	void isNeighborReturnTrueWhenOtherIs46() {
+		Point p = new PointImpl(4, 6);
+		assertTrue(point.isNeighbor(p));
+	}
+
+	@Test
+	void isNeighborReturnTrueWhenOtherIs56() {
+		Point p = new PointImpl(5, 6);
+		assertTrue(point.isNeighbor(p));
+	}
+
+	@Test
+	void isNeighborReturnTrueWhenOtherIs66() {
+		Point p = new PointImpl(6, 6);
+		assertTrue(point.isNeighbor(p));
+	}
+
+	@Test
 	void isNeighborReturnFalseWhenOtherIsNotNeighbor() {
-		Point p = new PointImpl(3, 5);
+		Point p = new PointImpl(3, 6);
 		assertFalse(point.isNeighbor(p));
 	}
 

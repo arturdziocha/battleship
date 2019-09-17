@@ -49,11 +49,6 @@ public class PointImpl implements Point {
 	}
 
 	@Override
-	public boolean isTheSame(Point other) {
-		return (row == other.getRow() && column == other.getColumn()) ? true : false;
-	}
-
-	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;

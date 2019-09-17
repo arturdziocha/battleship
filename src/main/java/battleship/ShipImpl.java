@@ -2,6 +2,7 @@ package battleship;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import battleship.enums.ShipClass;
 import battleship.interfaces.Point;
@@ -35,6 +36,9 @@ public class ShipImpl implements Ship {
 		case East:
 			fillEast();
 			break;
+		case West:
+			fillWest();
+			break;
 		}
 
 	}
@@ -55,6 +59,12 @@ public class ShipImpl implements Ship {
 	}
 
 	@Override
+	public Optional<Point> getPointAt(Point p) {
+		return points.stream()
+		        .filter(point -> point.equals(p))
+		        .findFirst();
+	}
+
 	public Point getPoint() {
 		return point;
 	}
@@ -65,39 +75,53 @@ public class ShipImpl implements Ship {
 	}
 
 	@Override
-	public boolean isSunk() {
-		// TODO Auto-generated method stub
-		return false;
+	public void shoot(Point point) {
+		Optional<Point> optional = getPointAt(point);
+		optional.ifPresent(p -> p.hit());
 	}
 
 	@Override
 	public boolean toCloseTo(Ship other) {
-		// TODO Auto-generated method stub
+		for (Point otherPoint : other.getPoints()) {
+			for(int i = 0; i<size;i++) {
+				if (points.get(i)
+				        .isNeighbor(otherPoint)) {
+					return true;
+				}
+			}
+		}
 		return false;
 	}
 
 	@Override
-	public void shoot(Point point) {
-		// TODO Auto-generated method stub
-
+	public boolean isSunk() {
+		return points.stream()
+		        .allMatch(p -> p.isHit());
 	}
 
 	private void fillNorth() {
 		for (int i = 0; i < size; i++) {
-			this.points.add(new PointImpl(point.getRow() - i, point.getColumn()));
+			this.points.add(new PointImpl(getPoint().getRow() - i, getPoint().getColumn()));
 		}
 	}
 
 	private void fillSouth() {
-		for (int i = 0; i < shipClass.getSize(); i++) {
-			this.points.add(new PointImpl(point.getRow() + i, point.getColumn()));
+		for (int i = 0; i < size; i++) {
+			this.points.add(new PointImpl(getPoint().getRow() + i, getPoint().getColumn()));
 		}
 	}
 
 	private void fillEast() {
-		for (int i = 0; i < shipClass.getSize(); i++) {
-			this.points.add(new PointImpl(point.getRow(), point.getColumn() - i));
+		for (int i = 0; i < size; i++) {
+			this.points.add(new PointImpl(getPoint().getRow(), getPoint().getColumn() - i));
 		}
+	}
+
+	private void fillWest() {
+		for (int i = 0; i < size; i++) {
+			this.points.add(new PointImpl(getPoint().getRow(), getPoint().getColumn() + i));
+		}
+
 	}
 
 }
