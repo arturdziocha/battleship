@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import battleship.interfaces.Point;
+import battleship.cmdImpl.PointImpl;
 
 class PointTest {
 	int row = 5;
@@ -73,7 +73,11 @@ class PointTest {
 		Point p = new PointImpl(5, 8);
 		assertFalse(point.equals(p));
 	}
-
+	@Test
+	void isNeighborReturnTrueWhenOtherIs66() {
+		Point p = new PointImpl(6, 6);
+		assertTrue(point.isNeighbor(p));
+	}
 	@Test
 	void isNeighborReturnTrueWhenOtherIs67() {
 		Point p = new PointImpl(6, 7);
@@ -116,15 +120,46 @@ class PointTest {
 		assertTrue(point.isNeighbor(p));
 	}
 
-	@Test
-	void isNeighborReturnTrueWhenOtherIs66() {
-		Point p = new PointImpl(6, 6);
-		assertTrue(point.isNeighbor(p));
-	}
+	
 
 	@Test
-	void isNeighborReturnFalseWhenOtherIsNotNeighbor() {
+	void isNeighborReturnFalseWhenOtherIs55() {
+		Point p = new PointImpl(5, 5);
+		assertFalse(point.isNeighbor(p));
+	}
+	@Test
+	void isNeighborReturnFalseWhenOtherIs36() {
 		Point p = new PointImpl(3, 6);
+		assertFalse(point.isNeighbor(p));
+	}
+	@Test
+	void isNeighborReturnFalseWhenOtherIs37() {
+		Point p = new PointImpl(3, 7);
+		assertFalse(point.isNeighbor(p));
+	}
+	@Test
+	void isNeighborReturnFalseWhenOtherIs38() {
+		Point p = new PointImpl(3, 9);
+		assertFalse(point.isNeighbor(p));
+	}
+	@Test
+	void isNeighborReturnFalseWhenOtherIs39() {
+		Point p = new PointImpl(3, 9);
+		assertFalse(point.isNeighbor(p));
+	}
+	@Test
+	void isNeighborReturnFalseWhenOtherIs49() {
+		Point p = new PointImpl(4, 9);
+		assertFalse(point.isNeighbor(p));
+	}
+	@Test
+	void isNeighborReturnFalseWhenOtherIs59() {
+		Point p = new PointImpl(5, 9);
+		assertFalse(point.isNeighbor(p));
+	}
+	@Test
+	void isNeighborReturnFalseWhenOtherIs69() {
+		Point p = new PointImpl(6, 9);
 		assertFalse(point.isNeighbor(p));
 	}
 

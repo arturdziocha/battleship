@@ -1,4 +1,4 @@
-package battleship.interfaces;
+package battleship;
 
 public interface Point {
 	int getRow();

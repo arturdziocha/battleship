@@ -1,13 +1,13 @@
-package battleship;
+package battleship.cmdImpl;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import battleship.Point;
+import battleship.Ship;
 import battleship.enums.Direction;
 import battleship.enums.ShipClass;
-import battleship.interfaces.Point;
-import battleship.interfaces.Ship;
 
 public class ShipImpl implements Ship {
     private ShipClass shipClass;
@@ -15,6 +15,7 @@ public class ShipImpl implements Ship {
     private Direction direction;
     private Point point;
     private List<Point> points;
+    private boolean placed;
 
     public ShipImpl(ShipClass shipClass, Direction direction, Point point) {
         this.shipClass = shipClass;
@@ -22,23 +23,24 @@ public class ShipImpl implements Ship {
         this.direction = direction;
         this.point = point;
         this.points = new ArrayList<>();
+        this.placed = false;
         calculatePoints();
 
     }
 
     private void calculatePoints() {
         switch (direction) {
-            case North:
-                fillNorth();
+            case Top:
+                fillTop();
                 break;
-            case South:
-                fillSouth();
+            case Bottom:
+                fillBottom();
                 break;
-            case East:
-                fillEast();
+            case Right:
+                fillRight();
                 break;
-            case West:
-                fillWest();
+            case Left:
+                fillLeft();
                 break;
         }
 
@@ -119,26 +121,32 @@ public class ShipImpl implements Ship {
         return points.stream()
                 .allMatch(p -> p.isHit());
     }
+    public void place() {
+    	this.placed = true;
+    }
+    public boolean isPlaced() {
+    	return placed;
+    }
 
-    private void fillNorth() {
+    private void fillTop() {
         for (int i = 0; i < size; i++) {
             this.points.add(new PointImpl(getPoint().getRow() - i, getPoint().getColumn()));
         }
     }
 
-    private void fillSouth() {
+    private void fillBottom() {
         for (int i = 0; i < size; i++) {
             this.points.add(new PointImpl(getPoint().getRow() + i, getPoint().getColumn()));
         }
     }
 
-    private void fillEast() {
+    private void fillRight() {
         for (int i = 0; i < size; i++) {
             this.points.add(new PointImpl(getPoint().getRow(), getPoint().getColumn() + i));
         }
     }
 
-    private void fillWest() {
+    private void fillLeft() {
         for (int i = 0; i < size; i++) {
             this.points.add(new PointImpl(getPoint().getRow(), getPoint().getColumn() - i));
         }

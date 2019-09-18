@@ -1,4 +1,4 @@
-package battleship.interfaces;
+package battleship;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,8 +18,12 @@ public interface Ship {
     Point getPoint();
 
     List<Point> getPoints();
+    
+    boolean isPlaced();
 
     boolean isSunk();
+    
+    void place();
 
     boolean toCloseTo(Ship other);
 

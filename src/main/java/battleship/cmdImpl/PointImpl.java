@@ -1,7 +1,7 @@
-package battleship;
+package battleship.cmdImpl;
 
+import battleship.Point;
 import battleship.enums.PointStatus;
-import battleship.interfaces.Point;
 
 public class PointImpl implements Point {
 	private int row;
@@ -45,7 +45,7 @@ public class PointImpl implements Point {
 
 	@Override
 	public boolean isNeighbor(Point other) {
-		return (Math.abs(getRow() - other.getRow()) <= 1 && getColumn() - other.getColumn() <= 1);
+		return (Math.abs(getRow() - other.getRow()) <= 1) && (Math.abs(getColumn() - other.getColumn() )<= 1);
 	}
 
 	@Override
