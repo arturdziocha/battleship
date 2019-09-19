@@ -31,13 +31,11 @@ public class PointImpl implements Point {
 		return status == PointStatus.Hit;
 	}
 
-	public boolean isOccupied() {
-		return status == PointStatus.Occupied;
-	}
-
-	public void occupy() {
-		this.status = PointStatus.Occupied;
-	}
+	/**
+	 * public boolean isOccupied() { return status == PointStatus.Occupied; }
+	 * 
+	 * public void occupy() { this.status = PointStatus.Occupied; }
+	 */
 
 	public void hit() {
 		this.status = PointStatus.Hit;
@@ -45,7 +43,7 @@ public class PointImpl implements Point {
 
 	@Override
 	public boolean isNeighbor(Point other) {
-		return (Math.abs(getRow() - other.getRow()) <= 1) && (Math.abs(getColumn() - other.getColumn() )<= 1);
+		return (Math.abs(getRow() - other.getRow()) <= 1) && (Math.abs(getColumn() - other.getColumn()) <= 1);
 	}
 
 	@Override
@@ -72,7 +70,5 @@ public class PointImpl implements Point {
 			return false;
 		return true;
 	}
-	
-	
-	
+
 }

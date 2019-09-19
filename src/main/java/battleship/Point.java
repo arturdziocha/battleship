@@ -9,11 +9,11 @@ public interface Point {
 
 	boolean equals(Object other);
 
-	boolean isOccupied();
+	// boolean isOccupied();
 
 	boolean isHit();
 
-	void occupy();
+	// void occupy();
 
 	void hit();
 }

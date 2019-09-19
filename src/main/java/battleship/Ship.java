@@ -17,13 +17,9 @@ public interface Ship {
 
     Point getPoint();
 
-    List<Point> getPoints();
-    
-    boolean isPlaced();
+    List<Point> getPoints();     
 
     boolean isSunk();
-    
-    void place();
 
     boolean toCloseTo(Ship other);
 

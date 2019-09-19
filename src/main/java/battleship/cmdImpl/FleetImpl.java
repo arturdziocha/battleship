@@ -25,8 +25,7 @@ public class FleetImpl implements Fleet {
 	public boolean placeShip(Ship ship) {
 		if (ship.getSize() > SIZE || isInsideBoard(ship) || isToClose(ship) || isAlreadyPlaced(ship)) {
 			return false;
-		} else {
-			ship.place();
+		} else {			
 			ships.add(ship);
 			return true;
 		}

@@ -1,10 +1,11 @@
-package battleship;
+package battleship.cmdImpl;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import battleship.Point;
 import battleship.cmdImpl.PointImpl;
 
 class PointTest {
@@ -32,7 +33,7 @@ class PointTest {
 		assertTrue(point.isEmpty());
 	}
 
-	@Test
+	/**@Test
 	void whenOccupyIsOccupiedIsTrue() {
 		point.occupy();
 		assertTrue(point.isOccupied());
@@ -48,7 +49,7 @@ class PointTest {
 	void whenHitIsOccupiedIsFalse() {
 		point.hit();
 		assertFalse(point.isOccupied());
-	}
+	}*/
 
 	@Test
 	void whenHitIsHitISTrue() {

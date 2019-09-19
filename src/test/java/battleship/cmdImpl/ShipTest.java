@@ -1,4 +1,4 @@
-package battleship;
+package battleship.cmdImpl;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -10,6 +10,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import battleship.Point;
+import battleship.Ship;
 import battleship.cmdImpl.PointImpl;
 import battleship.cmdImpl.ShipImpl;
 import battleship.enums.Direction;
@@ -230,11 +232,7 @@ class ShipTest {
 	@Test
 	void shipIsRightAndotherShipIsBottomAndNotToCloseReturnFalse() {
 		Ship ship = new ShipImpl(ShipClass.Destroyer, Direction.Right, new PointImpl(0, 1));
-		Ship ship2 = new ShipImpl(ShipClass.Destroyer, Direction.Bottom, new PointImpl(1, 5));
-		ship.getPoints()
-		        .forEach(p -> System.out.println("(" + p.getRow() + "," + p.getColumn() + ")"));
-		ship2.getPoints()
-		        .forEach(p -> System.out.println("(" + p.getRow() + "," + p.getColumn() + ")"));
+		Ship ship2 = new ShipImpl(ShipClass.Destroyer, Direction.Bottom, new PointImpl(1, 5));		
 		assertFalse(ship.toCloseTo(ship2));
 	}
 

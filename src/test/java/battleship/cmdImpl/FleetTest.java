@@ -1,17 +1,15 @@
-package battleship;
+package battleship.cmdImpl;
 
-import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import battleship.Fleet;
+import battleship.Point;
+import battleship.Ship;
 import battleship.cmdImpl.FleetImpl;
 import battleship.cmdImpl.PointImpl;
 import battleship.cmdImpl.ShipImpl;
@@ -69,10 +67,6 @@ public class FleetTest {
 		Ship ship = new ShipImpl(ShipClass.Destroyer, Direction.Right, new PointImpl(0, 1));
 		Ship ship2 = new ShipImpl(ShipClass.Submarine, Direction.Bottom, new PointImpl(1, 5));
 		Ship toClose = new ShipImpl(ShipClass.Battleship, Direction.Right, new PointImpl(3, 1));
-		/*
-		 * ship.getPoints().forEach(p -> System.out.println("(" + p.getRow() + "," +
-		 * p.getColumn() + ")"));
-		 */
 
 		assertTrue(fleet.placeShip(ship));
 		assertTrue(fleet.placeShip(ship2));
@@ -120,9 +114,11 @@ public class FleetTest {
 		Point point = new PointImpl(8, 4);
 		fleet.placeShip(ship);
 		assertTrue(fleet.shipAt(new PointImpl(8, 4))
-		        .isPresent());			
-		assertEquals(ship, fleet.shipAt(point).get());
+		        .isPresent());
+		assertEquals(ship, fleet.shipAt(point)
+		        .get());
 	}
+
 	@Test
 	void getAtAndShipNotExistsAtPointReturnOptionalOfShip() {
 		Ship ship = new ShipImpl(ShipClass.Destroyer, Direction.Bottom, new PointImpl(7, 4));
@@ -131,12 +127,10 @@ public class FleetTest {
 		assertFalse(fleet.shipAt(point)
 		        .isPresent());
 	}
+
 	@Test
 	void placeAllShipsRandomReturnTrue() {
 		fleet.placeShipsRandom();
-		fleet.getShips().forEach(s->System.out.println(s.getShipClass()));
-		//List<Ship> ships = fleet.getShips().stream().flatMap(ship->ship.getPoints().stream()).map(p->p.);
-		
 		assertTrue(fleet.isAllShipsPlaced());
 	}
 

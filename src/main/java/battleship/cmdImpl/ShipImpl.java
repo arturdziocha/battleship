@@ -14,16 +14,14 @@ public class ShipImpl implements Ship {
     private int size;
     private Direction direction;
     private Point point;
-    private List<Point> points;
-    private boolean placed;
+    private List<Point> points;    
 
     public ShipImpl(ShipClass shipClass, Direction direction, Point point) {
         this.shipClass = shipClass;
         this.size = shipClass.getSize();
         this.direction = direction;
         this.point = point;
-        this.points = new ArrayList<>();
-        this.placed = false;
+        this.points = new ArrayList<>();        
         calculatePoints();
 
     }
@@ -120,12 +118,6 @@ public class ShipImpl implements Ship {
     public boolean isSunk() {
         return points.stream()
                 .allMatch(p -> p.isHit());
-    }
-    public void place() {
-    	this.placed = true;
-    }
-    public boolean isPlaced() {
-    	return placed;
     }
 
     private void fillTop() {
