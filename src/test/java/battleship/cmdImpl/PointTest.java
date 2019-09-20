@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import battleship.Point;
 import battleship.cmdImpl.PointImpl;
@@ -33,23 +35,16 @@ class PointTest {
 		assertTrue(point.isEmpty());
 	}
 
-	/**@Test
-	void whenOccupyIsOccupiedIsTrue() {
-		point.occupy();
-		assertTrue(point.isOccupied());
-	}
-
-	@Test
-	void whenOccupiedHitIsFalse() {
-		point.occupy();
-		assertFalse(point.isHit());
-	}
-
-	@Test
-	void whenHitIsOccupiedIsFalse() {
-		point.hit();
-		assertFalse(point.isOccupied());
-	}*/
+	/**
+	 * @Test void whenOccupyIsOccupiedIsTrue() { point.occupy();
+	 *       assertTrue(point.isOccupied()); }
+	 * 
+	 * @Test void whenOccupiedHitIsFalse() { point.occupy();
+	 *       assertFalse(point.isHit()); }
+	 * 
+	 * @Test void whenHitIsOccupiedIsFalse() { point.hit();
+	 *       assertFalse(point.isOccupied()); }
+	 */
 
 	@Test
 	void whenHitIsHitISTrue() {
@@ -74,93 +69,17 @@ class PointTest {
 		Point p = new PointImpl(5, 8);
 		assertFalse(point.equals(p));
 	}
-	@Test
-	void isNeighborReturnTrueWhenOtherIs66() {
-		Point p = new PointImpl(6, 6);
+
+	@ParameterizedTest(name = "Is neighbor return True when Other row = {0}, and column = {1}")
+	@CsvSource({ "6,6", "6,7", "6,8", "5,8", "4,8", "4,7", "4,6", "5,6" })
+	void shouldReturnTrueWhenOtherIsNeighbor(int x, int y) {
+		Point p = new PointImpl(x, y);
 		assertTrue(point.isNeighbor(p));
 	}
-	@Test
-	void isNeighborReturnTrueWhenOtherIs67() {
-		Point p = new PointImpl(6, 7);
-		assertTrue(point.isNeighbor(p));
-	}
-
-	@Test
-	void isNeighborReturnTrueWhenOtherIs68() {
-		Point p = new PointImpl(6, 8);
-		assertTrue(point.isNeighbor(p));
-	}
-
-	@Test
-	void isNeighborReturnTrueWhenOtherIs58() {
-		Point p = new PointImpl(5, 8);
-		assertTrue(point.isNeighbor(p));
-	}
-
-	@Test
-	void isNeighborReturnTrueWhenOtherIs48() {
-		Point p = new PointImpl(4, 8);
-		assertTrue(point.isNeighbor(p));
-	}
-
-	@Test
-	void isNeighborReturnTrueWhenOtherIs47() {
-		Point p = new PointImpl(4, 7);
-		assertTrue(point.isNeighbor(p));
-	}
-
-	@Test
-	void isNeighborReturnTrueWhenOtherIs46() {
-		Point p = new PointImpl(4, 6);
-		assertTrue(point.isNeighbor(p));
-	}
-
-	@Test
-	void isNeighborReturnTrueWhenOtherIs56() {
-		Point p = new PointImpl(5, 6);
-		assertTrue(point.isNeighbor(p));
-	}
-
-	
-
-	@Test
-	void isNeighborReturnFalseWhenOtherIs55() {
-		Point p = new PointImpl(5, 5);
-		assertFalse(point.isNeighbor(p));
-	}
-	@Test
-	void isNeighborReturnFalseWhenOtherIs36() {
-		Point p = new PointImpl(3, 6);
-		assertFalse(point.isNeighbor(p));
-	}
-	@Test
-	void isNeighborReturnFalseWhenOtherIs37() {
-		Point p = new PointImpl(3, 7);
-		assertFalse(point.isNeighbor(p));
-	}
-	@Test
-	void isNeighborReturnFalseWhenOtherIs38() {
-		Point p = new PointImpl(3, 9);
-		assertFalse(point.isNeighbor(p));
-	}
-	@Test
-	void isNeighborReturnFalseWhenOtherIs39() {
-		Point p = new PointImpl(3, 9);
-		assertFalse(point.isNeighbor(p));
-	}
-	@Test
-	void isNeighborReturnFalseWhenOtherIs49() {
-		Point p = new PointImpl(4, 9);
-		assertFalse(point.isNeighbor(p));
-	}
-	@Test
-	void isNeighborReturnFalseWhenOtherIs59() {
-		Point p = new PointImpl(5, 9);
-		assertFalse(point.isNeighbor(p));
-	}
-	@Test
-	void isNeighborReturnFalseWhenOtherIs69() {
-		Point p = new PointImpl(6, 9);
+	@ParameterizedTest(name = "Is neighbor return False when Other row = {0}, and column = {1}")
+	@CsvSource({ "5,5", "3,6", "3,7", "3,8", "3,9", "4,9", "5,9", "6,9", "6,9" })
+	void shouldReturnFalseWhenOtherIsNotNeighbor(int x, int y) {
+		Point p = new PointImpl(x, y);
 		assertFalse(point.isNeighbor(p));
 	}
 

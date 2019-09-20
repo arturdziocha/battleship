@@ -55,7 +55,7 @@ public class FleetTest {
 	}
 
 	@Test
-	void placeShipReturnTrueWhenNotToCloseShips() {
+	void shouldReturnTrueWhenShipIsNotToCloseShips() {
 		Ship ship = new ShipImpl(ShipClass.Destroyer, Direction.Right, new PointImpl(1, 1));
 		Ship notToClose = new ShipImpl(ShipClass.Submarine, Direction.Right, new PointImpl(3, 1));
 		assertTrue(fleet.placeShip(ship));
@@ -63,7 +63,7 @@ public class FleetTest {
 	}
 
 	@Test
-	void placeShipReturnFalseWhenToCloseShips() {
+	void shouldReturnFalseWhenShipToCloseShips() {
 		Ship ship = new ShipImpl(ShipClass.Destroyer, Direction.Right, new PointImpl(0, 1));
 		Ship ship2 = new ShipImpl(ShipClass.Submarine, Direction.Bottom, new PointImpl(1, 5));
 		Ship toClose = new ShipImpl(ShipClass.Battleship, Direction.Right, new PointImpl(3, 1));
@@ -74,7 +74,7 @@ public class FleetTest {
 	}
 
 	@Test
-	void placeShipAlreadyPlacedReturnFalse() {
+	void shouldReturnFalseWhenShipAlreadyPlaced() {
 		Ship ship = new ShipImpl(ShipClass.Destroyer, Direction.Right, new PointImpl(0, 1));
 		Ship ship2 = new ShipImpl(ShipClass.Destroyer, Direction.Bottom, new PointImpl(5, 1));
 		fleet.placeShip(ship);
@@ -82,7 +82,7 @@ public class FleetTest {
 	}
 
 	@Test
-	void whenAllShipsPlacedReturnTrue() {
+	void shouldReturnTrueWhenAllShipsPlaced() {
 		Ship[] ships = { new ShipImpl(ShipClass.Barca, Direction.Bottom, new PointImpl(0, 0)),
 		        new ShipImpl(ShipClass.PatrolBoat, Direction.Bottom, new PointImpl(0, 2)),
 		        new ShipImpl(ShipClass.Submarine, Direction.Bottom, new PointImpl(0, 4)),
@@ -96,7 +96,7 @@ public class FleetTest {
 	}
 
 	@Test
-	void whenNotAllShipsPlacedReturnFalse() {
+	void shouldReturnFalseWhenNotAllShipsPlaced() {
 		Ship[] ships = { new ShipImpl(ShipClass.Barca, Direction.Bottom, new PointImpl(0, 0)),
 		        new ShipImpl(ShipClass.Submarine, Direction.Bottom, new PointImpl(0, 4)),
 		        new ShipImpl(ShipClass.Destroyer, Direction.Bottom, new PointImpl(0, 6)),
@@ -120,7 +120,7 @@ public class FleetTest {
 	}
 
 	@Test
-	void getAtAndShipNotExistsAtPointReturnOptionalOfShip() {
+	void shouldReturnOptionalOfShipWhenGetAtAndShipNotExistsAtPoint() {
 		Ship ship = new ShipImpl(ShipClass.Destroyer, Direction.Bottom, new PointImpl(7, 4));
 		Point point = new PointImpl(1, 4);
 		fleet.placeShip(ship);
@@ -129,7 +129,7 @@ public class FleetTest {
 	}
 
 	@Test
-	void placeAllShipsRandomReturnTrue() {
+	void shouldReturnTrueWhenPlaceAllShipsRandom() {
 		fleet.placeShipsRandom();
 		assertTrue(fleet.isAllShipsPlaced());
 	}
