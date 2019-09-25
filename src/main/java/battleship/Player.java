@@ -2,6 +2,8 @@ package battleship;
 
 import java.util.Optional;
 
+import battleship.ship.Ship;
+
 public interface Player {
 	abstract String getName();
 	boolean placeShip(Ship ship);

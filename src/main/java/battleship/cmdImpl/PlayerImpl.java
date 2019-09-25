@@ -7,8 +7,8 @@ import java.util.Optional;
 import battleship.Fleet;
 import battleship.Player;
 import battleship.Point;
-import battleship.Ship;
 import battleship.enums.PointStatus;
+import battleship.ship.Ship;
 
 public abstract class PlayerImpl implements Player {
 

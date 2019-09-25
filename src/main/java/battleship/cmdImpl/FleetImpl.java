@@ -9,9 +9,9 @@ import java.util.stream.Collectors;
 
 import battleship.Fleet;
 import battleship.Point;
-import battleship.Ship;
 import battleship.enums.Direction;
 import battleship.enums.ShipClass;
+import battleship.ship.Ship;
 
 public class FleetImpl implements Fleet {
 	private List<Ship> ships;

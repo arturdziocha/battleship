@@ -1,8 +1,9 @@
-package battleship;
+package battleship.ship;
 
 import java.util.List;
 import java.util.Optional;
 
+import battleship.Point;
 import battleship.enums.Direction;
 import battleship.enums.ShipClass;
 

@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Optional;
 
 import battleship.Point;
-import battleship.Ship;
 import battleship.enums.Direction;
 import battleship.enums.ShipClass;
+import battleship.ship.Ship;
 
 public class ShipImpl implements Ship {
     private ShipClass shipClass;

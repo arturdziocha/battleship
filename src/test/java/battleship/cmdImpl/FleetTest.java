@@ -9,12 +9,12 @@ import org.junit.jupiter.api.Test;
 
 import battleship.Fleet;
 import battleship.Point;
-import battleship.Ship;
 import battleship.cmdImpl.FleetImpl;
 import battleship.cmdImpl.PointImpl;
 import battleship.cmdImpl.ShipImpl;
 import battleship.enums.Direction;
 import battleship.enums.ShipClass;
+import battleship.ship.Ship;
 
 public class FleetTest {
 	private Fleet fleet;

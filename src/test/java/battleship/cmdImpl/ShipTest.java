@@ -11,11 +11,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import battleship.Point;
-import battleship.Ship;
 import battleship.cmdImpl.PointImpl;
 import battleship.cmdImpl.ShipImpl;
 import battleship.enums.Direction;
 import battleship.enums.ShipClass;
+import battleship.ship.Ship;
 
 class ShipTest {
 	private Ship ship;
