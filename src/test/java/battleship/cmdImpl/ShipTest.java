@@ -10,12 +10,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import battleship.Point;
 import battleship.cmdImpl.PointImpl;
-import battleship.cmdImpl.ShipImpl;
 import battleship.enums.Direction;
-import battleship.enums.ShipClass;
+import battleship.point.Point;
 import battleship.ship.Ship;
+import battleship.ship.ShipClass;
+import battleship.ship.ShipImpl;
 
 class ShipTest {
 	private Ship ship;

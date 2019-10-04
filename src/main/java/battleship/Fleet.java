@@ -3,6 +3,7 @@ package battleship;
 import java.util.List;
 import java.util.Optional;
 
+import battleship.point.Point;
 import battleship.ship.Ship;
 
 public interface Fleet {

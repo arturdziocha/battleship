@@ -8,13 +8,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import battleship.Fleet;
-import battleship.Point;
 import battleship.cmdImpl.FleetImpl;
 import battleship.cmdImpl.PointImpl;
-import battleship.cmdImpl.ShipImpl;
 import battleship.enums.Direction;
-import battleship.enums.ShipClass;
+import battleship.point.Point;
 import battleship.ship.Ship;
+import battleship.ship.ShipClass;
+import battleship.ship.ShipImpl;
 
 public class FleetTest {
 	private Fleet fleet;

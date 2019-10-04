@@ -1,4 +1,4 @@
-package battleship.ship;
+package battleship.v1.ship;
 
 import java.util.List;
 import java.util.Optional;

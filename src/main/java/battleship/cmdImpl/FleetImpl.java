@@ -8,10 +8,11 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 import battleship.Fleet;
-import battleship.Point;
 import battleship.enums.Direction;
-import battleship.enums.ShipClass;
+import battleship.point.Point;
 import battleship.ship.Ship;
+import battleship.ship.ShipClass;
+import battleship.ship.ShipImpl;
 
 public class FleetImpl implements Fleet {
 	private List<Ship> ships;

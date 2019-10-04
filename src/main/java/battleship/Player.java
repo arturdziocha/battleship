@@ -2,6 +2,7 @@ package battleship;
 
 import java.util.Optional;
 
+import battleship.point.Point;
 import battleship.ship.Ship;
 
 public interface Player {

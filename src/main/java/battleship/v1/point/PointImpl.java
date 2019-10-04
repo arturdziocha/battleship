@@ -1,7 +1,4 @@
-package battleship.cmdImpl;
-
-import battleship.enums.PointStatus;
-import battleship.point.Point;
+package battleship.v1.point;
 
 public class PointImpl implements Point {
 	private int row;
@@ -11,7 +8,7 @@ public class PointImpl implements Point {
 	public PointImpl(int row, int column) {
 		this.row = row;
 		this.column = column;
-		this.status = PointStatus.Empty;
+		this.status = PointStatus.EMPTY;
 
 	}
 
@@ -24,11 +21,11 @@ public class PointImpl implements Point {
 	}
 
 	public boolean isEmpty() {
-		return status == PointStatus.Empty;
+		return status == PointStatus.EMPTY;
 	}
 
 	public boolean isHit() {
-		return status == PointStatus.Hit;
+		return status == PointStatus.HIT;
 	}
 
 	/**
@@ -38,7 +35,7 @@ public class PointImpl implements Point {
 	 */
 
 	public void hit() {
-		this.status = PointStatus.Hit;
+		this.status = PointStatus.HIT;
 	}
 
 	@Override

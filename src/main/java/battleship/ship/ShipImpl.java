@@ -1,13 +1,12 @@
-package battleship.cmdImpl;
+package battleship.ship;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import battleship.Point;
+import battleship.cmdImpl.PointImpl;
 import battleship.enums.Direction;
-import battleship.enums.ShipClass;
-import battleship.ship.Ship;
+import battleship.point.Point;
 
 public class ShipImpl implements Ship {
     private ShipClass shipClass;
