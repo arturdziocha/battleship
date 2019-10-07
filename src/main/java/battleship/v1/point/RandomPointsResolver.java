@@ -6,7 +6,7 @@ import java.util.Random;
 import battleship.v1.ship.ShipClass;
 
 public class RandomPointsResolver implements PointsResolver {
-    private Random random = new Random();
+    private final Random random = new Random();
     private final ShipClass shipClass;
 
     public RandomPointsResolver(ShipClass shipClass) {
@@ -36,9 +36,11 @@ public class RandomPointsResolver implements PointsResolver {
         case LEFT:
             row = random.nextInt(10);
             column = random.nextInt(10) + shipClass.getSize();
+            break;
         case RIGHT:
             row = random.nextInt(10);
             column = random.nextInt(10) - shipClass.getSize();
+            break;
         }
         return new PointImpl(row, column);
     }

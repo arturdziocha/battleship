@@ -230,7 +230,7 @@ class ShipTest {
 	}
 
 	@Test
-	void shipIsRightAndotherShipIsBottomAndNotToCloseReturnFalse() {
+	void shipIsRightAndOtherShipIsBottomAndNotToCloseReturnFalse() {
 		Ship ship = new ShipImpl(ShipClass.Destroyer, Direction.Right, new PointImpl(0, 1));
 		Ship ship2 = new ShipImpl(ShipClass.Destroyer, Direction.Bottom, new PointImpl(1, 5));		
 		assertFalse(ship.toCloseTo(ship2));

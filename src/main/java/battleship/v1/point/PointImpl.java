@@ -68,4 +68,10 @@ public class PointImpl implements Point {
 		return true;
 	}
 
+    @Override
+    public String toString() {
+        return "PointImpl [row=" + row + ", column=" + column + ", status=" + status + "]";
+    }
+	
+
 }

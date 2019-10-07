@@ -7,8 +7,8 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'eclipse'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = 1.12
-targetCompatibility = 1.12
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 repositories {
 	mavenCentral()
 }
