@@ -1,19 +1,9 @@
 package battleship.v1.point;
 
 public interface Point {
-	int getRow();
+    int getRow();
 
-	int getColumn();
+    int getColumn();
 
-	boolean isNeighbor(Point other);
-
-	boolean equals(Object other);
-
-	// boolean isOccupied();
-
-	boolean isHit();
-
-	// void occupy();
-
-	void hit();
+    boolean isNeighbor(Point other);
 }

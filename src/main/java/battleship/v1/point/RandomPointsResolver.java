@@ -1,9 +1,9 @@
 package battleship.v1.point;
 
+import battleship.v1.ship.ShipClass;
+
 import java.util.List;
 import java.util.Random;
-
-import battleship.v1.ship.ShipClass;
 
 public class RandomPointsResolver implements PointsResolver {
     private final Random random = new Random();
@@ -17,8 +17,7 @@ public class RandomPointsResolver implements PointsResolver {
     public List<Point> resolve() {
         Direction randomDirection = Direction.values()[random.nextInt(4)];
         Point startPoint = lotteryRowAndColumn(randomDirection);
-        List<Point> points = new PointsSetter(shipClass.getSize(), startPoint, randomDirection).set();
-        return points;
+        return new PointsSetter(shipClass.getSize(), startPoint, randomDirection).set();
     }
 
     private Point lotteryRowAndColumn(Direction direction) {

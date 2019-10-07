@@ -3,6 +3,7 @@ package battleship.v1.point;
 import java.util.List;
 
 import battleship.ship.ShipClass;
+import battleship.v1.MalformedException;
 
 public class InputPointsResolver implements PointsResolver {
 
@@ -17,11 +18,10 @@ public class InputPointsResolver implements PointsResolver {
     }
 
     @Override
-    public List<Point> resolve() throws IllegalArgumentException {
+    public List<Point> resolve() throws MalformedException {
         Point startPoint = PointDecoder.inputToPoint(pointString);
-        
-        List<Point> points = new PointsSetter(shipClass.getSize(), startPoint, Direction.DOWN).set();
+        Direction direction = PointDecoder.inputToDirection(directionString);
 
-        return points;
+        return new PointsSetter(shipClass.getSize(), startPoint, direction).set();
     }
 }

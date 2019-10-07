@@ -8,12 +8,12 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 class PointTest {
-	int row = 5;
-	int column = 7;
+	private int row = 5;
+	private int column = 7;
 	private PointImpl point;
 
 	@BeforeEach
-	void setUp() throws Exception {
+	void setUp() {
 		point = new PointImpl(row, column);
 	}
 
@@ -28,43 +28,21 @@ class PointTest {
 	}
 
 	@Test
-	void whenInitializedStatusIsSetToEmpty() {
-		assertTrue(point.isEmpty());
-	}
-
-	/**
-	 * @Test void whenOccupyIsOccupiedIsTrue() { point.occupy();
-	 *       assertTrue(point.isOccupied()); }
-	 * 
-	 * @Test void whenOccupiedHitIsFalse() { point.occupy();
-	 *       assertFalse(point.isHit()); }
-	 * 
-	 * @Test void whenHitIsOccupiedIsFalse() { point.hit();
-	 *       assertFalse(point.isOccupied()); }
-	 */
-
-	@Test
-	void whenHitIsHitISTrue() {
-		point.hit();
-		assertTrue(point.isHit());
-	}
-
-	@Test
 	void IsTheSameReturnTrueWhenThisSamePoint() {
 		Point p = new PointImpl(5, 7);
-		assertTrue(point.equals(p));
+		assertEquals(point, p);
 	}
 
 	@Test
 	void equalsReturnTrueWhenThisSamePoint() {
 		Point p = new PointImpl(5, 7);
-		assertTrue(point.equals(p));
+		assertEquals(point, p);
 	}
 
 	@Test
 	void equalsReturnFalseWhenOtherPoint() {
 		Point p = new PointImpl(5, 8);
-		assertFalse(point.equals(p));
+		assertNotEquals(point, p);
 	}
 
 	@ParameterizedTest(name = "Is neighbor return True when Other row = {0}, and column = {1}")
