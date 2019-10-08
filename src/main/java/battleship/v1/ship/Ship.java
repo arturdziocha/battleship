@@ -3,19 +3,17 @@ package battleship.v1.ship;
 import java.util.List;
 import java.util.Optional;
 
-import battleship.enums.Direction;
-import battleship.point.Point;
+import battleship.v1.point.Point;
+
 
 public interface Ship {
     ShipClass getShipClass();
 
-    abstract int getSize();
+    int getSize();
+    
+    int getHealth();
 
-    Direction getDirection();
-
-    Optional<Point> getPointAt(Point point);
-
-    Point getPoint();
+    Optional<Point> isAt(Point point);    
 
     List<Point> getPoints();     
 
@@ -24,12 +22,4 @@ public interface Ship {
     boolean toCloseTo(Ship other);
 
     void shoot(Point point);
-
-    int getMostTopPosition();
-
-    int getMostBottomPosition();
-
-    int getMostLeftPosition();
-
-    int getMostRightPosition();
 }

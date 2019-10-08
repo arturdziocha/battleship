@@ -2,26 +2,39 @@ package battleship.v1.point;
 
 import java.util.List;
 
-import battleship.ship.ShipClass;
 import battleship.v1.MalformedException;
+import battleship.v1.ship.ShipClass;
 
 public class InputPointsResolver implements PointsResolver {
 
     private final ShipClass shipClass;
-    private final String pointString;
-    private final String directionString;
+    private final Point startPoint;
+    private final Direction direction;
 
-    public InputPointsResolver(ShipClass shipClass, String pointString, String directionString) {
+    public InputPointsResolver(ShipClass shipClass, String pointString, String directionString)
+            throws MalformedException {
         this.shipClass = shipClass;
-        this.pointString = pointString;
-        this.directionString = directionString;
+        this.startPoint = PointDecoder.inputToPoint(pointString);
+        this.direction = PointDecoder.inputToDirection(directionString);
     }
 
     @Override
     public List<Point> resolve() throws MalformedException {
-        Point startPoint = PointDecoder.inputToPoint(pointString);
-        Direction direction = PointDecoder.inputToDirection(directionString);
-
         return new PointsSetter(shipClass.getSize(), startPoint, direction).set();
+    }
+
+    @Override
+    public Point getStartPoint() {
+        return startPoint;
+    }
+
+    @Override
+    public Direction getDirection() {
+        return direction;
+    }
+
+    @Override
+    public ShipClass getShipClass() {
+        return shipClass;
     }
 }

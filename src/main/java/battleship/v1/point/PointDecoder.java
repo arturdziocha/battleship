@@ -6,7 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 public class PointDecoder {
     public static Point inputToPoint(String input) throws MalformedException {
         if (StringUtils.isEmpty(input)) {
-            throw new MalformedException("Input cannot be empty");
+            throw new MalformedException("Point cannot be empty");
         }
         input = input.toLowerCase();
         char posY = input.charAt(0);
@@ -16,7 +16,7 @@ public class PointDecoder {
         try {
             int x = Integer.parseInt(posX) - 1;
             if (x < 0 || x > 9 || y < 0 || y > 9) {
-                throw new MalformedException("First character must be between A and J");
+                throw new MalformedException("Point must be between A-J and 1-10");
             }
             return new PointImpl(x, y);
         } catch (NumberFormatException ex) {
@@ -24,8 +24,12 @@ public class PointDecoder {
         }
     }
 
-    public static Direction inputToDirection(String input) {
-        char charDirection = input.charAt(0);
+    public static Direction inputToDirection(String input) throws MalformedException {
+        if (StringUtils.isEmpty(input)) {
+            throw new MalformedException("Direction cannot be empty");
+        }
+        
+        char charDirection = input.toLowerCase().charAt(0);
         switch (charDirection) {
             case 'l':
                 return Direction.LEFT;

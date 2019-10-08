@@ -1,23 +1,25 @@
 package battleship.v1.point;
 
-import battleship.v1.ship.ShipClass;
-
 import java.util.List;
 import java.util.Random;
+
+import battleship.v1.ship.ShipClass;
 
 public class RandomPointsResolver implements PointsResolver {
     private final Random random = new Random();
     private final ShipClass shipClass;
+    private final Point startPoint;
+    private final Direction direction;
 
     public RandomPointsResolver(ShipClass shipClass) {
         this.shipClass = shipClass;
+        this.direction = Direction.values()[random.nextInt(Direction.values().length)];
+        this.startPoint = lotteryRowAndColumn(direction);
     }
 
     @Override
     public List<Point> resolve() {
-        Direction randomDirection = Direction.values()[random.nextInt(4)];
-        Point startPoint = lotteryRowAndColumn(randomDirection);
-        return new PointsSetter(shipClass.getSize(), startPoint, randomDirection).set();
+        return new PointsSetter(shipClass.getSize(), startPoint, direction).set();
     }
 
     private Point lotteryRowAndColumn(Direction direction) {
@@ -42,5 +44,20 @@ public class RandomPointsResolver implements PointsResolver {
             break;
         }
         return new PointImpl(row, column);
+    }
+
+    @Override
+    public Point getStartPoint() {
+        return startPoint;
+    }
+
+    @Override
+    public Direction getDirection() {
+        return direction;
+    }
+
+    @Override
+    public ShipClass getShipClass() {
+        return shipClass;
     }
 }

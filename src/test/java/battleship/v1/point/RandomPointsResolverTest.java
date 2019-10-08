@@ -1,13 +1,13 @@
 package battleship.v1.point;
 
-import battleship.v1.MalformedException;
-import battleship.v1.ship.ShipClass;
-
 import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import battleship.v1.MalformedException;
+import battleship.v1.ship.ShipClass;
 
 public class RandomPointsResolverTest {
     private PointsResolver pointsResolver;
