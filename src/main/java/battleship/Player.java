@@ -2,8 +2,8 @@ package battleship;
 
 import java.util.Optional;
 
-import battleship.point.Point;
-import battleship.ship.Ship;
+import battleship.v0.point.Point;
+import battleship.v0.ship.Ship;
 
 public interface Player {
 	abstract String getName();
