@@ -1,7 +1,11 @@
-package battleship.v2.model.enums;
+package battleship.v2.direction;
+
+import java.util.Random;
+
+import battleship.v1.MalformedException;
 
 public enum Direction {
-    UP(0, 'u'), RIGHT(1, 'r'), DOWN(2, 'd'), LEFT(3, 'l'), NONE(4, 'n');
+    UP(0, 'u'), RIGHT(1, 'r'), DOWN(2, 'd'), LEFT(3, 'l');
     private final int value;
     private final char shortName;
 
@@ -10,13 +14,18 @@ public enum Direction {
         this.shortName = shortName;
     }
 
-    public static Direction getFromShortName(char u) {
+    public static Direction getFromShortName(char u) throws MalformedException {
         for (Direction direction : Direction.values()) {
             if (direction.shortName == u) {
                 return direction;
             }
         }
-        return Direction.NONE;
+        throw new MalformedException("Cannot find Direction");
+    }
+
+    public static Direction getRandomDirection() {
+        Random random = new Random();
+        return Direction.values()[random.nextInt(Direction.values().length)];
     }
 
     public Direction turnLeft() {

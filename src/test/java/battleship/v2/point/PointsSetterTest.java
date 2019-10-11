@@ -1,4 +1,4 @@
-package battleship.v2.model;
+package battleship.v2.point;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -1,4 +1,4 @@
-package battleship.v1.ship;
+package battleship.v2.ship;
 
 public enum ShipClass {
     BARCA(1), PATROL_BOAT(2), SUBMARINE(3), DESTROYER(3), BATTLESHIP(4), CARRIER(5);
@@ -12,5 +12,4 @@ public enum ShipClass {
     public int getSize() {
         return size;
     }
-
 }
