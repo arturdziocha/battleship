@@ -30,7 +30,7 @@ class PointTest {
     }
 
     @Test
-    void IsTheSameReturnTrueWhenThisSamePoint() {
+    void isTheSameReturnTrueWhenThisSamePoint() {
         Point p = new Point.Builder(5, 7).build();
         assertEquals(point, p);
     }

@@ -4,5 +4,4 @@ public enum PointStatus {
 	Empty, Miss,
     // Occupied
 	Hit, Sunk;
-
 }

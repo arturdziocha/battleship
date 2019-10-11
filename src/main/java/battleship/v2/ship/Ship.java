@@ -1,7 +1,6 @@
 package battleship.v2.ship;
 
 import java.util.List;
-import java.util.Optional;
 
 import battleship.v2.point.Point;
 
@@ -10,19 +9,22 @@ public interface Ship {
 
     int getSize();
 
-    int getHealth();
-
-    void turnRight();
-
-    void turnLeft();
-
-    Optional<Point> isAt(Point point);
+    int getHealth();    
 
     List<Point> getPoints();
+    
+    boolean shoot(Point point);
 
     boolean isSunk();
 
     boolean toCloseTo(Ship other);
 
-    void shoot(Point point);
+    int getMostTopPosition();
+
+    int getMostBottomPosition();
+
+    int getMostLeftPosition();
+
+    int getMostRightPosition();
+    
 }
