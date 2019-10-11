@@ -37,7 +37,7 @@ class ShipImplTest {
 
     @Test
     void shouldCreateBarcaWithGivenPoints() throws MalformedException, DirectionException, PointException {
-        Point[] points = { new Point.Builder("G6").build() };
+        Point[] points = {new Point.Builder("G6").build()};
         Ship ship = new ShipImpl.Builder(ShipClass.BARCA).points(new Point.Builder(5, 6).build(), Direction.UP)
                 .build();
         assertThat(ship.getPoints(), containsInAnyOrder(points));
@@ -48,7 +48,7 @@ class ShipImplTest {
         Point[] points = {
                 new Point.Builder(5, 6).build(),
                 new Point.Builder(4, 6).build(),
-                new Point.Builder(3, 6).build() };
+                new Point.Builder(3, 6).build()};
         Ship ship = new ShipImpl.Builder(ShipClass.SUBMARINE).points(new Point.Builder("G6").build(), Direction.UP)
                 .build();
         assertThat(ship.getPoints(), containsInAnyOrder(points));
@@ -61,7 +61,7 @@ class ShipImplTest {
                 new Point.Builder(6, 6).build(),
                 new Point.Builder(7, 6).build(),
                 new Point.Builder(8, 6).build(),
-                new Point.Builder(9, 6).build() };
+                new Point.Builder(9, 6).build()};
         assertThat(baseShip.getPoints(), containsInAnyOrder(points));
     }
 
@@ -108,6 +108,7 @@ class ShipImplTest {
                 .build();
         assertTrue(destroyer.toCloseTo(toCloseShip));
     }
+
     @Test
     void otherShipIsDownAndToCloseReturnTrue() throws MalformedException, DirectionException, PointException {
         Ship toCloseShip = new ShipImpl.Builder(ShipClass.DESTROYER)
