@@ -8,14 +8,6 @@ public class Point {
     private final int row;
     private final int column;
 
-    public int getRow() {
-        return row;
-    }
-
-    public int getColumn() {
-        return column;
-    }
-
     public static class Builder {
         private int row;
         private int column;
@@ -33,12 +25,19 @@ public class Point {
         public Point build() {
             return new Point(this);
         }
-
     }
 
     private Point(Builder builder) {
         this.row = builder.row;
         this.column = builder.column;
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public int getColumn() {
+        return column;
     }
 
     public boolean isNeighbor(Point other) {

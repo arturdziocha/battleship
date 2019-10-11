@@ -13,24 +13,6 @@ public class PointsSetter {
     private final Direction direction;
     private List<Point> points;
 
-    public List<Point> getPoints() {
-        switch (direction) {
-        case UP:
-            fillTop();
-            break;
-        case DOWN:
-            fillBottom();
-            break;
-        case RIGHT:
-            fillRight();
-            break;
-        case LEFT:
-            fillLeft();
-            break;
-        }
-        return points;
-    }
-
     public static class Builder {
         private int size;
         private Point startPoint;
@@ -61,10 +43,10 @@ public class PointsSetter {
         }
 
         public PointsSetter build() throws DirectionException, PointException {
-            if(direction == null) {
+            if (direction == null) {
                 throw new DirectionException("Direction cannot be empty");
             }
-            if(startPoint == null) {
+            if (startPoint == null) {
                 throw new PointException("Point cannot be empty");
             }
             return new PointsSetter(this);
@@ -77,6 +59,24 @@ public class PointsSetter {
         this.startPoint = builder.startPoint;
         this.direction = builder.direction;
         this.points = new ArrayList<>();
+    }
+
+    public List<Point> getPoints() {
+        switch (direction) {
+        case UP:
+            fillTop();
+            break;
+        case DOWN:
+            fillBottom();
+            break;
+        case RIGHT:
+            fillRight();
+            break;
+        case LEFT:
+            fillLeft();
+            break;
+        }
+        return points;
     }
 
     private void fillTop() {

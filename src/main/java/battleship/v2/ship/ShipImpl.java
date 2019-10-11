@@ -16,6 +16,44 @@ public class ShipImpl implements Ship {
     private int health;
     private List<Point> points;
 
+    public static class Builder {
+        private ShipClass shipClass;
+        private List<Point> points;
+
+        public Builder(ShipClass shipClass) {
+            this.shipClass = shipClass;
+        }
+
+        public Builder points() throws DirectionException, PointException {
+            PointsSetter setter = new PointsSetter.Builder(shipClass.getSize()).startPoint()
+                    .direction()
+                    .build();
+            this.points = setter.getPoints();
+            return this;
+        }
+
+        public Builder points(Point startPoint, Direction direction) throws DirectionException, PointException {
+            PointsSetter setter = new PointsSetter.Builder(shipClass.getSize()).startPoint(startPoint)
+                    .direction(direction)
+                    .build();
+            this.points = setter.getPoints();
+            return this;
+        }
+
+        public ShipImpl build() throws MalformedException {
+            if (points.isEmpty()) {
+                throw new MalformedException("Points must be set");
+            }
+            return new ShipImpl(this);
+        }
+    }
+
+    private ShipImpl(Builder builder) {
+        this.shipClass = builder.shipClass;
+        this.health = builder.shipClass.getSize();
+        this.points = builder.points;
+    }
+
     @Override
     public ShipClass getShipClass() {
         return shipClass;
@@ -64,69 +102,43 @@ public class ShipImpl implements Ship {
         }
         return false;
     }
+
     @Override
     public int getMostTopPosition() {
-        return points.stream().map(Point::getRow).min(Integer::compare).get();
+        return points.stream()
+                .map(Point::getRow)
+                .min(Integer::compare)
+                .get();
     }
 
     @Override
     public int getMostBottomPosition() {
-        return points.stream().map(Point::getRow).max(Integer::compare).get();
+        return points.stream()
+                .map(Point::getRow)
+                .max(Integer::compare)
+                .get();
     }
 
     @Override
     public int getMostLeftPosition() {
-        return points.stream().map(Point::getColumn).min(Integer::compare).get();
+        return points.stream()
+                .map(Point::getColumn)
+                .min(Integer::compare)
+                .get();
     }
 
     @Override
     public int getMostRightPosition() {
-        return points.stream().map(Point::getColumn).max(Integer::compare).get();
+        return points.stream()
+                .map(Point::getColumn)
+                .max(Integer::compare)
+                .get();
     }
 
     private Optional<Point> isAt(Point point) {
         return points.stream()
                 .filter(p -> point.equals(p))
                 .findFirst();
-    }
-    
-
-    public static class Builder {
-        private ShipClass shipClass;
-        private List<Point> points;
-
-        public Builder(ShipClass shipClass) {
-            this.shipClass = shipClass;
-        }
-
-        public Builder points() throws DirectionException, PointException {
-            PointsSetter setter = new PointsSetter.Builder(shipClass.getSize()).startPoint()
-                    .direction()
-                    .build();
-            this.points = setter.getPoints();
-            return this;
-        }
-
-        public Builder points(Point startPoint, Direction direction) throws DirectionException, PointException {
-            PointsSetter setter = new PointsSetter.Builder(shipClass.getSize()).startPoint(startPoint)
-                    .direction(direction)
-                    .build();
-            this.points = setter.getPoints();
-            return this;
-        }
-
-        public ShipImpl build() throws MalformedException {
-            if (points.isEmpty()) {
-                throw new MalformedException("Points must be set");
-            }
-            return new ShipImpl(this);
-        }
-    }
-
-    private ShipImpl(Builder builder) {
-        this.shipClass = builder.shipClass;
-        this.health = builder.shipClass.getSize();
-        this.points = builder.points;
     }
 
 }
