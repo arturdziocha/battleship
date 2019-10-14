@@ -1,6 +1,7 @@
 package battleship.v2.ship;
 
 import java.util.List;
+import java.util.Optional;
 
 import battleship.v2.point.Point;
 
@@ -13,7 +14,7 @@ public interface Ship {
 
     List<Point> getPoints();
     
-    boolean shoot(Point point);
+    Optional<Point> shoot(Point point);
 
     boolean isSunk();
 

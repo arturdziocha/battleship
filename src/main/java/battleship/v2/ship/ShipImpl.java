@@ -74,7 +74,7 @@ public class ShipImpl implements Ship {
         return points;
     }
 
-    @Override
+    /**@Override
     public boolean shoot(Point point) {
         Optional<Point> optional = isAt(point);
         return optional.map(obj -> {
@@ -83,6 +83,11 @@ public class ShipImpl implements Ship {
         })
                 .orElse(false);
 
+    }
+    */
+    @Override
+    public Optional<Point> shoot(Point point) {
+        return Optional.of(isAt(point).map(ss->{health--;return ss;})).get();
     }
 
     @Override

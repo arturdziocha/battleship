@@ -2,6 +2,7 @@ package battleship.v2.ship;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -115,6 +116,24 @@ class ShipImplTest {
                 .points(new Point.Builder(4, 3).build(), Direction.DOWN)
                 .build();
         assertTrue(destroyer.toCloseTo(toCloseShip));
+    }
+    @Test
+    void getMostTopPosition() {
+        assertThat(destroyer.getMostTopPosition(), is(3));
+    }
+
+    @Test
+    void getMostBottomPosition() {
+        assertThat(destroyer.getMostBottomPosition(), is(3));
+    }
+
+    @Test
+    void getMostLeftPosition() {
+        assertThat(destroyer.getMostLeftPosition(), is(3));
+    }
+    @Test
+    void getMostRightPosition() {
+        assertThat(destroyer.getMostRightPosition(), is(5));
     }
 
 }
