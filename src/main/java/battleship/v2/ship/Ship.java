@@ -14,7 +14,9 @@ public interface Ship {
 
     List<Point> getPoints();
     
-    Optional<Point> shoot(Point point);
+    Optional<Point> isAt(Point point);
+    
+    void shoot();
 
     boolean isSunk();
 

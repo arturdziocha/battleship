@@ -67,38 +67,38 @@ class ShipImplTest {
     }
 
     @Test
-    void shotReturnFalseWhenShotPointNotInPoints() throws MalformedException, DirectionException, PointException {
+    void shotReturnFalseWhenNotIsAt() throws MalformedException, DirectionException, PointException {
 
-        assertFalse(baseShip.shoot(new Point.Builder("a1").build()));
+        assertFalse(baseShip.isAt(new Point.Builder("a1").build()).isPresent());
     }
 
     @Test
-    void shotReturnTrueWhenShotPointInPoints() throws MalformedException, DirectionException, PointException {
+    void shotReturnTrueWhenShipIsAtPoint() throws MalformedException, DirectionException, PointException {
 
-        assertTrue(baseShip.shoot(new Point.Builder("G6").build()));
+        assertTrue(baseShip.isAt(new Point.Builder("G6").build()).isPresent());
     }
 
     @Test
     void whenShotAndPointInPointsHealthIsSmaller() throws MalformedException, DirectionException, PointException {
 
-        baseShip.shoot(new Point.Builder("G6").build());
+        baseShip.shoot();
         assertEquals(4, baseShip.getHealth());
     }
 
     @Test
     void when2ShotsAndPointInPointsHealthIsSmaller() throws MalformedException, DirectionException, PointException {
-        baseShip.shoot(new Point.Builder("G6").build());
-        baseShip.shoot(new Point.Builder("G7").build());
+        baseShip.shoot();
+        baseShip.shoot();
         assertEquals(3, baseShip.getHealth());
     }
 
     @Test
     void shouldBeSunkAfterShots() throws MalformedException, DirectionException, PointException {
-        baseShip.shoot(new Point.Builder("G6").build());
-        baseShip.shoot(new Point.Builder("G7").build());
-        baseShip.shoot(new Point.Builder("G8").build());
-        baseShip.shoot(new Point.Builder("G9").build());
-        baseShip.shoot(new Point.Builder("G10").build());
+        baseShip.shoot();
+        baseShip.shoot();
+        baseShip.shoot();
+        baseShip.shoot();
+        baseShip.shoot();
         assertTrue(baseShip.isSunk());
     }
 

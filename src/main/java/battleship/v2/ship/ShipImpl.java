@@ -18,7 +18,7 @@ public class ShipImpl implements Ship {
 
     public static class Builder {
         private ShipClass shipClass;
-        private List<Point> points;
+        private List<Point> points;       
 
         public Builder(ShipClass shipClass) {
             this.shipClass = shipClass;
@@ -32,11 +32,13 @@ public class ShipImpl implements Ship {
             return this;
         }
 
-        public Builder points(Point startPoint, Direction direction) throws DirectionException, PointException {
-            PointsSetter setter = new PointsSetter.Builder(shipClass.getSize()).startPoint(startPoint)
-                    .direction(direction)
-                    .build();
-            this.points = setter.getPoints();
+        public Builder points(Point startPoint, Direction direction) throws DirectionException, PointException{
+            
+                PointsSetter setter = new PointsSetter.Builder(shipClass.getSize()).startPoint(startPoint)
+                        .direction(direction)
+                        .build();
+                this.points = setter.getPoints();         
+            
             return this;
         }
 
@@ -74,22 +76,18 @@ public class ShipImpl implements Ship {
         return points;
     }
 
-    /**@Override
-    public boolean shoot(Point point) {
-        Optional<Point> optional = isAt(point);
-        return optional.map(obj -> {
-            health--;
-            return true;
-        })
-                .orElse(false);
-
-    }
-    */
     @Override
-    public Optional<Point> shoot(Point point) {
-        return Optional.of(isAt(point).map(ss->{health--;return ss;})).get();
+    public Optional<Point> isAt(Point point) {
+        return points.stream()
+                .filter(p -> point.equals(p))
+                .findFirst();
     }
 
+    @Override
+    public void shoot() {
+        health--;
+    }
+    
     @Override
     public boolean isSunk() {
         return health == 0;
@@ -138,12 +136,6 @@ public class ShipImpl implements Ship {
                 .map(Point::getColumn)
                 .max(Integer::compare)
                 .get();
-    }
-
-    private Optional<Point> isAt(Point point) {
-        return points.stream()
-                .filter(p -> point.equals(p))
-                .findFirst();
     }
 
 }
