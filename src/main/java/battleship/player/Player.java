@@ -33,6 +33,7 @@ public abstract class Player {
         return shots.containsKey(point);
     }
     public List<Ship> shipsToPlace(){
+        /* TODO */
         return null;
     }
 
