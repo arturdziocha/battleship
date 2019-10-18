@@ -3,23 +3,26 @@ package battleship.fleet;
 import java.util.List;
 import java.util.Optional;
 
-import battleship.exception.DirectionException;
-import battleship.exception.MalformedException;
-import battleship.exception.PointException;
+import battleship.exception.MalformattedException;
+import battleship.exception.ShipOverlapException;
 import battleship.point.Point;
 import battleship.ship.Ship;
 
 
-public interface Fleet {
+public interface Fleet {    
     final int SIZE = 10;
 
-    boolean placeShip(Ship ship);
+    void placeShip(Ship ship) throws ShipOverlapException ;
 
-    void placeShipsRandom() throws MalformedException, DirectionException, PointException;
+    void placeShipsRandom()  throws MalformattedException, ShipOverlapException ;
 
     List<Ship> getShips();
 
     boolean isAllShipsPlaced();
 
     Optional<Ship> shipAt(Point point);
+    
+    List<Ship> shipsToPlace();
+
+    boolean allShipsSunk();
 }

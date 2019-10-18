@@ -4,9 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import battleship.direction.Direction;
-import battleship.exception.DirectionException;
-import battleship.exception.MalformedException;
-import battleship.exception.PointException;
+import battleship.exception.MalformattedException;
 import battleship.point.Point;
 import battleship.point.PointsSetter;
 
@@ -24,7 +22,7 @@ public class ShipImpl implements Ship {
             this.shipClass = shipClass;
         }
 
-        public Builder points() throws DirectionException, PointException {
+        public Builder points() throws MalformattedException {
             PointsSetter setter = new PointsSetter.Builder(shipClass.getSize()).startPoint()
                     .direction()
                     .build();
@@ -32,7 +30,7 @@ public class ShipImpl implements Ship {
             return this;
         }
 
-        public Builder points(Point startPoint, Direction direction) throws DirectionException, PointException{
+        public Builder points(Point startPoint, Direction direction) throws MalformattedException{
             
                 PointsSetter setter = new PointsSetter.Builder(shipClass.getSize()).startPoint(startPoint)
                         .direction(direction)
@@ -42,9 +40,9 @@ public class ShipImpl implements Ship {
             return this;
         }
 
-        public ShipImpl build() throws MalformedException {
+        public ShipImpl build() throws MalformattedException {
             if (points.isEmpty()) {
-                throw new MalformedException("Points must be set");
+                throw new MalformattedException("Points must be set");
             }
             return new ShipImpl(this);
         }
@@ -137,5 +135,11 @@ public class ShipImpl implements Ship {
                 .max(Integer::compare)
                 .get();
     }
+
+    @Override
+    public String toString() {
+        return "[shipClass=" + shipClass + ", health=" + health + ", points=" + points+"]" ;
+    }
+    
 
 }

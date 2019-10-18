@@ -1,33 +1,32 @@
 package battleship.direction;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.Test;
 
-import battleship.direction.Direction;
-import battleship.exception.MalformedException;
-
-import static org.junit.jupiter.api.Assertions.*;
+import battleship.exception.MalformattedException;
 
 class DirectionTest {
     @Test
-    public void whenGetFromShortNameUThenReturnDirectionUp() throws MalformedException {
+    public void whenGetFromShortNameUThenReturnDirectionUp() throws MalformattedException {
         Direction direction = Direction.getFromShortName('u');
         assertEquals(Direction.UP, direction);
     }
 
     @Test
-    public void whenGetFromShortNameRThenReturnDirectionRight() throws MalformedException {
+    public void whenGetFromShortNameRThenReturnDirectionRight() throws MalformattedException {
         Direction direction = Direction.getFromShortName('r');
         assertEquals(Direction.RIGHT, direction);
     }
 
     @Test
-    public void whenGetFromShortNameDThenReturnDirectionDown() throws MalformedException {
+    public void whenGetFromShortNameDThenReturnDirectionDown() throws MalformattedException {
         Direction direction = Direction.getFromShortName('d');
         assertEquals(Direction.DOWN, direction);
     }
 
     @Test
-    public void whenGetFromShortNameLThenReturnDirectionLeft() throws MalformedException {
+    public void whenGetFromShortNameLThenReturnDirectionLeft() throws MalformattedException {
         Direction direction = Direction.getFromShortName('l');
         assertEquals(Direction.LEFT, direction);
     }

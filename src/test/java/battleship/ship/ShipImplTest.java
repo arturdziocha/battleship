@@ -11,20 +11,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import battleship.direction.Direction;
-import battleship.exception.DirectionException;
-import battleship.exception.MalformedException;
-import battleship.exception.PointException;
+import battleship.exception.MalformattedException;
 import battleship.point.Point;
-import battleship.ship.Ship;
-import battleship.ship.ShipClass;
-import battleship.ship.ShipImpl;
 
 class ShipImplTest {
     private Ship baseShip;
     private Ship destroyer;
 
     @BeforeEach
-    public void setup() throws MalformedException, DirectionException, PointException {
+    public void setup() throws MalformattedException {
         this.baseShip = new ShipImpl.Builder(ShipClass.CARRIER).points(new Point.Builder("G6").build(), Direction.DOWN)
                 .build();
         this.destroyer = new ShipImpl.Builder(ShipClass.DESTROYER)
@@ -33,7 +28,7 @@ class ShipImplTest {
     }
 
     @Test
-    void shouldCreateBarcaRandomPoints() throws MalformedException, DirectionException, PointException {
+    void shouldCreateBarcaRandomPoints() throws MalformattedException {
         Ship ship = new ShipImpl.Builder(ShipClass.BARCA).points()
                 .build();
         assertEquals(1, ship.getPoints()
@@ -41,7 +36,7 @@ class ShipImplTest {
     }
 
     @Test
-    void shouldCreateBarcaWithGivenPoints() throws MalformedException, DirectionException, PointException {
+    void shouldCreateBarcaWithGivenPoints() throws MalformattedException {
         Point[] points = {new Point.Builder("G6").build()};
         Ship ship = new ShipImpl.Builder(ShipClass.BARCA).points(new Point.Builder(5, 6).build(), Direction.UP)
                 .build();
@@ -49,7 +44,7 @@ class ShipImplTest {
     }
 
     @Test
-    void upPointsSubmarineCreated() throws MalformedException, DirectionException, PointException {
+    void upPointsSubmarineCreated() throws MalformattedException {
         Point[] points = {
                 new Point.Builder(5, 6).build(),
                 new Point.Builder(4, 6).build(),
@@ -60,7 +55,7 @@ class ShipImplTest {
     }
 
     @Test
-    void bottomPointsCarrierCreated() throws MalformedException, DirectionException, PointException {
+    void bottomPointsCarrierCreated() throws MalformattedException{
         Point[] points = {
                 new Point.Builder(5, 6).build(),
                 new Point.Builder(6, 6).build(),
@@ -71,33 +66,33 @@ class ShipImplTest {
     }
 
     @Test
-    void shotReturnFalseWhenNotIsAt() throws MalformedException, DirectionException, PointException {
+    void shotReturnFalseWhenNotIsAt() throws MalformattedException {
 
         assertFalse(baseShip.isAt(new Point.Builder("a1").build()).isPresent());
     }
 
     @Test
-    void shotReturnTrueWhenShipIsAtPoint() throws MalformedException, DirectionException, PointException {
+    void shotReturnTrueWhenShipIsAtPoint() throws MalformattedException{
 
         assertTrue(baseShip.isAt(new Point.Builder("G6").build()).isPresent());
     }
 
     @Test
-    void whenShotAndPointInPointsHealthIsSmaller() throws MalformedException, DirectionException, PointException {
+    void whenShotAndPointInPointsHealthIsSmaller() throws MalformattedException {
 
         baseShip.shoot();
         assertEquals(4, baseShip.getHealth());
     }
 
     @Test
-    void when2ShotsAndPointInPointsHealthIsSmaller() throws MalformedException, DirectionException, PointException {
+    void when2ShotsAndPointInPointsHealthIsSmaller() throws MalformattedException {
         baseShip.shoot();
         baseShip.shoot();
         assertEquals(3, baseShip.getHealth());
     }
 
     @Test
-    void shouldBeSunkAfterShots() throws MalformedException, DirectionException, PointException {
+    void shouldBeSunkAfterShots() throws MalformattedException {
         baseShip.shoot();
         baseShip.shoot();
         baseShip.shoot();
@@ -107,7 +102,7 @@ class ShipImplTest {
     }
 
     @Test
-    void otherShipIsUpAndToCloseReturnTrue() throws MalformedException, DirectionException, PointException {
+    void otherShipIsUpAndToCloseReturnTrue() throws MalformattedException{
         Ship toCloseShip = new ShipImpl.Builder(ShipClass.DESTROYER)
                 .points(new Point.Builder(2, 3).build(), Direction.RIGHT)
                 .build();
@@ -115,7 +110,7 @@ class ShipImplTest {
     }
 
     @Test
-    void otherShipIsDownAndToCloseReturnTrue() throws MalformedException, DirectionException, PointException {
+    void otherShipIsDownAndToCloseReturnTrue() throws MalformattedException{
         Ship toCloseShip = new ShipImpl.Builder(ShipClass.DESTROYER)
                 .points(new Point.Builder(4, 3).build(), Direction.DOWN)
                 .build();

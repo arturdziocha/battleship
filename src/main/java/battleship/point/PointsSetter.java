@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import battleship.direction.Direction;
-import battleship.exception.DirectionException;
-import battleship.exception.PointException;
+import battleship.exception.MalformattedException;
 
 public class PointsSetter {
     private final int size;
@@ -42,12 +41,12 @@ public class PointsSetter {
             return this;
         }
 
-        public PointsSetter build() throws DirectionException, PointException {
+        public PointsSetter build() throws MalformattedException {
             if (direction == null) {
-                throw new DirectionException("Direction cannot be empty");
+                throw new MalformattedException("Direction cannot be empty");
             }
             if (startPoint == null) {
-                throw new PointException("Point cannot be empty");
+                throw new MalformattedException("Point cannot be empty");
             }
             return new PointsSetter(this);
         }

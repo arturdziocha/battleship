@@ -2,7 +2,7 @@ package battleship.direction;
 
 import java.util.Random;
 
-import battleship.exception.MalformedException;
+import battleship.exception.MalformattedException;
 
 
 public enum Direction {
@@ -15,13 +15,13 @@ public enum Direction {
         this.shortName = shortName;
     }
 
-    public static Direction getFromShortName(char u) throws MalformedException {
+    public static Direction getFromShortName(char u) throws MalformattedException {
         for (Direction direction : Direction.values()) {
             if (direction.shortName == u) {
                 return direction;
             }
         }
-        throw new MalformedException("Cannot find Direction");
+        throw new MalformattedException("Cannot find Direction");
     }
 
     public static Direction getRandomDirection() {
