@@ -2,7 +2,7 @@ package battleship.point;
 
 import java.util.Random;
 
-import battleship.exception.MalformedException;
+import battleship.exception.MalformattedException;
 
 public class Point {
     private final int row;
@@ -17,7 +17,7 @@ public class Point {
             this.column = column;
         }
 
-        public Builder(String pointString) throws MalformedException {
+        public Builder(String pointString) throws MalformattedException {
             row = PointDecoder.getRow(pointString);
             column = PointDecoder.getColumn(pointString);
         }
@@ -70,4 +70,10 @@ public class Point {
         result = prime * result + row;
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "[row=" + row + ", column=" + column + "]";
+    }
+    
 }
