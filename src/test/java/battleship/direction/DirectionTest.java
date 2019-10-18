@@ -1,9 +1,8 @@
 package battleship.direction;
 
+import battleship.exception.MalformedException;
 import org.junit.jupiter.api.Test;
 
-import battleship.direction.Direction;
-import battleship.exception.MalformedException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
