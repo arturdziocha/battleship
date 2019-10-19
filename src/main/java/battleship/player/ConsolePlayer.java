@@ -7,12 +7,8 @@ import battleship.exception.ShipOverlapException;
 import battleship.fleet.Fleet;
 import battleship.ship.Ship;
 
-public class ConsolePlayer extends Player {
-    public ConsolePlayer(String name) {
-        super();
-        this.name = name;
-    }
-    public class Builder{
+public class ConsolePlayer extends Player {    
+    public static class Builder{
         private String name;
         private Fleet fleet;
         public Builder name(String name) {
@@ -29,10 +25,7 @@ public class ConsolePlayer extends Player {
             }
             return this;
         }
-        public ConsolePlayer build() throws NotAllShipsPlacedException {
-            if(!fleet.isAllShipsPlaced()) {
-                throw new NotAllShipsPlacedException("Not all ships placed");
-            }
+        public ConsolePlayer build() throws NotAllShipsPlacedException {            
             return new ConsolePlayer(this);
         }
         

@@ -1,6 +1,6 @@
 package battleship.point;
 
 public enum PointStatus {
-    MISS, OCCUPIED, HIT, SUNK;
+    EMPTY, MISS, OCCUPIED, HIT, SUNK;
 
 }

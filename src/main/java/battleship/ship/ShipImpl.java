@@ -83,6 +83,9 @@ public class ShipImpl implements Ship {
 
     @Override
     public void shoot() {
+        if(isSunk()) {
+            throw new IllegalStateException("Ship is already sunk");
+        }
         health--;
     }
     

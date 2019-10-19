@@ -1,6 +1,7 @@
 package battleship.point;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -46,7 +47,7 @@ class PointTest {
         Point p = new Point.Builder(5, 8).build();
         assertNotEquals(point, p);
     }
-
+    @DisplayName("Is neighbor return True")
     @ParameterizedTest(name = "Is neighbor return True when Other row = {0}, and column = {1}")
     @CsvSource({ "6,6", "6,7", "6,8", "5,8", "4,8", "4,7", "4,6", "5,6" })
     void shouldReturnTrueWhenOtherIsNeighbor(int x, int y) {

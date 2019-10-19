@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -99,6 +100,14 @@ class ShipImplTest {
         baseShip.shoot();
         baseShip.shoot();
         assertTrue(baseShip.isSunk());
+    }
+    @Test
+    public void testTooManyHits() {
+        destroyer.shoot();
+        destroyer.shoot();
+        destroyer.shoot();
+        
+        assertThrows(IllegalStateException.class, ()->destroyer.shoot());
     }
 
     @Test

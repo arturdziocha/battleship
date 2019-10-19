@@ -26,7 +26,7 @@ public class PointsSetter {
             return this;
         }
 
-        public Builder startPoint(Point startPoint) {
+        public Builder startPoint(Point startPoint) {            
             this.startPoint = startPoint;
             return this;
         }
@@ -42,6 +42,9 @@ public class PointsSetter {
         }
 
         public PointsSetter build() throws MalformattedException {
+            if(direction == null && startPoint == null) {
+                throw new MalformattedException("Direction and point cannot be empty");
+            }
             if (direction == null) {
                 throw new MalformattedException("Direction cannot be empty");
             }

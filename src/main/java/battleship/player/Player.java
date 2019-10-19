@@ -1,8 +1,8 @@
 package battleship.player;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
+import java.util.stream.IntStream;
 
 import battleship.exception.NotAllShipsPlacedException;
 import battleship.fleet.Fleet;
@@ -10,14 +10,19 @@ import battleship.fleet.FleetImpl;
 import battleship.point.Point;
 import battleship.point.PointStatus;
 import battleship.ship.Ship;
+import battleship.ship.ShipClass;
 
-public abstract class Player {
-    protected Map<Point, PointStatus> shots;
+public abstract class Player {    
+    protected PointStatus[][] shots;
     protected Fleet fleet;
     protected String name;
 
     public Player() {
         fleet = new FleetImpl();
+        shots = new PointStatus[10][10];
+        IntStream.range(0, shots.length)
+                .forEach(x -> IntStream.range(0, shots.length)
+                        .forEach(y -> shots[x][y] = PointStatus.EMPTY));
     }
 
     public Optional<Ship> shootToFleet(Point point) throws NotAllShipsPlacedException {
@@ -26,15 +31,20 @@ public abstract class Player {
         }
         return fleet.shipAt(point);
     }
+
     public boolean hasLost() {
         return fleet.allShipsSunk();
     }
+
     public boolean isAlreadyShooted(Point point) {
-        return shots.containsKey(point);
+        return !shots[point.getRow()][point.getColumn()].equals(PointStatus.EMPTY);
     }
-    public List<Ship> shipsToPlace(){
-        /* TODO */
-        return null;
+
+    public List<ShipClass> shipsToPlace() {
+        return fleet.shipsToPlace();
+    }
+    public PointStatus[][] getShots() {
+        return shots;
     }
 
 }

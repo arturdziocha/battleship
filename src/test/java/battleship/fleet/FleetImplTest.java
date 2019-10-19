@@ -1,16 +1,14 @@
 package battleship.fleet;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
 
 import battleship.direction.Direction;
 import battleship.exception.MalformattedException;
@@ -19,8 +17,6 @@ import battleship.point.Point;
 import battleship.ship.Ship;
 import battleship.ship.ShipClass;
 import battleship.ship.ShipImpl;
-
-import java.util.Arrays;
 
 class FleetImplTest {
     private Fleet fleet;
