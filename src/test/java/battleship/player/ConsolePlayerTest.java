@@ -18,6 +18,11 @@ class ConsolePlayerTest {
         this.player = new ConsolePlayer.Builder().name("artur")
                 .build();
     }
+    @Test
+    @DisplayName("When initialized Fleet Shps is empty")
+    void whenInitializedFleetShipsIsEmpty() {
+        assertEquals(0, player.getFleet().getShips().size());
+    }
 
     @Test
     @DisplayName("Test getShots should return expected array of PointStatus.EMPTY")

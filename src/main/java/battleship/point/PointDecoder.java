@@ -5,7 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import battleship.exception.MalformattedException;
 
 public class PointDecoder {
-    public static Point inputToPoint(String input) throws MalformattedException {
+    public static PointImpl inputToPoint(String input) throws MalformattedException {
         if (StringUtils.isEmpty(input)) {
             throw new MalformattedException("Point cannot be empty");
         }
@@ -16,7 +16,7 @@ public class PointDecoder {
         int y = (int) posY - (int) 'a';
         try {
             int x = Integer.parseInt(posX) - 1;
-            return new Point.Builder(x, y).build();
+            return new PointImpl.Builder(x, y).build();
         } catch (NumberFormatException ex) {
             throw new MalformattedException("Malformed number");
         }

@@ -14,11 +14,11 @@ class PointsSetterTest {
     @Test
     @DisplayName("Should create 3 points up")
     void shouldCreate3PointsUp() throws MalformattedException {
-        Point[] points = {
-                new Point.Builder("B2").build(),
-                new Point.Builder("b3").build(),
-                new Point.Builder(3, 1).build() };
-        PointsSetter pointSetter = new PointsSetter.Builder(3).startPoint(new Point.Builder("b2").build())
+        PointImpl[] points = {
+                new PointImpl.Builder("B2").build(),
+                new PointImpl.Builder("b3").build(),
+                new PointImpl.Builder(3, 1).build() };
+        PointsSetter pointSetter = new PointsSetter.Builder(3).startPoint(new PointImpl.Builder("b2").build())
                 .direction(Direction.DOWN)
                 .build();
         assertThat(pointSetter.getPoints(), containsInAnyOrder(points));
@@ -35,7 +35,7 @@ class PointsSetterTest {
     @Test
     @DisplayName("Should throws Malformatted Exception when direction is null")
     void shouldThrowsMalformattedExceptionWhenDirectionIsNull() {
-        assertThrows(MalformattedException.class, () -> new PointsSetter.Builder(3).startPoint(new Point.Builder("b2").build())
+        assertThrows(MalformattedException.class, () -> new PointsSetter.Builder(3).startPoint(new PointImpl.Builder("b2").build())
                 .build(), "Direction cannot be empty");
     }
 

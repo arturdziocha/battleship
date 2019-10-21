@@ -14,6 +14,7 @@ import battleship.direction.Direction;
 import battleship.exception.MalformattedException;
 import battleship.exception.ShipOverlapException;
 import battleship.point.Point;
+import battleship.point.PointImpl;
 import battleship.ship.Ship;
 import battleship.ship.ShipClass;
 import battleship.ship.ShipImpl;
@@ -23,7 +24,7 @@ class FleetImplTest {
 
     @BeforeEach
     void setUp() {
-        fleet = new FleetImpl();
+        fleet = new FleetImpl.Builder().build();
     }
 
     @Test
@@ -33,7 +34,7 @@ class FleetImplTest {
 
     @Test
     void shouldReturn1When1ShipPlaced() throws MalformattedException, ShipOverlapException {
-        Ship ship = new ShipImpl.Builder(ShipClass.DESTROYER).points(new Point.Builder(7, 7).build(), Direction.DOWN)
+        Ship ship = new ShipImpl.Builder(ShipClass.DESTROYER).points(new PointImpl.Builder(7, 7).build(), Direction.DOWN)
                 .build();
         fleet.placeShip(ship);
         assertEquals(1, fleet.getShips().size());
@@ -42,7 +43,7 @@ class FleetImplTest {
     @Test
     void shouldThrowsShiOutsideBoardWhenShipPointBottomOutsideBoard()
             throws MalformattedException {
-        Ship ship = new ShipImpl.Builder(ShipClass.DESTROYER).points(new Point.Builder(8, 7).build(), Direction.DOWN)
+        Ship ship = new ShipImpl.Builder(ShipClass.DESTROYER).points(new PointImpl.Builder(8, 7).build(), Direction.DOWN)
                 .build();
         assertThrows(ShipOverlapException.class, () -> fleet.placeShip(ship));
     }
@@ -50,7 +51,7 @@ class FleetImplTest {
     @Test
     void shouldThrowsShiOutsideBoardWhenShipPointTopOutsideBoard()
             throws MalformattedException {
-        Ship ship = new ShipImpl.Builder(ShipClass.DESTROYER).points(new Point.Builder(1, 7).build(), Direction.UP)
+        Ship ship = new ShipImpl.Builder(ShipClass.DESTROYER).points(new PointImpl.Builder(1, 7).build(), Direction.UP)
                 .build();
         assertThrows(ShipOverlapException.class, () -> fleet.placeShip(ship));
     }
@@ -58,7 +59,7 @@ class FleetImplTest {
     @Test
     void shouldThrowsShiOutsideBoardWhenShipPointRigthOutsideBoard()
             throws MalformattedException {
-        Ship ship = new ShipImpl.Builder(ShipClass.DESTROYER).points(new Point.Builder(1, 8).build(), Direction.RIGHT)
+        Ship ship = new ShipImpl.Builder(ShipClass.DESTROYER).points(new PointImpl.Builder(1, 8).build(), Direction.RIGHT)
                 .build();
         assertThrows(ShipOverlapException.class, () -> fleet.placeShip(ship));
     }
@@ -66,17 +67,17 @@ class FleetImplTest {
     @Test
     void shouldThrowsShiOutsideBoardExceptionWhenShipPointLeftOutsideBoard()
             throws MalformattedException {
-        Ship ship = new ShipImpl.Builder(ShipClass.DESTROYER).points(new Point.Builder(1, 1).build(), Direction.LEFT)
+        Ship ship = new ShipImpl.Builder(ShipClass.DESTROYER).points(new PointImpl.Builder(1, 1).build(), Direction.LEFT)
                 .build();
         assertThrows(ShipOverlapException.class, () -> fleet.placeShip(ship));
     }
 
     @Test
     void shouldPutShipInFleetWhenShipIsNotToCloseShips() throws MalformattedException, ShipOverlapException {
-        Ship ship = new ShipImpl.Builder(ShipClass.DESTROYER).points(new Point.Builder(1, 1).build(), Direction.RIGHT)
+        Ship ship = new ShipImpl.Builder(ShipClass.DESTROYER).points(new PointImpl.Builder(1, 1).build(), Direction.RIGHT)
                 .build();
         Ship notToClose = new ShipImpl.Builder(ShipClass.SUBMARINE)
-                .points(new Point.Builder(3, 1).build(), Direction.RIGHT)
+                .points(new PointImpl.Builder(3, 1).build(), Direction.RIGHT)
                 .build();
         fleet.placeShip(ship);
         fleet.placeShip(notToClose);
@@ -85,10 +86,10 @@ class FleetImplTest {
 
     @Test
     void shouldThrowShipToCloseExceptionWhenShipIsToCloseShips() throws MalformattedException, ShipOverlapException {
-        Ship ship = new ShipImpl.Builder(ShipClass.DESTROYER).points(new Point.Builder(1, 1).build(), Direction.RIGHT)
+        Ship ship = new ShipImpl.Builder(ShipClass.DESTROYER).points(new PointImpl.Builder(1, 1).build(), Direction.RIGHT)
                 .build();
         Ship toClose = new ShipImpl.Builder(ShipClass.SUBMARINE)
-                .points(new Point.Builder(2, 1).build(), Direction.RIGHT)
+                .points(new PointImpl.Builder(2, 1).build(), Direction.RIGHT)
                 .build();
         fleet.placeShip(ship);
         assertThrows(ShipOverlapException.class, () -> fleet.placeShip(toClose));
@@ -97,7 +98,7 @@ class FleetImplTest {
     @Test
     void shouldReturnFiveShipsNotPlacedYet() throws MalformattedException, ShipOverlapException {
         ShipClass[] shipClassesNotPlaced = {ShipClass.BARCA, ShipClass.BATTLESHIP, ShipClass.CARRIER, ShipClass.PATROL_BOAT, ShipClass.SUBMARINE};
-        Ship ship = new ShipImpl.Builder(ShipClass.DESTROYER).points(new Point.Builder(1, 1).build(), Direction.RIGHT)
+        Ship ship = new ShipImpl.Builder(ShipClass.DESTROYER).points(new PointImpl.Builder(1, 1).build(), Direction.RIGHT)
                 .build();
         fleet.placeShip(ship);
         System.out.println(fleet.shipsToPlace());
@@ -108,17 +109,17 @@ class FleetImplTest {
     @Test
     void shouldReturnTrueWhenAllShipsPlaced() throws MalformattedException, ShipOverlapException {
         Ship[] ships = {
-                new ShipImpl.Builder(ShipClass.BARCA).points(new Point.Builder(0, 0).build(), Direction.DOWN)
+                new ShipImpl.Builder(ShipClass.BARCA).points(new PointImpl.Builder(0, 0).build(), Direction.DOWN)
                         .build(),
-                new ShipImpl.Builder(ShipClass.PATROL_BOAT).points(new Point.Builder(0, 2).build(), Direction.DOWN)
+                new ShipImpl.Builder(ShipClass.PATROL_BOAT).points(new PointImpl.Builder(0, 2).build(), Direction.DOWN)
                         .build(),
-                new ShipImpl.Builder(ShipClass.SUBMARINE).points(new Point.Builder(0, 4).build(), Direction.DOWN)
+                new ShipImpl.Builder(ShipClass.SUBMARINE).points(new PointImpl.Builder(0, 4).build(), Direction.DOWN)
                         .build(),
-                new ShipImpl.Builder(ShipClass.DESTROYER).points(new Point.Builder(0, 6).build(), Direction.DOWN)
+                new ShipImpl.Builder(ShipClass.DESTROYER).points(new PointImpl.Builder(0, 6).build(), Direction.DOWN)
                         .build(),
-                new ShipImpl.Builder(ShipClass.BATTLESHIP).points(new Point.Builder(0, 8).build(), Direction.DOWN)
+                new ShipImpl.Builder(ShipClass.BATTLESHIP).points(new PointImpl.Builder(0, 8).build(), Direction.DOWN)
                         .build(),
-                new ShipImpl.Builder(ShipClass.CARRIER).points(new Point.Builder(7, 0).build(), Direction.RIGHT)
+                new ShipImpl.Builder(ShipClass.CARRIER).points(new PointImpl.Builder(7, 0).build(), Direction.RIGHT)
                         .build()};
         for (Ship ship : ships) {
             fleet.placeShip(ship);
@@ -129,15 +130,15 @@ class FleetImplTest {
     @Test
     void shouldReturnFalseWhenAllShipsPlaced() throws MalformattedException, ShipOverlapException {
         Ship[] ships = {
-                new ShipImpl.Builder(ShipClass.BARCA).points(new Point.Builder(0, 0).build(), Direction.DOWN)
+                new ShipImpl.Builder(ShipClass.BARCA).points(new PointImpl.Builder(0, 0).build(), Direction.DOWN)
                         .build(),
-                new ShipImpl.Builder(ShipClass.PATROL_BOAT).points(new Point.Builder(0, 2).build(), Direction.DOWN)
+                new ShipImpl.Builder(ShipClass.PATROL_BOAT).points(new PointImpl.Builder(0, 2).build(), Direction.DOWN)
                         .build(),
-                new ShipImpl.Builder(ShipClass.SUBMARINE).points(new Point.Builder(0, 4).build(), Direction.DOWN)
+                new ShipImpl.Builder(ShipClass.SUBMARINE).points(new PointImpl.Builder(0, 4).build(), Direction.DOWN)
                         .build(),
-                new ShipImpl.Builder(ShipClass.DESTROYER).points(new Point.Builder(0, 6).build(), Direction.DOWN)
+                new ShipImpl.Builder(ShipClass.DESTROYER).points(new PointImpl.Builder(0, 6).build(), Direction.DOWN)
                         .build(),
-                new ShipImpl.Builder(ShipClass.BATTLESHIP).points(new Point.Builder(0, 8).build(), Direction.DOWN)
+                new ShipImpl.Builder(ShipClass.BATTLESHIP).points(new PointImpl.Builder(0, 8).build(), Direction.DOWN)
                         .build()};
         for (Ship ship : ships) {
             fleet.placeShip(ship);
@@ -147,9 +148,9 @@ class FleetImplTest {
 
     @Test
     void getAtAndShipExistsAtPointReturnOptionalOfShip() throws MalformattedException, ShipOverlapException {
-        Ship ship = new ShipImpl.Builder(ShipClass.DESTROYER).points(new Point.Builder(7, 4).build(), Direction.DOWN)
+        Ship ship = new ShipImpl.Builder(ShipClass.DESTROYER).points(new PointImpl.Builder(7, 4).build(), Direction.DOWN)
                 .build();
-        Point point = new Point.Builder(8, 4).build();
+        Point point = new PointImpl.Builder(8, 4).build();
         fleet.placeShip(ship);
         assertTrue(fleet.shipAt(point)
                 .isPresent());
@@ -160,9 +161,9 @@ class FleetImplTest {
     @Test
     void shouldReturnOptionalOfShipWhenGetAtAndShipNotExistsAtPoint()
             throws MalformattedException, ShipOverlapException {
-        Ship ship = new ShipImpl.Builder(ShipClass.DESTROYER).points(new Point.Builder(7, 4).build(), Direction.DOWN)
+        Ship ship = new ShipImpl.Builder(ShipClass.DESTROYER).points(new PointImpl.Builder(7, 4).build(), Direction.DOWN)
                 .build();
-        Point point = new Point.Builder(1, 4).build();
+        Point point = new PointImpl.Builder(1, 4).build();
         fleet.placeShip(ship);
         assertFalse(fleet.shipAt(point)
                 .isPresent());

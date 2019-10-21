@@ -22,11 +22,11 @@ public class PointsSetter {
         }
 
         public Builder startPoint() {
-            this.startPoint = Point.getRandomPoint();
+            this.startPoint = PointImpl.getRandomPoint();
             return this;
         }
 
-        public Builder startPoint(Point startPoint) {            
+        public Builder startPoint(PointImpl startPoint) {            
             this.startPoint = startPoint;
             return this;
         }
@@ -83,25 +83,25 @@ public class PointsSetter {
 
     private void fillTop() {
         for (int i = 0; i < size; i++) {
-            this.points.add(new Point.Builder(startPoint.getRow() - i, startPoint.getColumn()).build());
+            this.points.add(new PointImpl.Builder(startPoint.getRow() - i, startPoint.getColumn()).build());
         }
     }
 
     private void fillBottom() {
         for (int i = 0; i < size; i++) {
-            this.points.add(new Point.Builder(startPoint.getRow() + i, startPoint.getColumn()).build());
+            this.points.add(new PointImpl.Builder(startPoint.getRow() + i, startPoint.getColumn()).build());
         }
     }
 
     private void fillRight() {
         for (int i = 0; i < size; i++) {
-            this.points.add(new Point.Builder(startPoint.getRow(), startPoint.getColumn() + i).build());
+            this.points.add(new PointImpl.Builder(startPoint.getRow(), startPoint.getColumn() + i).build());
         }
     }
 
     private void fillLeft() {
         for (int i = 0; i < size; i++) {
-            this.points.add(new Point.Builder(startPoint.getRow(), startPoint.getColumn() - i).build());
+            this.points.add(new PointImpl.Builder(startPoint.getRow(), startPoint.getColumn() - i).build());
         }
 
     }

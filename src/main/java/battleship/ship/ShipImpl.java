@@ -6,6 +6,7 @@ import java.util.Optional;
 import battleship.direction.Direction;
 import battleship.exception.MalformattedException;
 import battleship.point.Point;
+import battleship.point.PointImpl;
 import battleship.point.PointsSetter;
 
 public class ShipImpl implements Ship {
@@ -16,7 +17,7 @@ public class ShipImpl implements Ship {
 
     public static class Builder {
         private ShipClass shipClass;
-        private List<Point> points;       
+        private List<Point> points;
 
         public Builder(ShipClass shipClass) {
             this.shipClass = shipClass;
@@ -30,13 +31,13 @@ public class ShipImpl implements Ship {
             return this;
         }
 
-        public Builder points(Point startPoint, Direction direction) throws MalformattedException{
-            
-                PointsSetter setter = new PointsSetter.Builder(shipClass.getSize()).startPoint(startPoint)
-                        .direction(direction)
-                        .build();
-                this.points = setter.getPoints();         
-            
+        public Builder points(PointImpl startPoint, Direction direction) throws MalformattedException {
+
+            PointsSetter setter = new PointsSetter.Builder(shipClass.getSize()).startPoint(startPoint)
+                    .direction(direction)
+                    .build();
+            this.points = setter.getPoints();
+
             return this;
         }
 
@@ -83,12 +84,12 @@ public class ShipImpl implements Ship {
 
     @Override
     public void shoot() {
-        if(isSunk()) {
+        if (isSunk()) {
             throw new IllegalStateException("Ship is already sunk");
         }
         health--;
     }
-    
+
     @Override
     public boolean isSunk() {
         return health == 0;
@@ -141,8 +142,7 @@ public class ShipImpl implements Ship {
 
     @Override
     public String toString() {
-        return "[shipClass=" + shipClass + ", health=" + health + ", points=" + points+"]" ;
+        return "[shipClass=" + shipClass + ", health=" + health + ", points=" + points + "]";
     }
-    
 
 }

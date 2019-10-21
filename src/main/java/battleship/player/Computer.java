@@ -1,7 +1,7 @@
 package battleship.player;
 
-import battleship.point.Point;
+import battleship.point.PointImpl;
 
 public interface Computer{    
-    Point prepareShot();
+    PointImpl prepareShot();
 }

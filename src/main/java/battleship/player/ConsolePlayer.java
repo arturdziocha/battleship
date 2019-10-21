@@ -5,6 +5,7 @@ import java.util.List;
 import battleship.exception.NotAllShipsPlacedException;
 import battleship.exception.ShipOverlapException;
 import battleship.fleet.Fleet;
+import battleship.fleet.FleetImpl;
 import battleship.ship.Ship;
 
 public class ConsolePlayer extends Player {    
@@ -12,7 +13,7 @@ public class ConsolePlayer extends Player {
         private String name;
         private Fleet fleet;
         public Builder name(String name) {
-            this.name = name;
+            this.name = name;            
             return this;
         }
         public Builder placeShip(Ship ship) throws ShipOverlapException {
@@ -25,14 +26,15 @@ public class ConsolePlayer extends Player {
             }
             return this;
         }
-        public ConsolePlayer build() throws NotAllShipsPlacedException {            
+        public ConsolePlayer build() throws NotAllShipsPlacedException {
+            fleet = new FleetImpl.Builder().build();
             return new ConsolePlayer(this);
         }
         
     }
     private ConsolePlayer(Builder builder) {
         super();
-        this.name = builder.name;
-        this.fleet = builder.fleet;
+        name = builder.name;
+        fleet = builder.fleet;
     }
 }

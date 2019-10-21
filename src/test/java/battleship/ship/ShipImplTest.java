@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import battleship.direction.Direction;
 import battleship.exception.MalformattedException;
 import battleship.point.Point;
+import battleship.point.PointImpl;
 
 class ShipImplTest {
     private Ship baseShip;
@@ -21,10 +22,10 @@ class ShipImplTest {
 
     @BeforeEach
     public void setup() throws MalformattedException {
-        this.baseShip = new ShipImpl.Builder(ShipClass.CARRIER).points(new Point.Builder("G6").build(), Direction.DOWN)
+        this.baseShip = new ShipImpl.Builder(ShipClass.CARRIER).points(new PointImpl.Builder("G6").build(), Direction.DOWN)
                 .build();
         this.destroyer = new ShipImpl.Builder(ShipClass.DESTROYER)
-                .points(new Point.Builder(3, 3).build(), Direction.RIGHT)
+                .points(new PointImpl.Builder(3, 3).build(), Direction.RIGHT)
                 .build();
     }
 
@@ -38,8 +39,8 @@ class ShipImplTest {
 
     @Test
     void shouldCreateBarcaWithGivenPoints() throws MalformattedException {
-        Point[] points = {new Point.Builder("G6").build()};
-        Ship ship = new ShipImpl.Builder(ShipClass.BARCA).points(new Point.Builder(5, 6).build(), Direction.UP)
+        PointImpl[] points = {new PointImpl.Builder("G6").build()};
+        Ship ship = new ShipImpl.Builder(ShipClass.BARCA).points(new PointImpl.Builder(5, 6).build(), Direction.UP)
                 .build();
         assertThat(ship.getPoints(), containsInAnyOrder(points));
     }
@@ -47,10 +48,10 @@ class ShipImplTest {
     @Test
     void upPointsSubmarineCreated() throws MalformattedException {
         Point[] points = {
-                new Point.Builder(5, 6).build(),
-                new Point.Builder(4, 6).build(),
-                new Point.Builder(3, 6).build()};
-        Ship ship = new ShipImpl.Builder(ShipClass.SUBMARINE).points(new Point.Builder("G6").build(), Direction.UP)
+                new PointImpl.Builder(5, 6).build(),
+                new PointImpl.Builder(4, 6).build(),
+                new PointImpl.Builder(3, 6).build()};
+        Ship ship = new ShipImpl.Builder(ShipClass.SUBMARINE).points(new PointImpl.Builder("G6").build(), Direction.UP)
                 .build();
         assertThat(ship.getPoints(), containsInAnyOrder(points));
     }
@@ -58,24 +59,24 @@ class ShipImplTest {
     @Test
     void bottomPointsCarrierCreated() throws MalformattedException{
         Point[] points = {
-                new Point.Builder(5, 6).build(),
-                new Point.Builder(6, 6).build(),
-                new Point.Builder(7, 6).build(),
-                new Point.Builder(8, 6).build(),
-                new Point.Builder(9, 6).build()};
+                new PointImpl.Builder(5, 6).build(),
+                new PointImpl.Builder(6, 6).build(),
+                new PointImpl.Builder(7, 6).build(),
+                new PointImpl.Builder(8, 6).build(),
+                new PointImpl.Builder(9, 6).build()};
         assertThat(baseShip.getPoints(), containsInAnyOrder(points));
     }
 
     @Test
     void shotReturnFalseWhenNotIsAt() throws MalformattedException {
 
-        assertFalse(baseShip.isAt(new Point.Builder("a1").build()).isPresent());
+        assertFalse(baseShip.isAt(new PointImpl.Builder("a1").build()).isPresent());
     }
 
     @Test
     void shotReturnTrueWhenShipIsAtPoint() throws MalformattedException{
 
-        assertTrue(baseShip.isAt(new Point.Builder("G6").build()).isPresent());
+        assertTrue(baseShip.isAt(new PointImpl.Builder("G6").build()).isPresent());
     }
 
     @Test
@@ -113,7 +114,7 @@ class ShipImplTest {
     @Test
     void otherShipIsUpAndToCloseReturnTrue() throws MalformattedException{
         Ship toCloseShip = new ShipImpl.Builder(ShipClass.DESTROYER)
-                .points(new Point.Builder(2, 3).build(), Direction.RIGHT)
+                .points(new PointImpl.Builder(2, 3).build(), Direction.RIGHT)
                 .build();
         assertTrue(destroyer.toCloseTo(toCloseShip));
     }
@@ -121,7 +122,7 @@ class ShipImplTest {
     @Test
     void otherShipIsDownAndToCloseReturnTrue() throws MalformattedException{
         Ship toCloseShip = new ShipImpl.Builder(ShipClass.DESTROYER)
-                .points(new Point.Builder(4, 3).build(), Direction.DOWN)
+                .points(new PointImpl.Builder(4, 3).build(), Direction.DOWN)
                 .build();
         assertTrue(destroyer.toCloseTo(toCloseShip));
     }

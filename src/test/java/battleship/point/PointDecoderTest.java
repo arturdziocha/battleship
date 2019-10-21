@@ -1,7 +1,7 @@
 package battleship.point;
 
 import battleship.exception.MalformattedException;
-import battleship.point.Point;
+import battleship.point.PointImpl;
 import battleship.point.PointDecoder;
 
 import org.junit.jupiter.api.Test;
@@ -23,31 +23,31 @@ class PointDecoderTest {
 
     @Test
     void givenPointIsTheSamePoint() throws MalformattedException {
-        Point point = new Point.Builder(9, 9).build();
-        Point pDecoded = PointDecoder.inputToPoint("J10");
+        PointImpl point = new PointImpl.Builder(9, 9).build();
+        PointImpl pDecoded = PointDecoder.inputToPoint("J10");
         assertEquals(point, pDecoded);
     }
 
     @Test
     void givenAnotherPointIsFalse() throws MalformattedException {
-        Point point = new Point.Builder(9, 9).build();
-        Point pDecoded = PointDecoder.inputToPoint("d10");
+        PointImpl point = new PointImpl.Builder(9, 9).build();
+        PointImpl pDecoded = PointDecoder.inputToPoint("d10");
         assertNotEquals(point, pDecoded);
     }
 
     @ParameterizedTest(name = "Is  the same point as input string: row = {0}, and column = {1}, Input String = {2}")
     @CsvSource({ "0,0,A1", "2,3,D3", "6,8,I7", "5,8,I6", "4,8,I5", "4,7,H5", "4,6,G5", "5,6,G6", "9,9,J10" })
     void shouldEqualsWhenOtherIsTheSameFromInput(int x, int y, String input) throws MalformattedException {
-        Point point = new Point.Builder(x, y).build();
-        Point pointDecoded = PointDecoder.inputToPoint(input);
+        PointImpl point = new PointImpl.Builder(x, y).build();
+        PointImpl pointDecoded = PointDecoder.inputToPoint(input);
         assertEquals(point, pointDecoded);
     }
 
     @ParameterizedTest(name = "Is  not the same point as input string: row = {0}, and column = {1}, Input String = {2}")
     @CsvSource({ "1,0,A1", "1,3,D3", "2,8,I7", "3,8,I6", "4,9,I5", "4,9,H5", "4,9,G5", "5,8,G6", "9,7,J10" })
     void shouldNotEqualsWhenOtherIsNotTheSameFromInput(int x, int y, String input) throws MalformattedException {
-        Point point = new Point.Builder(x, y).build();
-        Point pointDecoded = PointDecoder.inputToPoint(input);
+        PointImpl point = new PointImpl.Builder(x, y).build();
+        PointImpl pointDecoded = PointDecoder.inputToPoint(input);
         assertNotEquals(point, pointDecoded);
     }
 
