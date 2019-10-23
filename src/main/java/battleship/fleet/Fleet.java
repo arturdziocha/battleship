@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import battleship.exception.MalformattedException;
-import battleship.exception.ShipOverlapException;
+import battleship.exception.ShipPlacementException;
 import battleship.point.Point;
 import battleship.ship.Ship;
 import battleship.ship.ShipClass;
@@ -13,9 +13,9 @@ import battleship.ship.ShipClass;
 public interface Fleet {
     int SIZE = 10;
 
-    void placeShip(Ship ship) throws ShipOverlapException;
+    void placeShip(Ship ship) throws ShipPlacementException;
 
-    void placeShipsRandom() throws MalformattedException, ShipOverlapException;
+    void placeShipsRandom() throws MalformattedException, ShipPlacementException;
 
     List<ShipClass> shipsToPlace();
 

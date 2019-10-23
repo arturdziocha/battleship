@@ -17,7 +17,7 @@ class PointsSetterTest {
         PointImpl[] points = {
                 new PointImpl.Builder("B2").build(),
                 new PointImpl.Builder("b3").build(),
-                new PointImpl.Builder(3, 1).build() };
+                new PointImpl.Builder(3, 1).build()};
         PointsSetter pointSetter = new PointsSetter.Builder(3).startPoint(new PointImpl.Builder("b2").build())
                 .direction(Direction.DOWN)
                 .build();

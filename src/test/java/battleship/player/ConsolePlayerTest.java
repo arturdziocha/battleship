@@ -9,6 +9,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
@@ -16,7 +17,6 @@ import java.util.stream.IntStream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 
 import battleship.exception.MalformattedException;
 import battleship.exception.NotAllShipsPlacedException;
@@ -32,10 +32,10 @@ class ConsolePlayerTest {
 
     private ConsolePlayer player;
 
-    Fleet fleet;
+    private Fleet fleet;
 
     @BeforeEach
-    void setUp() throws NotAllShipsPlacedException, MalformattedException {
+    void setUp() {
         fleet = mock(Fleet.class);
         this.player = new ConsolePlayer.Builder("artur", fleet).build();
 
@@ -43,20 +43,21 @@ class ConsolePlayerTest {
 
     @Test
     @DisplayName("When initialized Fleet should be empty")
-    void whenInitializedThenShipsToPlaceShouldReturnAllShipsToPlace() throws NotAllShipsPlacedException {
+    void whenInitializedThenShipsToPlaceShouldReturnAllShipsToPlace() {
         doReturn(true).when(fleet)
                 .isAllShipsPlaced();
         doReturn(Arrays.asList(ShipClass.values())).when(fleet)
                 .shipsToPlace();
 
         ShipClass[] shipClasses = ShipClass.values();
-        List<ShipClass> shipsToPlace = player.shipsToPlace();
+        List<ShipClass> shipsToPlace = player.getFleet()
+                .shipsToPlace();
         assertThat(shipsToPlace, containsInAnyOrder(shipClasses));
     }
 
     @Test
     @DisplayName("When shot to fleet then return optional of ship")
-    void whenShotToFleeThenReturnOptionalOfShip() throws MalformattedException, NotAllShipsPlacedException {
+    void whenShotToFleeThenReturnOptionalOfShip() throws MalformattedException {
         Ship ship = new ShipImpl.Builder(ShipClass.CARRIER).points()
                 .build();
         Point point = new PointImpl.Builder("a2").build();
@@ -65,15 +66,14 @@ class ConsolePlayerTest {
                 .isAllShipsPlaced();
         when(fleet.shipAt(point)).thenReturn(Optional.of(ship));
 
-        assertEquals(ship, player.shootToFleet(point)
-                .get());
+        assertEquals(ship, player.shootToFleet(point).get());
 
     }
 
     @Test
     @DisplayName("When initialized Fleet Ships is empty")
     void whenInitializedFleetShipsIsEmpty() {
-        when(fleet.getShips()).thenReturn(Arrays.asList());
+        when(fleet.getShips()).thenReturn(Collections.emptyList());
         assertEquals(0, player.getFleet()
                 .getShips()
                 .size());
@@ -89,6 +89,4 @@ class ConsolePlayerTest {
         assertArrayEquals(expected, player.getShots());
 
     }
-    /**
-    */
 }

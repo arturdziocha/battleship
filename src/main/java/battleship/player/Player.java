@@ -1,22 +1,28 @@
 package battleship.player;
 
-import java.util.List;
 import java.util.Optional;
 
-import battleship.exception.NotAllShipsPlacedException;
+import battleship.exception.MalformattedException;
 import battleship.fleet.Fleet;
 import battleship.point.Point;
 import battleship.point.PointStatus;
 import battleship.ship.Ship;
-import battleship.ship.ShipClass;
 
-public interface Player {    
-    List<ShipClass> shipsToPlace();
-    Optional<Ship> shootToFleet(Point point) throws NotAllShipsPlacedException;
+public interface Player {
+    Optional<Ship> shootToFleet(Point point);
+
     boolean hasLost();
-    boolean isAlreadyShooted(Point point);
+
+    Point prepareShot() throws MalformattedException;
+
     void setShot(Point point, PointStatus pointStatus);
+
     void setShotSunk(Ship ship);
+
+    boolean isAlreadyShooted(Point point);
+
     PointStatus[][] getShots();
+
     Fleet getFleet();
+
 }

@@ -4,7 +4,7 @@ import java.util.Random;
 
 import battleship.exception.MalformattedException;
 
-public class PointImpl implements Point{
+public class PointImpl implements Point {
     private final int row;
     private final int column;
 
@@ -32,14 +32,17 @@ public class PointImpl implements Point{
         this.column = builder.column;
     }
 
+    @Override
     public int getRow() {
         return row;
     }
 
+    @Override
     public int getColumn() {
         return column;
     }
 
+    @Override
     public boolean isNeighbor(Point other) {
         return (Math.abs(getRow() - other.getRow()) <= 1) && (Math.abs(getColumn() - other.getColumn()) <= 1);
     }
@@ -74,6 +77,6 @@ public class PointImpl implements Point{
     @Override
     public String toString() {
         return "[row=" + row + ", column=" + column + "]";
-    }   
-    
+    }
+
 }

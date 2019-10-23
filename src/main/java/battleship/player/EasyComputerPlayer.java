@@ -1,38 +1,43 @@
 package battleship.player;
 
 import battleship.exception.MalformattedException;
-import battleship.exception.ShipOverlapException;
+import battleship.exception.ShipPlacementException;
 import battleship.fleet.Fleet;
 import battleship.fleet.FleetImpl;
+import battleship.point.Point;
 import battleship.point.PointImpl;
 
-public class EasyComputerPlayer extends AbstractPlayer implements Computer {
+public class EasyComputerPlayer extends AbstractPlayer {
     public static class Builder {
         private String name;
         private Fleet fleet;
+
         public Builder(Fleet fleet) {
             this.fleet = fleet;
         }
-        public EasyComputerPlayer build() throws MalformattedException, ShipOverlapException {
+
+        public EasyComputerPlayer build() throws MalformattedException, ShipPlacementException {
             name = "Easy Computer";
             fleet = new FleetImpl.Builder().build();
             fleet.placeShipsRandom();
-            
+
             return new EasyComputerPlayer(this);
         }
     }
+
     private EasyComputerPlayer(Builder builder) {
         super();
-        this.name = builder.name; 
+        this.name = builder.name;
         fleet = builder.fleet;
     }
 
-    
-
     @Override
-    public PointImpl prepareShot() {
-        // TODO Auto-generated method stub
-        return null;
+    public Point prepareShot() {
+        Point point = PointImpl.getRandomPoint();
+        while (isAlreadyShooted(point)) {
+            point = PointImpl.getRandomPoint();
+        }
+        return point;
     }
 
 }

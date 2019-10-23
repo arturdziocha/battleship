@@ -10,12 +10,12 @@ public interface Ship {
 
     int getSize();
 
-    int getHealth();    
+    int getHealth();
 
     List<Point> getPoints();
-    
+
     Optional<Point> isAt(Point point);
-    
+
     void shoot();
 
     boolean isSunk();
@@ -29,5 +29,5 @@ public interface Ship {
     int getMostLeftPosition();
 
     int getMostRightPosition();
-    
+
 }

@@ -21,7 +21,7 @@ class ShipImplTest {
     private Ship destroyer;
 
     @BeforeEach
-    public void setup() throws MalformattedException {
+    void setup() throws MalformattedException {
         this.baseShip = new ShipImpl.Builder(ShipClass.CARRIER).points(new PointImpl.Builder("G6").build(), Direction.DOWN)
                 .build();
         this.destroyer = new ShipImpl.Builder(ShipClass.DESTROYER)
@@ -57,7 +57,7 @@ class ShipImplTest {
     }
 
     @Test
-    void bottomPointsCarrierCreated() throws MalformattedException{
+    void bottomPointsCarrierCreated() {
         Point[] points = {
                 new PointImpl.Builder(5, 6).build(),
                 new PointImpl.Builder(6, 6).build(),
@@ -74,27 +74,27 @@ class ShipImplTest {
     }
 
     @Test
-    void shotReturnTrueWhenShipIsAtPoint() throws MalformattedException{
+    void shotReturnTrueWhenShipIsAtPoint() throws MalformattedException {
 
         assertTrue(baseShip.isAt(new PointImpl.Builder("G6").build()).isPresent());
     }
 
     @Test
-    void whenShotAndPointInPointsHealthIsSmaller() throws MalformattedException {
+    void whenShotAndPointInPointsHealthIsSmaller() {
 
         baseShip.shoot();
         assertEquals(4, baseShip.getHealth());
     }
 
     @Test
-    void when2ShotsAndPointInPointsHealthIsSmaller() throws MalformattedException {
+    void when2ShotsAndPointInPointsHealthIsSmaller() {
         baseShip.shoot();
         baseShip.shoot();
         assertEquals(3, baseShip.getHealth());
     }
 
     @Test
-    void shouldBeSunkAfterShots() throws MalformattedException {
+    void shouldBeSunkAfterShots() {
         baseShip.shoot();
         baseShip.shoot();
         baseShip.shoot();
@@ -102,17 +102,18 @@ class ShipImplTest {
         baseShip.shoot();
         assertTrue(baseShip.isSunk());
     }
+
     @Test
-    public void testTooManyHits() {
+    void testTooManyHits() {
         destroyer.shoot();
         destroyer.shoot();
         destroyer.shoot();
-        
-        assertThrows(IllegalStateException.class, ()->destroyer.shoot());
+
+        assertThrows(IllegalStateException.class, () -> destroyer.shoot());
     }
 
     @Test
-    void otherShipIsUpAndToCloseReturnTrue() throws MalformattedException{
+    void otherShipIsUpAndToCloseReturnTrue() throws MalformattedException {
         Ship toCloseShip = new ShipImpl.Builder(ShipClass.DESTROYER)
                 .points(new PointImpl.Builder(2, 3).build(), Direction.RIGHT)
                 .build();
@@ -120,12 +121,13 @@ class ShipImplTest {
     }
 
     @Test
-    void otherShipIsDownAndToCloseReturnTrue() throws MalformattedException{
+    void otherShipIsDownAndToCloseReturnTrue() throws MalformattedException {
         Ship toCloseShip = new ShipImpl.Builder(ShipClass.DESTROYER)
                 .points(new PointImpl.Builder(4, 3).build(), Direction.DOWN)
                 .build();
         assertTrue(destroyer.toCloseTo(toCloseShip));
     }
+
     @Test
     void getMostTopPosition() {
         assertThat(destroyer.getMostTopPosition(), is(3));
@@ -140,6 +142,7 @@ class ShipImplTest {
     void getMostLeftPosition() {
         assertThat(destroyer.getMostLeftPosition(), is(3));
     }
+
     @Test
     void getMostRightPosition() {
         assertThat(destroyer.getMostRightPosition(), is(5));

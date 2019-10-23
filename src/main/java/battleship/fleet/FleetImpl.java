@@ -7,7 +7,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import battleship.exception.MalformattedException;
-import battleship.exception.ShipOverlapException;
+import battleship.exception.ShipPlacementException;
 import battleship.point.Point;
 import battleship.ship.Ship;
 import battleship.ship.ShipClass;
@@ -30,18 +30,18 @@ public class FleetImpl implements Fleet {
     }
 
     @Override
-    public void placeShip(Ship ship) throws ShipOverlapException {
+    public void placeShip(Ship ship) throws ShipPlacementException {
         if (ship == null) {
             throw new IllegalArgumentException("Tried to place a null ship.");
         }
         if (isOutsideBoard(ship)) {
-            throw new ShipOverlapException("Ship is outside board");
+            throw new ShipPlacementException("Ship is outside board");
         }
         if (isToClose(ship)) {
-            throw new ShipOverlapException("Ship is to close another ship");
+            throw new ShipPlacementException("Ship is to close another ship");
         }
         if (isAlreadyPlaced(ship)) {
-            throw new ShipOverlapException("Ship is already set");
+            throw new ShipPlacementException("Ship is already set");
         }
         ships.add(ship);
 
