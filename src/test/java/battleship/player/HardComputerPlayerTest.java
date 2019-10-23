@@ -16,12 +16,12 @@ class HardComputerPlayerTest {
     void setUp() throws MalformattedException, ShipOverlapException {
         player = new HardComputerPlayer.Builder().build();
     }
-
+/**
     @DisplayName("When Initialized Player should create fleet with ships")
     @Test
     void initializePlayerShouldCreateFleetWithShips() {
         assertTrue(player.getFleet()
                 .isAllShipsPlaced());
     }
-
+*/
 }

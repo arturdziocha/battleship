@@ -7,25 +7,24 @@ import battleship.fleet.FleetImpl;
 import battleship.point.PointImpl;
 import battleship.point.PointStatus;
 
-public class HardComputerPlayer extends Player implements Computer {
+public class HardComputerPlayer extends AbstractPlayer implements Computer {
     private PointImpl lastShot;
     private PointStatus lastShotStatus;
 
     public static class Builder {
-        private String name;
+        private String name;       
         private Fleet fleet;
-
         public HardComputerPlayer build() throws MalformattedException, ShipOverlapException {
-            name = "Hard Computer";
+            name = "Hard Computer";            
             fleet = new FleetImpl.Builder().build();
             fleet.placeShipsRandom();
             return new HardComputerPlayer(this);
         }
     }
 
-    private HardComputerPlayer(Builder builder) throws MalformattedException, ShipOverlapException {
+    private HardComputerPlayer(Builder builder) {
         super();
-        this.name = builder.name;
+        this.name = builder.name;    
         fleet = builder.fleet;
     }
 
