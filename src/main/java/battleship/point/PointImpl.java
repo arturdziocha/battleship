@@ -1,10 +1,10 @@
 package battleship.point;
 
+import battleship.exception.MalformattedException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import battleship.exception.MalformattedException;
 
 public final class PointImpl implements Point, Comparable<Point> {
     private final int row;
@@ -30,7 +30,7 @@ public final class PointImpl implements Point, Comparable<Point> {
 
         /**
          * Build point from pointString
-         * 
+         *
          * @param pointString
          * @throws MalformattedException
          */
@@ -103,7 +103,7 @@ public final class PointImpl implements Point, Comparable<Point> {
 
     @Override
     public int compareTo(Point other) {
-        return new Double(distance(this)).compareTo(distance(other));
+        return Double.valueOf(distance(this)).compareTo(distance(other));
     }
 
     private double distance(Point p) {
