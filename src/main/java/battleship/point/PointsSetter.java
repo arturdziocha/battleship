@@ -22,7 +22,7 @@ public class PointsSetter {
         }
 
         public Builder startPoint() {
-            this.startPoint = PointImpl.getRandomPoint();
+            this.startPoint = new PointImpl.Builder().build();
             return this;
         }
 
@@ -65,18 +65,18 @@ public class PointsSetter {
 
     public List<Point> getPoints() {
         switch (direction) {
-            case UP:
-                fillTop();
-                break;
-            case DOWN:
-                fillBottom();
-                break;
-            case RIGHT:
-                fillRight();
-                break;
-            case LEFT:
-                fillLeft();
-                break;
+        case UP:
+            fillTop();
+            break;
+        case DOWN:
+            fillBottom();
+            break;
+        case RIGHT:
+            fillRight();
+            break;
+        case LEFT:
+            fillLeft();
+            break;
         }
         return points;
     }

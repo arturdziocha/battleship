@@ -25,9 +25,10 @@ class EasyComputerPlayerTest {
     @DisplayName("When Initialized Player should create fleet with ships")
     @Test
     void initializePlayerShouldCreateFleetWithShips() {
-        doReturn(true).when(fleet).isAllShipsPlaced();
-        assertTrue(player.getFleet().isAllShipsPlaced());
+        doReturn(true).when(fleet)
+                .isAllShipsPlaced();
+        assertTrue(player.getFleet()
+                .isAllShipsPlaced());
     }
-
 
 }

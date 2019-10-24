@@ -1,7 +1,9 @@
 package battleship.player;
 
-import java.util.Optional;
-import java.util.stream.IntStream;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import battleship.exception.MalformattedException;
 import battleship.fleet.Fleet;
@@ -10,21 +12,9 @@ import battleship.point.PointStatus;
 import battleship.ship.Ship;
 
 public abstract class AbstractPlayer implements Player {
-    private PointStatus[][] shots;
+    private Map<Point, PointStatus> shots = new TreeMap<>();
     Fleet fleet;
-    String name;
-
-    AbstractPlayer() {
-        shots = new PointStatus[10][10];
-        IntStream.range(0, shots.length)
-                .forEach(x -> IntStream.range(0, shots.length)
-                        .forEach(y -> shots[x][y] = PointStatus.EMPTY));
-    }
-
-    @Override
-    public Optional<Ship> shootToFleet(Point point) {
-        return fleet.shipAt(point);
-    }
+    String name;   
 
     @Override
     public boolean hasLost() {
@@ -33,22 +23,43 @@ public abstract class AbstractPlayer implements Player {
 
     @Override
     public void setShot(Point point, PointStatus pointStatus) {
-        shots[point.getRow()][point.getColumn()] = pointStatus;
+        if (shots.containsKey(point)) {
+            shots.replace(point, pointStatus);
+        } else {
+            shots.put(point, pointStatus);
+        }
     }
 
     @Override
     public void setShotSunk(Ship ship) {
+        Set<Point> occupiedPoints = new TreeSet<>();
+
         ship.getPoints()
-                .forEach(point -> shots[point.getRow()][point.getColumn()] = PointStatus.SUNK);
+                .forEach(point -> {
+                    setShot(point, PointStatus.SUNK);
+                    point.calculateNeighbors()
+                            .forEach(neighbor -> occupiedPoints.add(neighbor));
+                });
+        occupiedPoints.removeAll(ship.getPoints());
+        occupiedPoints.forEach(point -> setShot(point, PointStatus.OCCUPIED));
+
+//        ship.getPoints()
+//                .forEach(point -> {
+//                    point.calculateNeighbors()
+//                            .forEach(neighbor -> setShot(neighbor, PointStatus.OCCUPIED));
+//                });
+
+//        ship.getPoints()
+//                .forEach(point -> setShot(point, PointStatus.SUNK));
     }
 
     @Override
     public boolean isAlreadyShooted(Point point) {
-        return !shots[point.getRow()][point.getColumn()].equals(PointStatus.EMPTY);
+        return shots.containsKey(point);
     }
 
     @Override
-    public PointStatus[][] getShots() {
+    public Map<Point, PointStatus> getShots() {
         return shots;
     }
 

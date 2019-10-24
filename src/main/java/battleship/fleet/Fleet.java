@@ -9,7 +9,6 @@ import battleship.point.Point;
 import battleship.ship.Ship;
 import battleship.ship.ShipClass;
 
-
 public interface Fleet {
     int SIZE = 10;
 

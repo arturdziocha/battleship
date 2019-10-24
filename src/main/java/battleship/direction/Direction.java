@@ -4,7 +4,6 @@ import java.util.Random;
 
 import battleship.exception.MalformattedException;
 
-
 public enum Direction {
     UP(0, 'u'), RIGHT(1, 'r'), DOWN(2, 'd'), LEFT(3, 'l');
     private final int value;

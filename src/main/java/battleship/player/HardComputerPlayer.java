@@ -1,9 +1,6 @@
 package battleship.player;
 
-import battleship.exception.MalformattedException;
-import battleship.exception.ShipPlacementException;
 import battleship.fleet.Fleet;
-import battleship.fleet.FleetImpl;
 import battleship.point.Point;
 import battleship.point.PointImpl;
 import battleship.point.PointStatus;

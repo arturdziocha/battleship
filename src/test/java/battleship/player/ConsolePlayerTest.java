@@ -1,25 +1,20 @@
 package battleship.player;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.doReturn;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.IntStream;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import battleship.direction.Direction;
 import battleship.exception.MalformattedException;
-import battleship.exception.NotAllShipsPlacedException;
 import battleship.fleet.Fleet;
 import battleship.point.Point;
 import battleship.point.PointImpl;
@@ -28,45 +23,22 @@ import battleship.ship.Ship;
 import battleship.ship.ShipClass;
 import battleship.ship.ShipImpl;
 
+/**
+ * @author P
+ *
+ */
 class ConsolePlayerTest {
 
-    private ConsolePlayer player;
+    private Player player;
 
     private Fleet fleet;
+    private Map<Point, PointStatus> expected;
 
     @BeforeEach
     void setUp() {
+        expected = new TreeMap<>();
         fleet = mock(Fleet.class);
         this.player = new ConsolePlayer.Builder("artur", fleet).build();
-
-    }
-
-    @Test
-    @DisplayName("When initialized Fleet should be empty")
-    void whenInitializedThenShipsToPlaceShouldReturnAllShipsToPlace() {
-        doReturn(true).when(fleet)
-                .isAllShipsPlaced();
-        doReturn(Arrays.asList(ShipClass.values())).when(fleet)
-                .shipsToPlace();
-
-        ShipClass[] shipClasses = ShipClass.values();
-        List<ShipClass> shipsToPlace = player.getFleet()
-                .shipsToPlace();
-        assertThat(shipsToPlace, containsInAnyOrder(shipClasses));
-    }
-
-    @Test
-    @DisplayName("When shot to fleet then return optional of ship")
-    void whenShotToFleeThenReturnOptionalOfShip() throws MalformattedException {
-        Ship ship = new ShipImpl.Builder(ShipClass.CARRIER).points()
-                .build();
-        Point point = new PointImpl.Builder("a2").build();
-
-        doReturn(true).when(fleet)
-                .isAllShipsPlaced();
-        when(fleet.shipAt(point)).thenReturn(Optional.of(ship));
-
-        assertEquals(ship, player.shootToFleet(point).get());
 
     }
 
@@ -82,11 +54,44 @@ class ConsolePlayerTest {
     @Test
     @DisplayName("Test getShots should return expected array of PointStatus.EMPTY")
     void shouldReturnArrayOfPointStatusEmpty() {
-        PointStatus[][] expected = new PointStatus[10][10];
-        IntStream.range(0, 10)
-                .forEach(x -> IntStream.range(0, 10)
-                        .forEach(y -> expected[x][y] = PointStatus.EMPTY));
-        assertArrayEquals(expected, player.getShots());
-
+        assertTrue(expected.equals(player.getShots()));
     }
+
+    @Test
+    @DisplayName("Set shot should set shot point to HIT")
+    void shouldSetShotPointToHit() throws MalformattedException {
+        expected.put(new PointImpl.Builder(1, 1).build(), PointStatus.HIT);
+        player.setShot(new PointImpl.Builder("b2").build(), PointStatus.HIT);
+        assertTrue(expected.equals(player.getShots()));
+    }
+
+    @Test
+    @DisplayName("Set shot sunk should set points SUNK and neigbors Occupied")
+    void shouldSetPointsSunkWhenShipIsSunk() throws MalformattedException {
+
+        // Occupied
+        expected.put(new PointImpl.Builder(0, 0).build(), PointStatus.OCCUPIED);
+        expected.put(new PointImpl.Builder(1, 0).build(), PointStatus.OCCUPIED);
+        expected.put(new PointImpl.Builder(2, 0).build(), PointStatus.OCCUPIED);
+        expected.put(new PointImpl.Builder(3, 0).build(), PointStatus.OCCUPIED);
+        expected.put(new PointImpl.Builder(4, 0).build(), PointStatus.OCCUPIED);
+        expected.put(new PointImpl.Builder(0, 1).build(), PointStatus.OCCUPIED);
+        expected.put(new PointImpl.Builder(4, 1).build(), PointStatus.OCCUPIED);
+        expected.put(new PointImpl.Builder(0, 2).build(), PointStatus.OCCUPIED);
+        expected.put(new PointImpl.Builder(1, 2).build(), PointStatus.OCCUPIED);
+        expected.put(new PointImpl.Builder(2, 2).build(), PointStatus.OCCUPIED);
+        expected.put(new PointImpl.Builder(3, 2).build(), PointStatus.OCCUPIED);
+        expected.put(new PointImpl.Builder(4, 2).build(), PointStatus.OCCUPIED);
+        // SUNK
+        expected.put(new PointImpl.Builder(1, 1).build(), PointStatus.SUNK);
+        expected.put(new PointImpl.Builder(2, 1).build(), PointStatus.SUNK);
+        expected.put(new PointImpl.Builder(3, 1).build(), PointStatus.SUNK);
+
+        Ship ship = new ShipImpl.Builder(ShipClass.SUBMARINE)
+                .points(new PointImpl.Builder("b2").build(), Direction.DOWN)
+                .build();
+        player.setShotSunk(ship);        
+        assertTrue(expected.equals(player.getShots()));
+    }
+
 }

@@ -1,6 +1,6 @@
 package battleship.player;
 
-import java.util.Optional;
+import java.util.Map;
 
 import battleship.exception.MalformattedException;
 import battleship.fleet.Fleet;
@@ -9,7 +9,6 @@ import battleship.point.PointStatus;
 import battleship.ship.Ship;
 
 public interface Player {
-    Optional<Ship> shootToFleet(Point point);
 
     boolean hasLost();
 
@@ -21,7 +20,7 @@ public interface Player {
 
     boolean isAlreadyShooted(Point point);
 
-    PointStatus[][] getShots();
+    Map<Point, PointStatus> getShots();
 
     Fleet getFleet();
 

@@ -1,10 +1,12 @@
 package battleship.point;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import battleship.exception.MalformattedException;
 
-public class PointImpl implements Point {
+public final class PointImpl implements Point, Comparable<Point> {
     private final int row;
     private final int column;
 
@@ -17,6 +19,21 @@ public class PointImpl implements Point {
             this.column = column;
         }
 
+        /**
+         * Build point with random row and column
+         */
+        public Builder() {
+            Random random = new Random();
+            row = random.nextInt(10);
+            column = random.nextInt(10);
+        }
+
+        /**
+         * Build point from pointString
+         * 
+         * @param pointString
+         * @throws MalformattedException
+         */
         public Builder(String pointString) throws MalformattedException {
             row = PointDecoder.getRow(pointString);
             column = PointDecoder.getColumn(pointString);
@@ -47,12 +64,17 @@ public class PointImpl implements Point {
         return (Math.abs(getRow() - other.getRow()) <= 1) && (Math.abs(getColumn() - other.getColumn()) <= 1);
     }
 
-    public static PointImpl getRandomPoint() {
-        Random random = new Random();
-        int row = random.nextInt(10);
-        int col = random.nextInt(10);
-        return new PointImpl.Builder(row, col).build();
+    @Override
+    public List<Point> calculateNeighbors() {
+        List<Point> toReturn = new ArrayList<>();
+        for (int i = -1; i <= 1; i++) {
+            toReturn.add(new PointImpl.Builder(row - 1, column + i).build());
+            toReturn.add(new PointImpl.Builder(row + 1, column + i).build());
+        }
+        toReturn.add(new PointImpl.Builder(row, column - 1).build());
+        toReturn.add(new PointImpl.Builder(row, column + 1).build());
 
+        return toReturn;
     }
 
     @Override
@@ -77,6 +99,15 @@ public class PointImpl implements Point {
     @Override
     public String toString() {
         return "[row=" + row + ", column=" + column + "]";
+    }
+
+    @Override
+    public int compareTo(Point other) {
+        return new Double(distance(this)).compareTo(distance(other));
+    }
+
+    private double distance(Point p) {
+        return (double) Math.sqrt(Math.pow(p.getRow(), 2) + Math.pow(p.getColumn(), 2));
     }
 
 }

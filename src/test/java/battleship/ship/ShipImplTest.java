@@ -22,7 +22,8 @@ class ShipImplTest {
 
     @BeforeEach
     void setup() throws MalformattedException {
-        this.baseShip = new ShipImpl.Builder(ShipClass.CARRIER).points(new PointImpl.Builder("G6").build(), Direction.DOWN)
+        this.baseShip = new ShipImpl.Builder(ShipClass.CARRIER)
+                .points(new PointImpl.Builder("G6").build(), Direction.DOWN)
                 .build();
         this.destroyer = new ShipImpl.Builder(ShipClass.DESTROYER)
                 .points(new PointImpl.Builder(3, 3).build(), Direction.RIGHT)
@@ -39,7 +40,7 @@ class ShipImplTest {
 
     @Test
     void shouldCreateBarcaWithGivenPoints() throws MalformattedException {
-        PointImpl[] points = {new PointImpl.Builder("G6").build()};
+        PointImpl[] points = { new PointImpl.Builder("G6").build() };
         Ship ship = new ShipImpl.Builder(ShipClass.BARCA).points(new PointImpl.Builder(5, 6).build(), Direction.UP)
                 .build();
         assertThat(ship.getPoints(), containsInAnyOrder(points));
@@ -50,7 +51,7 @@ class ShipImplTest {
         Point[] points = {
                 new PointImpl.Builder(5, 6).build(),
                 new PointImpl.Builder(4, 6).build(),
-                new PointImpl.Builder(3, 6).build()};
+                new PointImpl.Builder(3, 6).build() };
         Ship ship = new ShipImpl.Builder(ShipClass.SUBMARINE).points(new PointImpl.Builder("G6").build(), Direction.UP)
                 .build();
         assertThat(ship.getPoints(), containsInAnyOrder(points));
@@ -63,20 +64,22 @@ class ShipImplTest {
                 new PointImpl.Builder(6, 6).build(),
                 new PointImpl.Builder(7, 6).build(),
                 new PointImpl.Builder(8, 6).build(),
-                new PointImpl.Builder(9, 6).build()};
+                new PointImpl.Builder(9, 6).build() };
         assertThat(baseShip.getPoints(), containsInAnyOrder(points));
     }
 
     @Test
     void shotReturnFalseWhenNotIsAt() throws MalformattedException {
 
-        assertFalse(baseShip.isAt(new PointImpl.Builder("a1").build()).isPresent());
+        assertFalse(baseShip.isAt(new PointImpl.Builder("a1").build())
+                .isPresent());
     }
 
     @Test
     void shotReturnTrueWhenShipIsAtPoint() throws MalformattedException {
 
-        assertTrue(baseShip.isAt(new PointImpl.Builder("G6").build()).isPresent());
+        assertTrue(baseShip.isAt(new PointImpl.Builder("G6").build())
+                .isPresent());
     }
 
     @Test

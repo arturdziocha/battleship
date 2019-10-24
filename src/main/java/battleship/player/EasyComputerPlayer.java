@@ -33,9 +33,9 @@ public class EasyComputerPlayer extends AbstractPlayer {
 
     @Override
     public Point prepareShot() {
-        Point point = PointImpl.getRandomPoint();
+        Point point = new PointImpl.Builder().build();
         while (isAlreadyShooted(point)) {
-            point = PointImpl.getRandomPoint();
+            point = new PointImpl.Builder().build();
         }
         return point;
     }
