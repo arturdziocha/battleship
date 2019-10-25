@@ -1,10 +1,10 @@
 package battleship.point;
 
-import battleship.exception.MalformattedException;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
+import java.util.Set;
+import java.util.TreeSet;
+
+import battleship.exception.MalformattedException;
 
 public final class PointImpl implements Point, Comparable<Point> {
     private final int row;
@@ -65,8 +65,8 @@ public final class PointImpl implements Point, Comparable<Point> {
     }
 
     @Override
-    public List<Point> calculateNeighbors() {
-        List<Point> toReturn = new ArrayList<>();
+    public Set<Point> calculateNeighbors() {
+        Set<Point> toReturn = new TreeSet<>();
         for (int i = -1; i <= 1; i++) {
             toReturn.add(new PointImpl.Builder(row - 1, column + i).build());
             toReturn.add(new PointImpl.Builder(row + 1, column + i).build());

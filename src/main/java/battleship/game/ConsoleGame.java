@@ -1,0 +1,133 @@
+package battleship.game;
+
+import java.util.List;
+import java.util.Scanner;
+
+import battleship.direction.Direction;
+import battleship.exception.MalformattedException;
+import battleship.exception.ShipPlacementException;
+import battleship.fleet.Fleet;
+import battleship.fleet.FleetImpl;
+import battleship.player.ConsolePlayer;
+import battleship.player.EasyComputerPlayer;
+import battleship.player.HardComputerPlayer;
+import battleship.player.Player;
+import battleship.point.Point;
+import battleship.point.PointImpl;
+import battleship.ship.Ship;
+import battleship.ship.ShipClass;
+import battleship.ship.ShipImpl;
+import battleship.view.View;
+
+public class ConsoleGame implements Game {
+    private Player firstPlayer, secondPlayer, currentPlayer;
+    private Scanner reader = new Scanner(System.in);
+    private final View view;
+
+    public ConsoleGame(View view) {
+        this.view = view;
+    }
+
+    @Override
+    public void play() {
+        view.welcomeUsers();
+        view.showInstructions();
+        view.showGameMode();
+        int mode = reader.nextInt();
+        setupPlayers(mode);
+        System.out.println(mode);
+    }
+
+    private void setupPlayers(int mode) {
+
+        switch (mode) {
+        case 0:
+            setupHumanPlayers();
+            break;
+        case 1:
+        case 2:
+            setupHumanWithComputer(mode);
+            break;
+
+        }
+    }
+
+    private void setupHumanPlayers() {
+
+    }
+
+    private void setupHumanWithComputer(int mode) {
+        String firstPlayerName = setupName();
+        Fleet firstPlayerFleet = new FleetImpl.Builder().build();
+        view.showShipPlacementMode();
+        int placementMode = reader.nextInt();
+        if (placementMode == 0) {
+            firstPlayerFleet.placeShipsRandom();
+        } else if (placementMode == 1) {
+            while (!firstPlayerFleet.isAllShipsPlaced()) {
+                List<ShipClass> shipsToPlace = firstPlayerFleet.shipsToPlace();
+                view.showShipsToPlace(shipsToPlace);
+                int shipToPlaceId = reader.nextInt();
+                view.showShipPositioningView(shipsToPlace.get(shipToPlaceId));
+                String position = reader.next();
+                String directionStr = reader.next();
+                Point startPoint = new PointImpl.Builder(position).build();
+                Direction direction = Direction.getFromShortName(directionStr);
+                Ship ship = new ShipImpl.Builder(shipsToPlace.get(shipToPlaceId)).points(startPoint, direction)
+                        .build();
+            }
+        }
+        Fleet secondPlayerFleet = new FleetImpl.Builder().build();
+        secondPlayerFleet.placeShipsRandom();
+        secondPlayer = mode == 1 ? new EasyComputerPlayer.Builder(secondPlayerFleet).build()
+                : new HardComputerPlayer.Builder(secondPlayerFleet).build();
+    }
+
+    private Player setupPlayer(int playerNumber) {
+        String name = setupName();
+        Fleet fleet = new FleetImpl.Builder().build();
+        boolean placementModeSuccess = false;
+        while (placementModeSuccess == false) {
+
+            view.showShipPlacementMode();
+            int placementMode = reader.nextInt();            
+            placementModeSuccess = (placementMode == 0 || placementMode == 1) ? true : false;
+
+            if (placementMode == 1) {
+                try {
+                    fleet.placeShipsRandom();
+                    while (!fleet.isAllShipsPlaced()) {
+                        fleet.placeShipsRandom();
+                    }
+                } catch (MalformattedException e) {
+                    System.out.println(e.getMessage());
+                    System.exit(0);
+                }
+
+            } else if (placementMode == 0) {
+                while (!fleet.isAllShipsPlaced()) {
+                    List<ShipClass> shipsToPlace = fleet.shipsToPlace();
+                    view.showShipsToPlace(shipsToPlace);
+                    int shipIdToPlace = reader.nextInt();
+                    while (true) {
+                        try {
+                            ShipClass shipToPlace = shipsToPlace.get(shipIdToPlace);
+                        } catch (IndexOutOfBoundsException e) {
+                            System.out.println("Index of bound. Please select ship one more time");
+                            view.showShipsToPlace(shipsToPlace);
+                            shipIdToPlace = reader.nextInt();
+                            continue;
+                        }
+                    }
+                }
+            }
+        }
+        return new ConsolePlayer.Builder(name, fleet).build();
+    }
+
+    private String setupName() {
+        view.showNameSelect();
+        return reader.next();
+    }
+
+}

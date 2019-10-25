@@ -29,7 +29,8 @@ public class ConsolePlayer extends AbstractPlayer {
 
     @Override
     public Point prepareShot() throws MalformattedException {
-        String pointString = ConsoleReader.shotPointReader();
+        ConsoleReader reader = new ConsoleReader();
+        String pointString = reader.shotPointReader();
         return new PointImpl.Builder(pointString).build();
     }
 }

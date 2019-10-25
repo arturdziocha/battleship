@@ -26,7 +26,7 @@ public class PointsSetter {
             return this;
         }
 
-        public Builder startPoint(PointImpl startPoint) {
+        public Builder startPoint(Point startPoint) {
             this.startPoint = startPoint;
             return this;
         }

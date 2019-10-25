@@ -14,7 +14,7 @@ public interface Fleet {
 
     void placeShip(Ship ship) throws ShipPlacementException;
 
-    void placeShipsRandom() throws MalformattedException, ShipPlacementException;
+    void placeShipsRandom() throws MalformattedException;
 
     List<ShipClass> shipsToPlace();
 

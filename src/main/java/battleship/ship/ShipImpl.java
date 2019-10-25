@@ -6,7 +6,6 @@ import java.util.Optional;
 import battleship.direction.Direction;
 import battleship.exception.MalformattedException;
 import battleship.point.Point;
-import battleship.point.PointImpl;
 import battleship.point.PointsSetter;
 
 public class ShipImpl implements Ship {
@@ -31,7 +30,7 @@ public class ShipImpl implements Ship {
             return this;
         }
 
-        public Builder points(PointImpl startPoint, Direction direction) throws MalformattedException {
+        public Builder points(Point startPoint, Direction direction) throws MalformattedException {
 
             PointsSetter setter = new PointsSetter.Builder(shipClass.getSize()).startPoint(startPoint)
                     .direction(direction)

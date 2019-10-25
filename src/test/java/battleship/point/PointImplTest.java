@@ -76,8 +76,7 @@ class PointImplTest {
                 new PointImpl.Builder(6, 7).build(),
                 new PointImpl.Builder(6, 8).build(),
                 new PointImpl.Builder(5, 6).build(),
-                new PointImpl.Builder(5, 8).build()};
-        System.out.println(point.calculateNeighbors());
+                new PointImpl.Builder(5, 8).build()};        
         assertThat(point.calculateNeighbors(), containsInAnyOrder(points));
 
     }

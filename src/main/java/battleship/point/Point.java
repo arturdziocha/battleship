@@ -1,6 +1,6 @@
 package battleship.point;
 
-import java.util.List;
+import java.util.Set;
 
 public interface Point{
     int getRow();
@@ -9,6 +9,6 @@ public interface Point{
 
     boolean isNeighbor(Point other);
     
-    List<Point> calculateNeighbors();
+    Set<Point> calculateNeighbors();
 
 }
