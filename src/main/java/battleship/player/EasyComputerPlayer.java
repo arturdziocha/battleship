@@ -1,7 +1,5 @@
 package battleship.player;
 
-import battleship.exception.MalformattedException;
-import battleship.exception.ShipPlacementException;
 import battleship.fleet.Fleet;
 import battleship.point.Point;
 import battleship.point.PointImpl;
@@ -15,7 +13,7 @@ public class EasyComputerPlayer extends AbstractPlayer {
             this.fleet = fleet;
         }
 
-        public EasyComputerPlayer build() throws MalformattedException, ShipPlacementException {
+        public EasyComputerPlayer build() {
             name = "Easy Computer";
             return new EasyComputerPlayer(this);
         }
