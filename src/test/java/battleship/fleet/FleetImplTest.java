@@ -152,6 +152,7 @@ class FleetImplTest {
         for (Ship ship : ships) {
             fleet.placeShip(ship);
         }
+        fleet.getShips().stream().flatMap(ss->ss.getPoints().stream()).forEach(System.out::println);
         assertFalse(fleet.isAllShipsPlaced());
     }
 

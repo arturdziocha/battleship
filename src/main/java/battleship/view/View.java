@@ -2,6 +2,7 @@ package battleship.view;
 
 import java.util.List;
 
+import battleship.fleet.Fleet;
 import battleship.ship.ShipClass;
 
 public interface View {
@@ -12,5 +13,6 @@ public interface View {
     void showShipPlacementMode();
     void showShipsToPlace(List<ShipClass> shipsToPlace);
     void showShipPositioningView(ShipClass shipClass);
+	void showFleetShips(Fleet fleet);
     
 }
