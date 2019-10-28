@@ -14,6 +14,20 @@ public enum Direction {
         this.shortName = shortName;
     }
 
+    public char getShortName() {
+        return shortName;
+    }
+
+    public Direction turnLeft() {
+        int index = (value + 3) % 4;
+        return Direction.values()[index];
+    }
+
+    public Direction turnRight() {
+        int index = (value + 1) % 4;
+        return Direction.values()[index];
+    }
+
     public static Direction getFromShortName(char u) throws MalformattedException {
         for (Direction direction : Direction.values()) {
             if (direction.shortName == u) {
@@ -26,15 +40,5 @@ public enum Direction {
     public static Direction getRandomDirection() {
         Random random = new Random();
         return Direction.values()[random.nextInt(Direction.values().length)];
-    }
-
-    public Direction turnLeft() {
-        int index = (value + 3) % 4;
-        return Direction.values()[index];
-    }
-
-    public Direction turnRight() {
-        int index = (value + 1) % 4;
-        return Direction.values()[index];
     }
 }

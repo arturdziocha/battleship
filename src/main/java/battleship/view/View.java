@@ -10,8 +10,8 @@ public interface View {
     void showInstructions();
     void showGameMode();
     void showNameSelect();
-    void showShipPlacementMode();
-    void showShipsToPlace(List<ShipClass> shipsToPlace);
+    void showShipPlacementModeView(String playerName);
+    void showShipsToPlace(String playerName, List<ShipClass> shipsToPlace);
     void showShipPositioningView(ShipClass shipClass);
 	void showFleetShips(Fleet fleet);
     
