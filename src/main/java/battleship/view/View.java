@@ -13,6 +13,7 @@ public interface View {
     void showShipPlacementModeView(String playerName);
     void showShipsToPlace(String playerName, List<ShipClass> shipsToPlace);
     void showShipPositioningView(ShipClass shipClass);
+    void showShipDirectionView(ShipClass shipClass);
 	void showFleetShips(Fleet fleet);
     
 }

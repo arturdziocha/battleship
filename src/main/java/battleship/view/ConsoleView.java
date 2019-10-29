@@ -14,7 +14,7 @@ public class ConsoleView implements View {
 
     @Override
     public void welcomeUsers() {
-        System.out.println("       WELCOME TO BATTLESHIPS\n\n");
+        System.out.println("WELCOME TO BATTLESHIPS\n\n");
     }
 
     @Override
@@ -22,26 +22,27 @@ public class ConsoleView implements View {
         System.out.println("INSTRUCTIONS\n" + "- Before the game starts you will be asked to place your battleships\n"
                 + "- When the game starts you can select a position on the enemy board to fire on\n"
                 + "- You cannot fire in the same place twice\n"
-                + "- The game is only over when either you or your enemy have no battleships are left\n"
-                + "- You may also resign from a game by typing \"resign\"\n" + "~ GOOD LUCK PLAYER ~\n");
+                + "- The game is only over when either you or your enemy have no battleships are left\n");
     }
 
     @Override
     public void showGameMode() {
         System.out.println("Please select game mode\n" + "[0] - Human vs Human\n" + "[1] - Human vs Easy Computer\n"
-                + "[2] - Human vs Gard Computer\n" + ">>>");
+                + "[2] - Human vs Gard Computer\n");
 
     }
 
     @Override
     public void showNameSelect() {
-        System.out.println("Please give your name:\n" + ">>>");
+        System.out.println("Please give your name:\n");
+        System.out.println(">>>");
+        
     }
 
     @Override
     public void showShipPlacementModeView(String playerName) {
-        System.out.println(playerName + ": would you like to set the ships yourself\n" + "[0] - YES\n"
-                + "[1] - Set randomly\n" + ">>>");
+        System.out.println(playerName + ": would you like to set the ships yourself\n" + "[0] - YES\n" + "[1] - Set randomly\n"
+                + ">>>");
     }
 
     @Override
@@ -55,14 +56,22 @@ public class ConsoleView implements View {
 
     @Override
     public void showShipPositioningView(ShipClass shipClass) {
-        System.out.println("Please set the position and direction of ship " + shipClass.name() + ": length - "
-                + shipClass.getSize() + "\n" + "Position should be between A-J and between 1-10\n" + "Direction: ");
+        System.out.println("Please set the position and direction of ship " + shipClass + ": length - " + shipClass.getSize()
+                + "\n" + "Position should be between A-J and between 1-10\n");
+
+        System.out.println("Position should be like A3\n");
+        System.out.println(">>>");
+    }
+
+    @Override
+    public void showShipDirectionView(ShipClass shipClass) {
+        System.out.println("Please set the direction of ship " + shipClass + "length: " + shipClass.getSize() + "\n");
         for (Direction direction : Direction.values()) {
-            System.out.print("[" + direction.getShortName() + "]: " + direction+ " ");
+            System.out.print("[" + direction.getShortName() + "]: " + direction + "\n ");
         }
         ;
-        System.out.println("Position should be like A3 d\n"
-                + ">>>");
+        System.out.println(">>>");
+
     }
 
     @Override

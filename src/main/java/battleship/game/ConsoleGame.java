@@ -1,8 +1,9 @@
 package battleship.game;
 
-import java.util.InputMismatchException;
-import java.util.List;
 import java.util.Scanner;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import battleship.direction.Direction;
 import battleship.exception.MalformattedException;
@@ -18,9 +19,8 @@ import battleship.point.PointImpl;
 import battleship.ship.Ship;
 import battleship.ship.ShipClass;
 import battleship.ship.ShipImpl;
+import battleship.view.UI;
 import battleship.view.View;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class ConsoleGame implements Game {
     final Logger logger = LoggerFactory.getLogger(ConsoleGame.class);
@@ -36,8 +36,8 @@ public class ConsoleGame implements Game {
     public void play() {
         view.welcomeUsers();
         view.showInstructions();
-        int gameMode = setupGameMode();
-        // setupPlayers(gameMode);
+        int gameMode = setupGameMode();        
+        setupPlayers(gameMode);
         // currentPlayer = firstPlayer;
     }
 
@@ -53,6 +53,7 @@ public class ConsoleGame implements Game {
                 } else {
                     System.out.println("Please select valid Game Mode");
                     gameModeChecker = false;
+                    
                 }
 
             } else {
@@ -62,26 +63,6 @@ public class ConsoleGame implements Game {
 
         }
         return gameMode;
-    }
-
-    private int setupPlacementMode(String playerName) {
-        boolean placementModeChecker = false;
-        int placementMode = -1;
-        while (placementModeChecker == false) {
-            view.showShipPlacementModeView(playerName);
-            if (reader.hasNextInt()) {
-                placementMode = reader.nextInt();
-                if (placementMode == 0 || placementMode == 1) {
-                    placementModeChecker = true;
-                } else {
-                    System.out.println("Please select valid Placement mode");
-                }
-            } else {
-                System.out.println("Enter valid integer value");
-                reader.next();
-            }
-        }
-        return placementMode;
     }
 
     private void setupPlayers(int setupMode) {
@@ -100,20 +81,16 @@ public class ConsoleGame implements Game {
 
     private void setupHumanPlayers() {
         firstPlayer = setupPlayer();
+        UI.clear();
         secondPlayer = setupPlayer();
 
     }
 
     private void setupHumanWithComputer(int setupMode) {
         firstPlayer = setupPlayer();
-        Fleet secondPlayerFleet = new FleetImpl.Builder().build();
-        try {
-            secondPlayerFleet.placeShipsRandom();
-            secondPlayer = setupMode == 1 ? new EasyComputerPlayer.Builder(secondPlayerFleet).build()
-                    : new HardComputerPlayer.Builder(secondPlayerFleet).build();
-        } catch (MalformattedException e) {
-            System.out.println(e.getMessage());
-        }
+        Fleet secondPlayerFleet = setupRandomShips(new FleetImpl.Builder().build());
+        secondPlayer = setupMode == 1 ? new EasyComputerPlayer.Builder(secondPlayerFleet).build()
+                : new HardComputerPlayer.Builder(secondPlayerFleet).build();
 
     }
 
@@ -129,74 +106,132 @@ public class ConsoleGame implements Game {
         return reader.next();
     }
 
-    private Fleet setupFleet(String name) {
+    private Fleet setupFleet(String playerName) {
         Fleet fleet = new FleetImpl.Builder().build();
+        int placementMode = setupPlacementMode(playerName);
 
+        if (placementMode == 1) {
+            fleet = setupRandomShips(fleet);
+        } else if (placementMode == 0) {
+            fleet = setupConsoleFleet(fleet, playerName);
+        }
+        return fleet;
+    }
+
+    private int setupPlacementMode(String playerName) {
         boolean placementModeChecker = false;
-        int placementMode;
-        do {
-            view.showShipPlacementMode(name);
-            placementMode = reader.nextInt();
-            if (placementMode == 1) {
-                placementModeChecker = true;
+        int placementMode = -1;
+        while (placementModeChecker == false) {
+            view.showShipPlacementModeView(playerName);
+            if (reader.hasNextInt()) {
+                placementMode = reader.nextInt();
+                if (placementMode == 0 || placementMode == 1) {
+                    placementModeChecker = true;
+                } else {
+                    System.out.println("Please select valid Placement mode");
+                }
+            } else {
+                System.out.println("Enter valid valid integer value");
+                reader.next();
+            }
+        }
+        return placementMode;
+    }
+
+    private Fleet setupRandomShips(Fleet fleet) {
+        while (!fleet.isAllShipsPlaced()) {
+            try {
+                fleet.placeShipsRandom();
+            } catch (MalformattedException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return fleet;
+    }
+
+    private Fleet setupConsoleFleet(Fleet fleet, String playerName) {
+        while (!fleet.isAllShipsPlaced()) {
+            ShipClass shipClass = setupShipToPlace(fleet, playerName);
+            Point startPoint = setupPoint(shipClass);
+            Direction direction = setupDirection(shipClass);
+            try {
+                Ship ship = new ShipImpl.Builder(shipClass).points(startPoint, direction).build();
+                fleet.placeShip(ship);
+            }catch (MalformattedException e) {
+                System.out.println(e.getMessage());
+            }catch(ShipPlacementException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return fleet;       
+    }
+
+    private ShipClass setupShipToPlace(Fleet fleet, String playerName) {
+
+        ShipClass shipClass = ShipClass.BARCA;
+        boolean shipToPlaceChecker = false;
+        while (shipToPlaceChecker == false) {
+            view.showFleetShips(fleet);
+            view.showShipsToPlace(playerName, fleet.shipsToPlace());
+            if (reader.hasNextInt()) {
+                int shipIdToPlace = reader.nextInt();
+                if (shipIdToPlace >= 0 && shipIdToPlace < fleet.shipsToPlace()
+                        .size()) {
+                    shipClass = fleet.shipsToPlace()
+                            .get(shipIdToPlace);
+                    shipToPlaceChecker = true;
+                    return shipClass;
+                } else {
+                    System.out.println("Please select valid Placement mode");
+                }
+            } else {
+                System.out.println("Enter valid valid integer value");
+                reader.next();
+            }
+        }
+        return null;
+        
+    }
+
+    private Point setupPoint(ShipClass shipClass) {
+        boolean pointChecker = false;
+        while (pointChecker == false) {
+            view.showShipPositioningView(shipClass);
+            if (reader.hasNext()) {
                 try {
-                    fleet.placeShipsRandom();
+                    Point point = new PointImpl.Builder(reader.next()).build();
+                    pointChecker = true;
+                    return point;
                 } catch (MalformattedException e) {
                     System.out.println(e.getMessage());
+                    pointChecker = false;
                 }
-
-            } else if (placementMode == 0) {
-                placementModeChecker = true;
-                boolean allSheepPlacedChecker = false;
-                do {
-                    boolean shipIdChecker = false;
-
-                    do {
-                        List<ShipClass> shipsToPlace = fleet.shipsToPlace();
-                        view.showFleetShips(fleet);
-                        view.showShipsToPlace(name, shipsToPlace);
-                        int shipIdToPlace = reader.nextInt();
-                        try {
-                            ShipClass shipClass = shipsToPlace.get(shipIdToPlace);
-                            shipIdChecker = true;
-
-                            boolean pointChecker = false;
-                            do {
-                                view.showShipPositioningView(shipClass);
-                                String pointString = reader.next();
-                                String directionString = reader.next();
-
-                                try {
-                                    Point startPoint = new PointImpl.Builder(pointString).build();
-                                    Direction direction = Direction.getFromShortName(directionString.charAt(0));
-                                    pointChecker = true;
-                                    Ship ship = new ShipImpl.Builder(shipClass).points(startPoint, direction)
-                                            .build();
-                                    fleet.placeShip(ship);
-                                    allSheepPlacedChecker = fleet.isAllShipsPlaced();
-                                } catch (MalformattedException e) {
-                                    System.out.println(e.getMessage());
-                                    pointChecker = false;
-                                } catch (ShipPlacementException e) {
-                                    System.out.println(e.getMessage());
-                                    pointChecker = false;
-                                }
-                            } while (pointChecker == false);
-
-                        } catch (IndexOutOfBoundsException e) {
-                            System.out.println(e.getMessage());
-                            shipIdChecker = false;
-                        }
-                    } while (shipIdChecker == false);
-
-                } while (allSheepPlacedChecker == false);
             } else {
-                placementModeChecker = false;
+                reader.next();
             }
+        }
+        return null;
+    }
 
-        } while (placementModeChecker == false);
-
-        return fleet;
+    private Direction setupDirection(ShipClass shipClass) {
+        boolean directionChecker = false;
+        while (directionChecker == false) {
+            view.showShipDirectionView(shipClass);
+            if (reader.hasNext()) {
+                try {
+                    Direction direction = Direction.getFromShortName(reader.next()
+                            .charAt(0));
+                    directionChecker = true;
+                    return direction;
+                } catch (MalformattedException e) {
+                    System.out.println(e.getMessage());
+                    directionChecker = false;
+                }
+            } else {
+                reader.next();
+            }
+        }
+        return Direction.DOWN;
     }
 
     private void switchPlayer() {
