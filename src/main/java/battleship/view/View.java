@@ -9,7 +9,7 @@ public interface View {
     void welcomeUsers();
     void showInstructions();
     void showGameMode();
-    void showNameSelect();
+    void showNameSelect(int playerId);
     void showShipPlacementModeView(String playerName);
     void showShipsToPlace(String playerName, List<ShipClass> shipsToPlace);
     void showShipPositioningView(ShipClass shipClass);
