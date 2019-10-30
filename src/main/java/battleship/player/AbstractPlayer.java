@@ -14,19 +14,21 @@ import battleship.ship.Ship;
 public abstract class AbstractPlayer implements Player {
     private Map<Point, PointStatus> shots = new TreeMap<>();
     Fleet fleet;
-    String name;   
+    String name;
 
     @Override
     public boolean hasLost() {
-        return fleet.allShipsSunk();
+        return fleet.isAllShipsSunk();
     }
 
     @Override
     public void setShot(Point point, PointStatus pointStatus) {
-        if (shots.containsKey(point)) {
-            shots.replace(point, pointStatus);
-        } else {
-            shots.put(point, pointStatus);
+        if (point.isInsideBoard()) {
+            if (shots.containsKey(point)) {
+                shots.replace(point, pointStatus);
+            } else {
+                shots.put(point, pointStatus);
+            }
         }
     }
 
@@ -67,6 +69,9 @@ public abstract class AbstractPlayer implements Player {
     public Fleet getFleet() {
         return fleet;
     }
+
+    @Override
+    public abstract String getName();
 
     @Override
     public abstract Point prepareShot() throws MalformattedException;

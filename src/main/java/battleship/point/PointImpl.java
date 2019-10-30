@@ -9,6 +9,7 @@ import battleship.exception.MalformattedException;
 public final class PointImpl implements Point, Comparable<Point> {
     private final int row;
     private final int column;
+    private int boardSize = 10;
 
     public static class Builder {
         private int row;
@@ -78,13 +79,21 @@ public final class PointImpl implements Point, Comparable<Point> {
     }
 
     @Override
+    public boolean isInsideBoard() {
+        return row >= 0 && row < boardSize && column >= 0 && column < boardSize;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o)
             return true;
-        if (o == null || getClass() != o.getClass())
+        if (o == null)
             return false;
-        PointImpl point = (PointImpl) o;
-        return row == point.row && column == point.column;
+        if (!(o instanceof PointImpl)) {
+            return false;
+        }
+
+        return (row == ((PointImpl) o).row) && (column == ((PointImpl) o).column);
     }
 
     @Override
@@ -103,7 +112,8 @@ public final class PointImpl implements Point, Comparable<Point> {
 
     @Override
     public int compareTo(Point other) {
-        return Double.valueOf(distance(this)).compareTo(distance(other));
+        return Double.valueOf(distance(this))
+                .compareTo(distance(other));
     }
 
     private double distance(Point p) {

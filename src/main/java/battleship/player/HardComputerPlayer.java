@@ -30,6 +30,11 @@ public class HardComputerPlayer extends AbstractPlayer {
     }
 
     @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
     public Point prepareShot() {
         // TODO Auto-generated method stub
         return null;

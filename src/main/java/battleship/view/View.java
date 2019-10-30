@@ -1,8 +1,11 @@
 package battleship.view;
 
 import java.util.List;
+import java.util.Map;
 
 import battleship.fleet.Fleet;
+import battleship.point.Point;
+import battleship.point.PointStatus;
 import battleship.ship.ShipClass;
 
 public interface View {
@@ -15,5 +18,7 @@ public interface View {
     void showShipPositioningView(ShipClass shipClass);
     void showShipDirectionView(ShipClass shipClass);
 	void showFleetShips(Fleet fleet);
+    void showShots(Map<Point, PointStatus> shots, String playerName);
+    void showShotPointView(String name);
     
 }

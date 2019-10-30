@@ -92,7 +92,7 @@ public class FleetImpl implements Fleet {
     }
 
     @Override
-    public boolean allShipsSunk() {
+    public boolean isAllShipsSunk() {
         return ships.stream()
                 .allMatch(Ship::isSunk);
     }

@@ -24,4 +24,6 @@ public interface Player {
 
     Fleet getFleet();
 
+    String getName();
+
 }

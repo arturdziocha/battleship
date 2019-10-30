@@ -45,4 +45,12 @@ public class PointDecoder {
         return y;
     }
 
+    public static String pointToString(Point point) {
+        char charColumn = (char) (point.getColumn() + 'a');
+        String toReturn = String.valueOf(charColumn)
+                .toUpperCase() + String.valueOf(point.getRow() + 1);
+        return toReturn;
+
+    }
+
 }

@@ -24,6 +24,10 @@ public class EasyComputerPlayer extends AbstractPlayer {
         this.name = builder.name;
         fleet = builder.fleet;
     }
+    @Override
+    public String getName() {
+        return name;
+    }
 
     @Override
     public Point prepareShot() {

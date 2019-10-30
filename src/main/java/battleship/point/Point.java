@@ -11,4 +11,6 @@ public interface Point{
     
     Set<Point> calculateNeighbors();
 
+    boolean isInsideBoard();
+
 }

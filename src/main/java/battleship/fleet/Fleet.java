@@ -24,5 +24,5 @@ public interface Fleet {
 
     Optional<Ship> shipAt(Point point);
 
-    boolean allShipsSunk();
+    boolean isAllShipsSunk();
 }
