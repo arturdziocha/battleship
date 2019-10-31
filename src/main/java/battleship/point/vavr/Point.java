@@ -1,8 +1,9 @@
-package battleship.point;
+package battleship.point.vavr;
 
 import java.util.Set;
 
-public interface Point{
+public interface Point {
+    
     int getRow();
 
     int getColumn();

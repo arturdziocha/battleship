@@ -12,25 +12,29 @@ public final class PointImpl implements Point, Comparable<Point> {
 	        .thenComparing(Point::getColumn);
 	private final int row;
 	private final int column;
-	private int boardSize = 10;
+	private final int boardSize = 10;
 
 	public static class Builder {
-		private int row;
-		private int column;
+		private final  int row;
+		private final int column;
 
+		/**
+         * Build point with random row and column
+         */
+        public Builder() {
+            Random random = new Random();
+            row = random.nextInt(10);
+            column = random.nextInt(10);
+        }
+        /**
+         * Build point from row and column
+         * @param row
+         * @param column
+         */
 		public Builder(int row, int column) {
 			this.row = row;
 			this.column = column;
-		}
-
-		/**
-		 * Build point with random row and column
-		 */
-		public Builder() {
-			Random random = new Random();
-			row = random.nextInt(10);
-			column = random.nextInt(10);
-		}
+		}	
 
 		/**
 		 * Build point from pointString
