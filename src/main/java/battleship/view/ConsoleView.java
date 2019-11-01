@@ -97,34 +97,34 @@ public class ConsoleView implements View {
                     IntStream.range(0, 10)
                             .forEach(column -> points[row][column] = PointStatus.EMPTY);
                 });
-        fleet.getShips()
-                .stream()
-                .flatMap(ship -> ship.getPoints()
-                        .stream())
-                .forEach(point -> points[point.getRow()][point.getColumn()] = PointStatus.OCCUPIED);
+		fleet.getShips()
+		        .stream()
+		        .flatMap(ship -> ship.getPoints()
+		                .stream())
+		        .forEach(point -> points[point.getRow()][point.getColumn()] = PointStatus.OCCUPIED);
 
-        System.out.printf("%-3s", "");
-        Stream.of(letters)
-                .forEach(letter -> System.out.printf("%-3s", " " + letter));
-        System.out.println();
+		System.out.printf("%-3s", "");
+		Stream.of(letters)
+		        .forEach(letter -> System.out.printf("%-3s", " " + letter));
+		System.out.println();
 
-        IntStream.range(0, 10)
-                .forEach(row -> {
-                    System.out.printf("%-3s", row + 1);
-                    IntStream.range(0, 10)
-                            .forEach(column -> {
-                                if (points[row][column].equals(PointStatus.EMPTY)) {
-                                    System.out.printf("[ ]");
-                                } else {
-                                    System.out.printf("[");
-                                    System.out.printf(ConsoleColor.ANSI_CYAN + "%s" + ConsoleColor.ANSI_RESET,
-                                            points[row][column].getStatus());
-                                    System.out.printf("]");
-                                }
-                            });
-                    System.out.println();
+		IntStream.range(0, 10)
+		        .forEach(row -> {
+			        System.out.printf("%-3s", row + 1);
+			        IntStream.range(0, 10)
+			                .forEach(column -> {
+				                if (points[row][column].equals(PointStatus.EMPTY)) {
+					                System.out.printf("[ ]");
+				                } else {
+					                System.out.printf("[");
+					                System.out.printf(ConsoleColor.ANSI_CYAN + "%s" + ConsoleColor.ANSI_RESET,
+					                        points[row][column].getStatus());
+					                System.out.printf("]");
+				                }
+			                });
+			        System.out.println();
 
-                });
+		        });
 
         /*
          * for (PointStatus[] arr : points) { System.out.printf("%-3d", 1); for

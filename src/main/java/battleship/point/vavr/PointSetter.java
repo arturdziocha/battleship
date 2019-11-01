@@ -16,13 +16,14 @@ public final class PointSetter {
             this.size = size;
         }
 
-        public Builder startPoint() {
-            this.startPoint = new PointImpl.Builder().build();
-            return this;
+        public Builder(int size, Point startPoint, Direction direction) {
+            this.size = size;
+            this.startPoint = Either.right(startPoint);
+            this.direction = Either.right(direction);
         }
 
-        public Builder startPoint(Either<String, Point> startPoint) {
-            this.startPoint = startPoint;
+        public Builder startPoint() {
+            this.startPoint = new PointImpl.Builder().build();
             return this;
         }
 
@@ -31,19 +32,17 @@ public final class PointSetter {
             return this;
         }
 
-        public Builder direction(Either<String, Direction> direction) {
-            this.direction = direction;
-            return this;
-        }
-
         public Either<String, PointSetter> build() {
-            if (startPoint.isEmpty() && startPoint.isEmpty()) {
+            if (startPoint == null || direction == null) {
+                return Either.left("Direction or point cannot be empty");
+            }
+            if (startPoint.isLeft() && startPoint.isLeft()) {
                 return Either.left("Direction and point cannot be empty");
             }
-            if (direction.isEmpty()) {
+            if (direction.isLeft()) {
                 return Either.left("\"Direction cannot be empty\"");
             }
-            if (startPoint.isEmpty()) {
+            if (startPoint.isLeft()) {
                 return Either.left("Point cannot be empty");
             }
             return Either.right(new PointSetter(this));
@@ -64,18 +63,18 @@ public final class PointSetter {
 
     public List<Point> getPoints() {
         switch (direction) {
-        case UP:
-            fillTop();
-            break;
-        case DOWN:
-            fillBottom();
-            break;
-        case RIGHT:
-            fillRight();
-            break;
-        case LEFT:
-            fillLeft();
-            break;
+            case UP:
+                fillTop();
+                break;
+            case DOWN:
+                fillBottom();
+                break;
+            case RIGHT:
+                fillRight();
+                break;
+            case LEFT:
+                fillLeft();
+                break;
         }
         return points;
     }

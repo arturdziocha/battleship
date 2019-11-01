@@ -3,14 +3,17 @@ package battleship.point.vavr;
 import java.util.Set;
 
 public interface Point {
-    
-    int getRow();
 
-    int getColumn();
+	int getRow();
 
-    boolean isNeighbor(Point other);
-    
-    Set<Point> calculateNeighbors();
+	int getColumn();
 
-    boolean isInsideBoard();
+	boolean isNeighbor(Point other);
+
+	Set<Point> calculateNeighbors();
+
+	boolean isOutsideBoard();
+
+	int compareTo(Point other);
+
 }

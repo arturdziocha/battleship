@@ -9,7 +9,7 @@ public enum Direction {
     private final int value;
     private final char shortName;
 
-    Direction(final int value, char shortName) {
+    Direction(final int value, final char shortName) {
         this.value = value;
         this.shortName = shortName;
     }
