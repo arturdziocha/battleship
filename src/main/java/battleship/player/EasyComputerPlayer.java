@@ -29,7 +29,7 @@ public class EasyComputerPlayer extends AbstractPlayer {
     @Override
     public Either<String, Point> prepareShot() {
         Either<String, Point> point = new PointImpl.Builder().build();
-        while (!isAlreadyShooted(point.get())) {
+        while (isAlreadyShooted(point.get())) {
             point = new PointImpl.Builder().build();
         }
         return point;

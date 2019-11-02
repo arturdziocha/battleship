@@ -42,9 +42,15 @@ public class ConsoleGame implements Game {
 		setupPlayers(gameMode);
 		currentPlayer = firstPlayer;
 		if (isReadyToStart()) {
-			while (isGameFinished() == false) {
+			do {
 				receiveShot();
-			}
+			} while (isGameFinished() == false);
+//			while (isGameFinished() == false) {
+//				receiveShot();
+//			}
+			Player winner = getWinner();
+			System.out.printf(ConsoleColor.ANSI_RED + "%s" + ConsoleColor.ANSI_RESET, winner.getName()
+			        .toUpperCase() + "!!! You are absolutely awesome. Great job");
 		}
 		Player winner = getWinner();
 		System.out.printf(ConsoleColor.ANSI_RED + "%s" + ConsoleColor.ANSI_RESET, winner.getName()
@@ -263,22 +269,27 @@ public class ConsoleGame implements Game {
 						ship.shoot();
 						if (ship.isSunk()) {
 							currentPlayer.setShotSunk(ship);
-							System.out.printf(ConsoleView.cyan, "Yeah, you kill ship " + ship.getShipClass() + "-"
-							        + ship.getSize() + " at point " + PointDecoder.pointToString(point));
+							System.out.printf(ConsoleView.cyan,
+							        "Yeah, you kill ship " + ship.getShipClass() + "-" + ship.getSize() + " at point "
+							                + PointDecoder.pointToString(point)
+							                        .get());
 						} else {
 							currentPlayer.setShot(point, PointStatus.HIT);
-							System.out.printf(ConsoleView.cyan, "Yeah, you shot ship " + ship.getShipClass() + "-"
-							        + ship.getSize() + " at point " + PointDecoder.pointToString(point));
+							System.out.printf(ConsoleView.cyan,
+							        "Yeah, you shot ship " + ship.getShipClass() + "-" + ship.getSize() + " at point "
+							                + PointDecoder.pointToString(point)
+							                        .get());
 						}
 						receiveShot();
 					})
 					        .onEmpty(() -> setMissAndSwitchPlayer(point));
 				} else {
-					System.out.printf(ConsoleView.error, "You shooted outside board");
+					System.out.printf(ConsoleView.error, currentPlayer.getName() + "!. You already shooted this point");
 					switchPlayer();
+					receiveShot();
 				}
 			} else {
-				System.out.printf(ConsoleView.error, "You shooted outside board");
+				System.out.printf(ConsoleView.error, currentPlayer.getName() + "!. You shooted outside board");
 				switchPlayer();
 			}
 
