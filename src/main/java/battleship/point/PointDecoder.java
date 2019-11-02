@@ -2,55 +2,41 @@ package battleship.point;
 
 import org.apache.commons.lang3.StringUtils;
 
-import battleship.exception.MalformattedException;
+import io.vavr.collection.List;
+import io.vavr.control.Either;
+import io.vavr.control.Try;
 
-public class PointDecoder {
-    public static PointImpl inputToPoint(String input) throws MalformattedException {
-        if (StringUtils.isEmpty(input)) {
-            throw new MalformattedException("Point cannot be empty");
-        }
-        input = input.toLowerCase();
-        char posY = input.charAt(0);
-        String posX = input.substring(1);
+public final class PointDecoder {
+	public static final List<Character> chars = List.of('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+	        'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'W', 'X', 'Y', 'Z');
 
-        int y = (int) posY - (int) 'a';
-        try {
-            int x = Integer.parseInt(posX) - 1;
-            return new PointImpl.Builder(x, y).build();
-        } catch (NumberFormatException ex) {
-            throw new MalformattedException("Malformed number");
-        }
-    }
+	public static Either<String, Integer> getRow(String pointString) {
+		if (StringUtils.isEmpty(pointString)) {
+			return Either.left("String cannot be empty");
+		}
+		String posX = pointString.substring(1);
+		Try<Integer> i = Try.of(() -> Integer.parseInt(posX));
+		return i.isSuccess() ? Either.right(i.get() - 1) : Either.left("You have to set Row position");
+	}
 
-    public static int getRow(String pointString) throws MalformattedException {
-        if (StringUtils.isEmpty(pointString)) {
-            throw new MalformattedException("Point cannot be empty");
-        }
-        String posX = pointString.substring(1);
-        try {
-            int x = Integer.parseInt(posX) - 1;
-            return x;
-        } catch (NumberFormatException e) {
-            throw new MalformattedException("You have to set Row position");
-        }
-    }
+	public static Either<String, Integer> getColumn(String pointString) {
+		if (StringUtils.isEmpty(pointString)) {
+			return Either.left("String cannot be empty");
+		}
+		pointString = pointString.toUpperCase();
+		char posY = pointString.charAt(0);
+		int y = chars.indexOf(Character.valueOf(posY));
+		return y == -1 ? Either.left("Wrong column specified") : Either.right(y);
+	}
 
-    public static int getColumn(String pointString) throws MalformattedException {
-        if (StringUtils.isEmpty(pointString)) {
-            throw new MalformattedException("Point cannot be empty");
-        }
-        pointString = pointString.toLowerCase();
-        char posY = pointString.charAt(0);
-        int y = (int) posY - (int) 'a';
-        return y;
-    }
-
-    public static String pointToString(Point point) {
-        char charColumn = (char) (point.getColumn() + 'a');
-        String toReturn = String.valueOf(charColumn)
-                .toUpperCase() + String.valueOf(point.getRow() + 1);
-        return toReturn;
-
-    }
-
+	public static Either<String, String> pointToString(Point point) {
+		Try<Character> tryCharacter = Try.of(() -> chars.get(point.getColumn()));
+		if (tryCharacter.isFailure()) {
+			return Either.left("Cannot find Column for this point");
+		}
+		StringBuilder builder = new StringBuilder();
+		builder.append(tryCharacter.get());
+		builder.append(point.getRow() + 1);
+		return Either.right(builder.toString());
+	}
 }

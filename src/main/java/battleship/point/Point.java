@@ -2,14 +2,18 @@ package battleship.point;
 
 import java.util.Set;
 
-public interface Point{
-    int getRow();
+public interface Point {
 
-    int getColumn();
+	int getRow();
 
-    boolean isNeighbor(Point other);
-    
-    Set<Point> calculateNeighbors();
+	int getColumn();
 
-    boolean isInsideBoard();
+	boolean isNeighbor(Point other);
+
+	Set<Point> calculateNeighbors();
+
+	boolean isOutsideBoard();
+
+	int compareTo(Point other);
+
 }

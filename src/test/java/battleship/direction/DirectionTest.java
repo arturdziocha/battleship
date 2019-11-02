@@ -1,4 +1,4 @@
-package battleship.direction.vavr;
+package battleship.direction;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import battleship.direction.Direction;
 import io.vavr.control.Either;
 
 class DirectionTest {

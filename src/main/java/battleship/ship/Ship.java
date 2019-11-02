@@ -1,9 +1,8 @@
 package battleship.ship;
 
-import java.util.List;
-import java.util.Optional;
-
 import battleship.point.Point;
+import io.vavr.collection.List;
+import io.vavr.control.Option;
 
 public interface Ship {
     ShipClass getShipClass();
@@ -14,20 +13,20 @@ public interface Ship {
 
     List<Point> getPoints();
 
-    Optional<Point> isAt(Point point);
+    Option<Point> isAt(Point point);
 
-    void shoot();
+    boolean shoot();
 
     boolean isSunk();
 
     boolean toCloseTo(Ship other);
 
-    int getMostTopPosition();
+    Option<Point> getMostTopPosition();
 
-    int getMostBottomPosition();
+    Option<Point> getMostBottomPosition();
 
-    int getMostLeftPosition();
+    Option<Point> getMostLeftPosition();
 
-    int getMostRightPosition();
+    Option<Point> getMostRightPosition();
 
 }

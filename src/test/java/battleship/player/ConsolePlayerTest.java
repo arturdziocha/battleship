@@ -1,4 +1,4 @@
-package battleship.player.vavr;
+package battleship.player;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -9,15 +9,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import battleship.direction.vavr.Direction;
-import battleship.exception.MalformattedException;
-import battleship.fleet.vavr.Fleet;
-import battleship.point.vavr.Point;
-import battleship.point.vavr.PointImpl;
-import battleship.point.vavr.PointStatus;
-import battleship.ship.vavr.Ship;
-import battleship.ship.vavr.ShipClass;
-import battleship.ship.vavr.ShipImpl;
+import battleship.direction.Direction;
+import battleship.fleet.Fleet;
+import battleship.player.AbstractPlayer;
+import battleship.player.ConsolePlayer;
+import battleship.player.Player;
+import battleship.point.Point;
+import battleship.point.PointImpl;
+import battleship.point.PointStatus;
+import battleship.ship.Ship;
+import battleship.ship.ShipClass;
+import battleship.ship.ShipImpl;
 import io.vavr.collection.List;
 import io.vavr.collection.Map;
 import io.vavr.collection.TreeMap;
@@ -59,13 +61,13 @@ class ConsolePlayerTest {
     }
     @Test
     @DisplayName("Shot in the same point should return true")
-    void shotTheSamePointShouldReturnTrue() throws MalformattedException {        
+    void shotTheSamePointShouldReturnTrue() {        
         player.setShot(new PointImpl.Builder("b2").build().get(), PointStatus.HIT);
         assertTrue(player.isAlreadyShooted(new PointImpl.Builder("b2").build().get()));
     }
     @Test
     @DisplayName("Set shot sunk should set points SUNK and neigbors Occupied")
-    void shouldSetPointsSunkWhenShipIsSunk() throws MalformattedException {
+    void shouldSetPointsSunkWhenShipIsSunk() {
 
         // Occupied
         expected = expected.put(new PointImpl.Builder(0, 0).build().get(), PointStatus.OCCUPIED);
@@ -91,7 +93,7 @@ class ConsolePlayerTest {
     }
     @Test
     @DisplayName("Set shot sunk 2 should set points SUNK and neigbors Occupied")
-    void shouldSetPointsSunkWhenShipIsSunk2() throws MalformattedException {
+    void shouldSetPointsSunkWhenShipIsSunk2(){
 
         // Occupied
         expected = expected.put(new PointImpl.Builder("j4").build().get(), PointStatus.OCCUPIED);

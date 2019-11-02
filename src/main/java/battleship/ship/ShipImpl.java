@@ -1,57 +1,61 @@
 package battleship.ship;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.Comparator;
 
 import battleship.direction.Direction;
-import battleship.exception.MalformattedException;
 import battleship.point.Point;
-import battleship.point.PointsSetter;
+import battleship.point.PointSetter;
+import io.vavr.collection.List;
+import io.vavr.control.Either;
+import io.vavr.control.Option;
 
-public class ShipImpl implements Ship {
-
-    private final ShipClass shipClass;
-    private int health;
-    private List<Point> points;
+public final class ShipImpl implements Ship {
 
     public static class Builder {
-        private ShipClass shipClass;
-        private List<Point> points;
+        private final ShipClass shipClass;
+        private final Either<String, List<Point>> points;
 
         public Builder(ShipClass shipClass) {
             this.shipClass = shipClass;
-        }
-
-        public Builder points() throws MalformattedException {
-            PointsSetter setter = new PointsSetter.Builder(shipClass.getSize()).startPoint()
+            Either<String, PointSetter> pointSetter = new PointSetter.Builder(shipClass.getSize()).startPoint()
                     .direction()
                     .build();
-            this.points = setter.getPoints();
-            return this;
+
+            points = pointSetter.isLeft() ? Either.left("Cannot set points")
+                    : Either.right(List.ofAll(pointSetter.get()
+                    .getPoints()));
         }
 
-        public Builder points(Point startPoint, Direction direction) throws MalformattedException {
+        public Builder(ShipClass shipClass, Point startPoint, Direction direction) {
+            this.shipClass = shipClass;
+            Either<String, PointSetter> pointSetter = new PointSetter.Builder(shipClass.getSize(), startPoint,
+                    direction).build();
+            points = pointSetter.isLeft() ? Either.left(pointSetter.getLeft())
+                    : Either.right(List.ofAll(pointSetter.get()
+                    .getPoints()));
 
-            PointsSetter setter = new PointsSetter.Builder(shipClass.getSize()).startPoint(startPoint)
-                    .direction(direction)
-                    .build();
-            this.points = setter.getPoints();
-
-            return this;
         }
 
-        public ShipImpl build() throws MalformattedException {
-            if (points.isEmpty()) {
-                throw new MalformattedException("Points must be set");
+        public Either<String, Ship> build() {
+            if (points == null) {
+                return Either.left("Points are null");
             }
-            return new ShipImpl(this);
+            if (points.isLeft()) {
+                return Either.left(points.getLeft());
+            }
+            return Either.right(new ShipImpl(this));
+
         }
     }
 
+    private final List<Point> points;
+    private final ShipClass shipClass;
+    private int health;
+
     private ShipImpl(Builder builder) {
+        this.points = builder.points.get();
         this.shipClass = builder.shipClass;
-        this.health = builder.shipClass.getSize();
-        this.points = builder.points;
+        this.health = shipClass.getSize();
     }
 
     @Override
@@ -75,18 +79,18 @@ public class ShipImpl implements Ship {
     }
 
     @Override
-    public Optional<Point> isAt(Point point) {
-        return points.stream()
-                .filter(p -> point.equals(p))
-                .findFirst();
+    public Option<Point> isAt(Point point) {
+        Option<Point> opt = points.find(p -> p.equals(point));
+        return opt;
     }
 
     @Override
-    public void shoot() {
+    public boolean shoot() {
         if (isSunk()) {
-            throw new IllegalStateException("Ship is already sunk");
+            return false;
         }
         health--;
+        return true;
     }
 
     @Override
@@ -108,35 +112,23 @@ public class ShipImpl implements Ship {
     }
 
     @Override
-    public int getMostTopPosition() {
-        return points.stream()
-                .map(Point::getRow)
-                .min(Integer::compare)
-                .get();
+    public Option<Point> getMostTopPosition() {
+        return points.minBy(Comparator.comparingInt(Point::getRow));
     }
 
     @Override
-    public int getMostBottomPosition() {
-        return points.stream()
-                .map(Point::getRow)
-                .max(Integer::compare)
-                .get();
+    public Option<Point> getMostBottomPosition() {
+        return points.maxBy(Comparator.comparingInt(Point::getRow));
     }
 
     @Override
-    public int getMostLeftPosition() {
-        return points.stream()
-                .map(Point::getColumn)
-                .min(Integer::compare)
-                .get();
+    public Option<Point> getMostLeftPosition() {
+        return points.minBy(Comparator.comparingInt(Point::getColumn));
     }
 
     @Override
-    public int getMostRightPosition() {
-        return points.stream()
-                .map(Point::getColumn)
-                .max(Integer::compare)
-                .get();
+    public Option<Point> getMostRightPosition() {
+        return points.maxBy(Comparator.comparingInt(Point::getColumn));
     }
 
     @Override

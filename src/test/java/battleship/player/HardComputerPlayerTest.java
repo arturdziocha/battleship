@@ -1,4 +1,4 @@
-package battleship.player.vavr;
+package battleship.player;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doReturn;
@@ -8,7 +8,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import battleship.fleet.vavr.Fleet;
+import battleship.fleet.Fleet;
+import battleship.player.HardComputerPlayer;
+import battleship.player.Player;
 
 class HardComputerPlayerTest {
 	private Player player;

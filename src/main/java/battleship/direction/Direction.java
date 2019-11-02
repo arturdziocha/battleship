@@ -2,7 +2,7 @@ package battleship.direction;
 
 import java.util.Random;
 
-import battleship.exception.MalformattedException;
+import io.vavr.control.Either;
 
 public enum Direction {
     UP(0, 'u'), RIGHT(1, 'r'), DOWN(2, 'd'), LEFT(3, 'l');
@@ -28,17 +28,18 @@ public enum Direction {
         return Direction.values()[index];
     }
 
-    public static Direction getFromShortName(char u) throws MalformattedException {
+    public static Either<String, Direction> getFromShortName(char u) {
         for (Direction direction : Direction.values()) {
             if (direction.shortName == u) {
-                return direction;
+                return Either.right(direction);
             }
         }
-        throw new MalformattedException("Cannot find Direction");
+        return Either.left("Direction not found");
+
     }
 
     public static Direction getRandomDirection() {
-        Random random = new Random();
-        return Direction.values()[random.nextInt(Direction.values().length)];
-    }
+            Random random = new Random();
+            return Direction.values()[random.nextInt(Direction.values().length)];
+        }
 }

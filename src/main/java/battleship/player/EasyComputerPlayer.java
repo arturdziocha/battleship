@@ -3,9 +3,10 @@ package battleship.player;
 import battleship.fleet.Fleet;
 import battleship.point.Point;
 import battleship.point.PointImpl;
+import io.vavr.control.Either;
 
 public class EasyComputerPlayer extends AbstractPlayer {
-    public static class Builder {
+	public static class Builder {
         private String name;
         private Fleet fleet;
 
@@ -23,16 +24,12 @@ public class EasyComputerPlayer extends AbstractPlayer {
         super();
         this.name = builder.name;
         fleet = builder.fleet;
-    }
-    @Override
-    public String getName() {
-        return name;
-    }
+    }    
 
     @Override
-    public Point prepareShot() {
-        Point point = new PointImpl.Builder().build();
-        while (isAlreadyShooted(point)) {
+    public Either<String, Point> prepareShot() {
+        Either<String, Point> point = new PointImpl.Builder().build();
+        while (!isAlreadyShooted(point.get())) {
             point = new PointImpl.Builder().build();
         }
         return point;

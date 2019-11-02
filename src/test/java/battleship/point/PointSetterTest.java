@@ -1,4 +1,4 @@
-package battleship.point.vavr;
+package battleship.point;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -7,7 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import battleship.direction.vavr.Direction;
+import battleship.direction.Direction;
+import battleship.point.Point;
+import battleship.point.PointImpl;
+import battleship.point.PointSetter;
 import io.vavr.control.Either;
 
 class PointSetterTest {

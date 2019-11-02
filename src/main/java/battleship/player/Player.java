@@ -1,18 +1,18 @@
 package battleship.player;
 
-import java.util.Map;
 
-import battleship.exception.MalformattedException;
 import battleship.fleet.Fleet;
 import battleship.point.Point;
 import battleship.point.PointStatus;
 import battleship.ship.Ship;
+import io.vavr.collection.Map;
+import io.vavr.control.Either;
 
 public interface Player {
 
     boolean hasLost();
 
-    Point prepareShot() throws MalformattedException;
+    Either<String, Point> prepareShot();
 
     void setShot(Point point, PointStatus pointStatus);
 

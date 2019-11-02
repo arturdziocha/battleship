@@ -1,28 +1,25 @@
 package battleship.fleet;
 
-import java.util.List;
-import java.util.Optional;
-
-import battleship.exception.MalformattedException;
-import battleship.exception.ShipPlacementException;
 import battleship.point.Point;
 import battleship.ship.Ship;
 import battleship.ship.ShipClass;
+import io.vavr.collection.List;
+import io.vavr.control.Either;
+import io.vavr.control.Option;
 
 public interface Fleet {
-    int SIZE = 10;
+	Either<String, List<Ship>> placeShip(Ship ship);
 
-    void placeShip(Ship ship) throws ShipPlacementException;
+	void placeAllShipsRandom();
 
-    void placeShipsRandom() throws MalformattedException;
+	boolean isAllShipsPlaced();
 
-    List<ShipClass> shipsToPlace();
+	List<Ship> getShips();
 
-    List<Ship> getShips();
+	List<ShipClass> shipsToPlace();
+	
+	Option<Ship> shipAt(Point point);
+	
+	boolean isAllShipsSunk();
 
-    boolean isAllShipsPlaced();
-
-    Optional<Ship> shipAt(Point point);
-
-    boolean isAllShipsSunk();
 }

@@ -5,56 +5,64 @@ import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
 
-import battleship.exception.MalformattedException;
+import io.vavr.control.Either;
 
 public final class PointImpl implements Point, Comparable<Point> {
 	private static final Comparator<Point> COMPARATOR = Comparator.comparingInt(Point::getRow)
 	        .thenComparing(Point::getColumn);
-	private final int row;
-	private final int column;
-	private final int boardSize = 10;
+	public static final int BOARD_SIZE = 10;
 
 	public static class Builder {
-		private final  int row;
-		private final int column;
+		private final Either<String, Integer> row;
+		private final Either<String, Integer> column;
 
 		/**
-         * Build point with random row and column
-         */
-        public Builder() {
-            Random random = new Random();
-            row = random.nextInt(10);
-            column = random.nextInt(10);
-        }
-        /**
-         * Build point from row and column
-         * @param row
-         * @param column
-         */
+		 * Build point with random row and column
+		 */
+		public Builder() {
+			Random random = new Random();
+			row = Either.right(random.nextInt(BOARD_SIZE));
+			column = Either.right(random.nextInt(BOARD_SIZE));
+		}
+
+		/**
+		 * Build point from row and column
+		 * 
+		 * @param row
+		 * @param column
+		 */
 		public Builder(int row, int column) {
-			this.row = row;
-			this.column = column;
-		}	
+			this.row = Either.right(row);
+			this.column = Either.right(column);
+		}
 
 		/**
 		 * Build point from pointString
-		 *
+		 * 
 		 * @param pointString
-		 * @throws MalformattedException
 		 */
-		public Builder(String pointString) throws MalformattedException {
+		public Builder(String pointString) {
 			row = PointDecoder.getRow(pointString);
 			column = PointDecoder.getColumn(pointString);
 		}
 
-		public PointImpl build() {
-			return new PointImpl(this);
+		public Either<String, Point> build() {
+			if (row.isLeft()) {
+				return Either.left(row.getLeft());
+			}
+			if (column.isLeft()) {
+				return Either.left(column.getLeft());
+			}
+			return Either.right(new PointImpl(this));
 		}
 	}
 
+	private int row;
+	private int column;
+
 	private PointImpl(Builder builder) {
-		this.row = builder.row;
-		this.column = builder.column;
+		this.row = builder.row.get();
+		this.column = builder.column.get();
 	}
 
 	@Override
@@ -75,19 +83,43 @@ public final class PointImpl implements Point, Comparable<Point> {
 	@Override
 	public Set<Point> calculateNeighbors() {
 		Set<Point> toReturn = new TreeSet<>();
+		Either<String, Point> point;
 		for (int i = -1; i <= 1; i++) {
-			toReturn.add(new PointImpl.Builder(row - 1, column + i).build());
-			toReturn.add(new PointImpl.Builder(row + 1, column + i).build());
+			point = new PointImpl.Builder(row - 1, column + i).build();
+			if (point.isRight()) {
+				if (!point.get()
+				        .isOutsideBoard()) {
+					toReturn.add(point.get());
+				}
+			}
+			point = new PointImpl.Builder(row + 1, column + i).build();
+			if (point.isRight()) {
+				if (!point.get()
+				        .isOutsideBoard()) {
+					toReturn.add(point.get());
+				}
+			}
 		}
-		toReturn.add(new PointImpl.Builder(row, column - 1).build());
-		toReturn.add(new PointImpl.Builder(row, column + 1).build());
-
+		point = new PointImpl.Builder(row, column - 1).build();
+		if (point.isRight()) {
+			if (!point.get()
+			        .isOutsideBoard()) {
+				toReturn.add(point.get());
+			}
+		}
+		point = new PointImpl.Builder(row, column + 1).build();
+		if (point.isRight()) {
+			if (!point.get()
+			        .isOutsideBoard()) {
+				toReturn.add(point.get());
+			}
+		}
 		return toReturn;
 	}
 
 	@Override
-	public boolean isInsideBoard() {
-		return row >= 0 && row < boardSize && column >= 0 && column < boardSize;
+	public boolean isOutsideBoard() {
+		return row < 0 || row >= BOARD_SIZE || column < 0 || column >= BOARD_SIZE;
 	}
 
 	@Override

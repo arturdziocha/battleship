@@ -5,7 +5,7 @@ public enum ShipClass {
     private final int size;
     private final String name;
 
-    ShipClass(final int size, String name) {
+    ShipClass(final int size, final String name) {
         this.size = size;
         this.name = name;
     }

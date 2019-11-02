@@ -1,11 +1,8 @@
 package battleship.game;
 
-import java.util.Optional;
 import java.util.Scanner;
 
 import battleship.direction.Direction;
-import battleship.exception.MalformattedException;
-import battleship.exception.ShipPlacementException;
 import battleship.fleet.Fleet;
 import battleship.fleet.FleetImpl;
 import battleship.player.ConsolePlayer;
@@ -19,14 +16,19 @@ import battleship.point.PointStatus;
 import battleship.ship.Ship;
 import battleship.ship.ShipClass;
 import battleship.ship.ShipImpl;
+import battleship.view.ConsoleColor;
 import battleship.view.ConsoleView;
 import battleship.view.View;
-import battleship.view.vavr.ConsoleColor;
+import io.vavr.collection.List;
+import io.vavr.control.Either;
+import io.vavr.control.Option;
+import io.vavr.control.Try;
 
 public class ConsoleGame implements Game {
+
 	private Player firstPlayer, secondPlayer, currentPlayer;
 	private Scanner reader = new Scanner(System.in);
-	private final View view;
+	private View view;
 
 	public ConsoleGame(View view) {
 		this.view = view;
@@ -54,8 +56,9 @@ public class ConsoleGame implements Game {
 		int gameMode = -1;
 		while (gameModeChecker == false) {
 			view.showGameMode();
-			if (reader.hasNextInt()) {
-				gameMode = reader.nextInt();
+			Try<Integer> intTry = Try.of(() -> reader.nextInt());
+			if (intTry.isSuccess()) {
+				gameMode = intTry.get();
 				if (gameMode == 0 || gameMode == 1 || gameMode == 2) {
 					gameModeChecker = true;
 				} else {
@@ -95,14 +98,12 @@ public class ConsoleGame implements Game {
 		Fleet secondPlayerFleet = setupRandomShips(new FleetImpl.Builder().build());
 		secondPlayer = setupMode == 1 ? new EasyComputerPlayer.Builder(secondPlayerFleet).build()
 		        : new HardComputerPlayer.Builder(secondPlayerFleet).build();
-
 	}
 
 	private Player setupPlayer(int playerId) {
-		String name = setupName(playerId);
-		Fleet fleet = setupFleet(name);
-
-		return new ConsolePlayer.Builder(name, fleet).build();
+		String playerName = setupName(playerId);
+		Fleet fleet = setupFleet(playerName);
+		return new ConsolePlayer.Builder(playerName, fleet).build();
 	}
 
 	private String setupName(int playerId) {
@@ -127,8 +128,9 @@ public class ConsoleGame implements Game {
 		int placementMode = -1;
 		while (placementModeChecker == false) {
 			view.showShipPlacementModeView(playerName);
-			if (reader.hasNextInt()) {
-				placementMode = reader.nextInt();
+			Try<Integer> intTry = Try.of(() -> reader.nextInt());
+			if (intTry.isSuccess()) {
+				placementMode = intTry.get();
 				if (placementMode == 0 || placementMode == 1) {
 					placementModeChecker = true;
 				} else {
@@ -144,11 +146,7 @@ public class ConsoleGame implements Game {
 
 	private Fleet setupRandomShips(Fleet fleet) {
 		while (!fleet.isAllShipsPlaced()) {
-			try {
-				fleet.placeShipsRandom();
-			} catch (MalformattedException e) {
-				System.out.printf(ConsoleView.error, e.getMessage());
-			}
+			fleet.placeAllShipsRandom();
 		}
 		return fleet;
 	}
@@ -158,85 +156,84 @@ public class ConsoleGame implements Game {
 			ShipClass shipClass = setupShipToPlace(fleet, playerName);
 			Point startPoint = setupPoint(shipClass);
 			Direction direction = setupDirection(shipClass);
-			try {
-				Ship ship = new ShipImpl.Builder(shipClass).points(startPoint, direction)
-				        .build();
-				fleet.placeShip(ship);
-			} catch (MalformattedException e) {
-				System.out.printf(ConsoleView.error, e.getMessage());
-			} catch (ShipPlacementException e) {
-				System.out.printf(ConsoleView.error, e.getMessage());
+			Either<String, Ship> ship = new ShipImpl.Builder(shipClass, startPoint, direction).build();
+			if (ship.isRight()) {
+				Either<String, List<Ship>> placeShip = fleet.placeShip(ship.get());
+				if (placeShip.isLeft()) {
+					System.out.printf(ConsoleView.error, placeShip.getLeft());
+				}
+			} else {
+				System.out.printf(ConsoleView.error, ship.getLeft());
 			}
 		}
 		return fleet;
 	}
 
 	private ShipClass setupShipToPlace(Fleet fleet, String playerName) {
-
 		ShipClass shipClass = ShipClass.BARCA;
 		boolean shipToPlaceChecker = false;
 		while (shipToPlaceChecker == false) {
+			List<ShipClass> shipsToPlace = fleet.shipsToPlace();
 			view.showFleetShips(fleet);
 			view.showShipsToPlace(playerName, fleet.shipsToPlace());
-			if (reader.hasNextInt()) {
-				int shipIdToPlace = reader.nextInt();
-				if (shipIdToPlace >= 0 && shipIdToPlace < fleet.shipsToPlace()
-				        .size()) {
-					shipClass = fleet.shipsToPlace()
-					        .get(shipIdToPlace);
+			Try<Integer> shipId = Try.of(() -> reader.nextInt());
+			if (shipId.isSuccess()) {
+				Try<ShipClass> shipTry = Try.of(() -> shipsToPlace.get(shipId.get()));
+				if (shipTry.isSuccess()) {
+					shipClass = shipTry.get();
 					shipToPlaceChecker = true;
-					return shipClass;
 				} else {
-					System.out.printf(ConsoleView.error, "Please select valid Placement mode");
+					System.out.printf(ConsoleView.error, "Please select valid Ship to place");
 				}
 			} else {
 				System.out.printf(ConsoleView.error, "Enter valid valid integer value");
 				reader.next();
 			}
-		}
-		return null;
 
+		}
+		return shipClass;
 	}
 
 	private Point setupPoint(ShipClass shipClass) {
 		boolean pointChecker = false;
+		Either<String, Point> point = new PointImpl.Builder().build();
 		while (pointChecker == false) {
 			view.showShipPositioningView(shipClass);
-			if (reader.hasNext()) {
-				try {
-					Point point = new PointImpl.Builder(reader.next()).build();
+			Try<String> pointTry = Try.of(() -> reader.next());
+			if (pointTry.isSuccess()) {
+				point = new PointImpl.Builder(pointTry.get()).build();
+				if (point.isRight()) {
 					pointChecker = true;
-					return point;
-				} catch (MalformattedException e) {
-					System.out.printf(ConsoleView.error, e.getMessage());
-					pointChecker = false;
+				} else if (point.isLeft()) {
+					System.out.printf(ConsoleView.error, point.getLeft());
 				}
 			} else {
 				reader.next();
 			}
+
 		}
-		return null;
+		return point.get();
 	}
 
 	private Direction setupDirection(ShipClass shipClass) {
 		boolean directionChecker = false;
+		Either<String, Direction> direction = Either.right(Direction.DOWN);
 		while (directionChecker == false) {
 			view.showShipDirectionView(shipClass);
-			if (reader.hasNext()) {
-				try {
-					Direction direction = Direction.getFromShortName(reader.next()
-					        .charAt(0));
+			Try<String> dirTry = Try.of(() -> reader.next());
+			if (dirTry.isSuccess()) {
+				direction = Direction.getFromShortName(dirTry.get()
+				        .charAt(0));
+				if (direction.isRight()) {
 					directionChecker = true;
-					return direction;
-				} catch (MalformattedException e) {
-					System.out.printf(ConsoleView.error, e.getMessage());
-					directionChecker = false;
+				} else {
+					System.out.printf(ConsoleView.error, direction.getLeft());
 				}
 			} else {
 				reader.next();
 			}
 		}
-		return Direction.DOWN;
+		return direction.get();
 	}
 
 	public boolean isReadyToStart() {
@@ -246,64 +243,62 @@ public class ConsoleGame implements Game {
 		                .isAllShipsPlaced();
 	}
 
+	private boolean isGameFinished() {
+		return firstPlayer.hasLost() || secondPlayer.hasLost();
+	}
+
 	private void receiveShot() {
-		try {
-			if (currentPlayer instanceof ConsolePlayer) {
-				view.showShots(currentPlayer.getShots(), currentPlayer.getName());
-				System.out.println(firstPlayer.getShots());
-				firstPlayer.getShots()
-				        .forEach((k, v) -> {
-					        System.out.println("[" + PointDecoder.pointToString(k) + "]-" + v);
-				        });
-			}
-			Point shotPoint = currentPlayer.prepareShot();
-			if (shotPoint.isInsideBoard()) {
-				System.out.println(
-				        "Player " + currentPlayer.getName() + " your shot is " + PointDecoder.pointToString(shotPoint));
-				if (!currentPlayer.isAlreadyShooted(shotPoint)) {
-					Player oponent = getOponent();
-					Optional<Ship> optShip = oponent.getFleet()
-					        .shipAt(shotPoint);
-					optShip.ifPresent(ship -> {
+		if (currentPlayer instanceof ConsolePlayer) {
+			view.showShots(currentPlayer.getShots(), currentPlayer.getName());
+		}
+		Either<String, Point> pointEither = currentPlayer.prepareShot();
+		if (pointEither.isRight()) {
+			Point point = pointEither.get();
+			if (!point.isOutsideBoard()) {
+				if (!currentPlayer.isAlreadyShooted(point)) {
+					Option<Ship> optShip = getOponent().getFleet()
+					        .shipAt(point);
+					// TODO
+					optShip.peek(ship -> {
 						ship.shoot();
 						if (ship.isSunk()) {
 							currentPlayer.setShotSunk(ship);
-							System.out.printf(ConsoleView.cyan, "Yeah, you kill ship " + ship.getShipClass());
-							receiveShot();
+							System.out.printf(ConsoleView.cyan, "Yeah, you kill ship " + ship.getShipClass() + "-"
+							        + ship.getSize() + " at point " + PointDecoder.pointToString(point));
 						} else {
-							currentPlayer.setShot(shotPoint, PointStatus.HIT);
-							System.out.printf(ConsoleView.cyan, "Yeah, you shot ship " + ship.getShipClass());
-							receiveShot();
+							currentPlayer.setShot(point, PointStatus.HIT);
+							System.out.printf(ConsoleView.cyan, "Yeah, you shot ship " + ship.getShipClass() + "-"
+							        + ship.getSize() + " at point " + PointDecoder.pointToString(point));
 						}
-					});
-					if (!optShip.isPresent()) {
-						currentPlayer.setShot(shotPoint, PointStatus.MISS);
-						switchPlayer();
-					}
-
+						receiveShot();
+					})
+					        .onEmpty(() -> setMissAndSwitchPlayer(point));
 				} else {
-					System.out.printf(ConsoleView.error, "You already shot this point. Try one more time");
-					receiveShot();
+					System.out.printf(ConsoleView.error, "You shooted outside board");
+					switchPlayer();
 				}
 			} else {
-				System.out.printf(ConsoleView.error, "Please select point inside board!");
-				receiveShot();
+				System.out.printf(ConsoleView.error, "You shooted outside board");
+				switchPlayer();
 			}
-		} catch (MalformattedException e) {
-			System.out.printf(ConsoleView.error, e.getMessage());
+
+		} else {
+			System.out.printf(ConsoleView.error, pointEither.getLeft());
+			switchPlayer();
 		}
 	}
 
-	private boolean isGameFinished() {
-		return firstPlayer.hasLost() || secondPlayer.hasLost();
+	private void switchPlayer() {
+		currentPlayer = currentPlayer.equals(firstPlayer) ? secondPlayer : firstPlayer;
 	}
 
 	private Player getOponent() {
 		return currentPlayer.equals(firstPlayer) ? secondPlayer : firstPlayer;
 	}
 
-	private void switchPlayer() {
-		currentPlayer = currentPlayer.equals(firstPlayer) ? secondPlayer : firstPlayer;
+	private void setMissAndSwitchPlayer(Point point) {
+		currentPlayer.setShot(point, PointStatus.MISS);
+		switchPlayer();
 	}
 
 	private Player getWinner() {

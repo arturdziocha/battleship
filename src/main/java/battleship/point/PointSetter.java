@@ -1,9 +1,9 @@
-package battleship.point.vavr;
+package battleship.point;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import battleship.direction.vavr.Direction;
+import battleship.direction.Direction;
 import io.vavr.control.Either;
 
 public final class PointSetter {
