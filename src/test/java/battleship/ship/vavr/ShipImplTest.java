@@ -110,7 +110,7 @@ class ShipImplTest {
     }
 
     @Test
-	@DisplayName("When to many shots ship is sunk and return false")
+    @DisplayName("When to many shots ship is sunk and return false")
     void testTooManyHits() {
         destroyer.shoot();
         destroyer.shoot();
@@ -120,39 +120,41 @@ class ShipImplTest {
     }
 
     @Test
-	@DisplayName("When ship is up and to close another ship then return true")
+    @DisplayName("When ship is up and to close another ship then return true")
     void otherShipIsUpAndToCloseReturnTrue() {
         Ship toCloseShip = new ShipImpl.Builder(ShipClass.DESTROYER, new PointImpl.Builder(2, 3).build().get(), Direction.RIGHT).build().get();
         assertTrue(destroyer.toCloseTo(toCloseShip));
     }
-	@Test
-	@DisplayName("When ship is down and to close another ship then return true")
-	void otherShipIsDownAndToCloseReturnTrue(){
-		Ship toCloseShip = new ShipImpl.Builder(ShipClass.DESTROYER, new PointImpl.Builder(4, 3).build().get(), Direction.DOWN).build().get();
-		assertTrue(destroyer.toCloseTo(toCloseShip));
-	}
-	@Test
-	@DisplayName("Get most top position of ship")
+
+    @Test
+    @DisplayName("When ship is down and to close another ship then return true")
+    void otherShipIsDownAndToCloseReturnTrue() {
+        Ship toCloseShip = new ShipImpl.Builder(ShipClass.DESTROYER, new PointImpl.Builder(4, 3).build().get(), Direction.DOWN).build().get();
+        assertTrue(destroyer.toCloseTo(toCloseShip));
+    }
+
+    @Test
+    @DisplayName("Get most top position of ship")
     void getMostTopPosition() {
-		assertEquals(new PointImpl.Builder(3, 3).build().get(), destroyer.getMostTopPosition().get());
+        assertEquals(new PointImpl.Builder(3, 3).build().get(), destroyer.getMostTopPosition().get());
     }
 
     @Test
     @DisplayName("Get most bottom position of ship")
     void getMostBottomPosition() {
-    	assertEquals(new PointImpl.Builder(3, 3).build().get(), destroyer.getMostBottomPosition().get());
+        assertEquals(new PointImpl.Builder(3, 3).build().get(), destroyer.getMostBottomPosition().get());
     }
-    
+
     @Test
     @DisplayName("Get most left position of ship")
     void getMostLeftPosition() {
-    	assertEquals(new PointImpl.Builder(3, 3).build().get(), destroyer.getMostLeftPosition().get());
+        assertEquals(new PointImpl.Builder(3, 3).build().get(), destroyer.getMostLeftPosition().get());
     }
 
     @Test
     @DisplayName("Get most right position of ship")
     void getMostRightPosition() {
-    	assertEquals(new PointImpl.Builder(3, 5).build().get(), destroyer.getMostRightPosition().get());
+        assertEquals(new PointImpl.Builder(3, 5).build().get(), destroyer.getMostRightPosition().get());
     }
 
 }

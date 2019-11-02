@@ -47,20 +47,15 @@ public class FleetImpl implements Fleet {
 	}
 
 	@Override
-	public Either<String, List<Ship>> placeAllShipsRandom() {
+	public void placeAllShipsRandom() {
 		while (!isAllShipsPlaced()) {
 			for (ShipClass shipClass : ShipClass.values()) {
 				Either<String, Ship> ship = new ShipImpl.Builder(shipClass).build();
-				if (ship.isLeft()) {
-					return Either.left(ship.getLeft());
-				}
 				while (placeShip(ship.get()).isLeft()) {
 					ship = new ShipImpl.Builder(shipClass).build();
 				}
 			}
 		}
-		return Either.right(ships);
-
 	}
 
 	@Override
@@ -69,14 +64,14 @@ public class FleetImpl implements Fleet {
 	}
 
 	@Override
-	public Set<ShipClass> shipsToPlace() {
-		Set<ShipClass> shipClasses = shipClasses();
+	public List<ShipClass> shipsToPlace() {
+		List<ShipClass> shipClasses = shipClasses();
 		Set<ShipClass> alreadySet = shipClassesAlreadyInFleet();
 		return shipClasses.removeAll(alreadySet);
 	}
 
 	public boolean isAllShipsPlaced() {
-		Set<ShipClass> allShipClassesSet = shipClasses();
+		Set<ShipClass> allShipClassesSet = TreeSet.of(ShipClass.values());
 		Set<ShipClass> placedSet = shipClassesAlreadyInFleet();
 		return allShipClassesSet.equals(placedSet);
 	}
@@ -117,8 +112,8 @@ public class FleetImpl implements Fleet {
 		return false;
 	}
 
-	private Set<ShipClass> shipClasses() {
-		return TreeSet.of(ShipClass.values());
+	private List<ShipClass> shipClasses() {
+		return List.of(ShipClass.values());
 	}
 
 	private Set<ShipClass> shipClassesAlreadyInFleet() {

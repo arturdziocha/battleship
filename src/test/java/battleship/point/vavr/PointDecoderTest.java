@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import battleship.point.PointImpl;
 import io.vavr.control.Either;
 
 class PointDecoderTest {
@@ -84,7 +83,7 @@ class PointDecoderTest {
     @Test
     @DisplayName("Given column outside board should return Either.left")
     void givenColumnOutsideBoardShouldReturnEitherLeft() {
-        Either<String, String> point = PointDecoder.pointToString(new PointImpl.Builder(99, 99).build());
+        Either<String, String> point = PointDecoder.pointToString(new PointImpl.Builder(99, 99).build().get());
         assertTrue(point.isLeft());
         assertFalse(point.isRight());
         assertEquals("Cannot find Column for this point", point.getLeft());
@@ -93,7 +92,7 @@ class PointDecoderTest {
     @Test
     @DisplayName("Given given good point should return String")
     void givenGoodPointShouldReturnGoodString() {
-        Either<String, String> point = PointDecoder.pointToString(new PointImpl.Builder(3, 1).build());
+        Either<String, String> point = PointDecoder.pointToString(new PointImpl.Builder(3, 1).build().get());
         assertEquals("B4", point.get());
     }
 

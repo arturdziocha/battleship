@@ -4,10 +4,13 @@ import java.util.stream.IntStream;
 
 import battleship.direction.vavr.Direction;
 import battleship.fleet.vavr.Fleet;
+import battleship.player.Player;
 import battleship.point.vavr.Point;
 import battleship.point.vavr.PointDecoder;
+import battleship.point.vavr.PointImpl;
 import battleship.point.vavr.PointStatus;
 import battleship.ship.vavr.ShipClass;
+import io.vavr.collection.Iterator;
 import io.vavr.collection.List;
 import io.vavr.collection.Map;
 
@@ -63,11 +66,13 @@ public class ConsoleView implements View {
 	public void showShipsToPlace(String playerName, List<ShipClass> shipsToPlace) {
 		System.out.printf(yellow, playerName);
 		System.out.printf(cyan, "Please select ship to place");
-		IntStream.range(0, shipsToPlace.size())
-		        .forEach(i -> System.out.println("[" + i + "]" + shipsToPlace.get(i)
-		                .getName()));
-		System.out.printf(blue, ">>>");
-
+		Iterator<ShipClass> shipClassIterator = shipsToPlace.iterator();
+		int i = 0;
+		while (shipClassIterator.hasNext()) {
+			System.out.println("[" + i + "]" + shipClassIterator.get()
+			        .getName());
+			i++;
+		}
 	}
 
 	@Override
@@ -93,10 +98,11 @@ public class ConsoleView implements View {
 
 	@Override
 	public void showFleetShips(Fleet fleet) {
-		PointStatus[][] points = new PointStatus[10][10];
-		IntStream.range(0, 10)
+		int size = PointImpl.BOARD_SIZE;
+		PointStatus[][] points = new PointStatus[size][size];
+		IntStream.range(0, size)
 		        .forEach(row -> {
-			        IntStream.range(0, 10)
+			        IntStream.range(0, size)
 			                .forEach(column -> points[row][column] = PointStatus.EMPTY);
 		        });
 		fleet.getShips()
@@ -107,7 +113,7 @@ public class ConsoleView implements View {
 		        .forEach(point -> points[point.getRow()][point.getColumn()] = PointStatus.OCCUPIED);
 
 		System.out.printf("%-3s", "");
-		List.of(PointDecoder.chars)
+		PointDecoder.chars.take(size)
 		        .forEach(letter -> System.out.printf("%-3s", " " + letter));
 		System.out.println();
 
@@ -133,44 +139,45 @@ public class ConsoleView implements View {
 
 	@Override
 	public void showShots(Map<Point, PointStatus> shots, String playerName) {
+		int size = PointImpl.BOARD_SIZE;
 		System.out.printf(yellow, playerName);
-        System.out.printf(cyan, "This is your shot board");
-        PointStatus[][] shotsBoard = new PointStatus[10][10];
+		System.out.printf(cyan, "This is your shot board");
+		PointStatus[][] shotsBoard = new PointStatus[10][10];
 
-        IntStream.range(0, 10)
-                .forEach(row -> {
-                    IntStream.range(0, 10)
-                            .forEach(column -> shotsBoard[row][column] = PointStatus.EMPTY);
-                });
-        shots.forEach((k, v) -> {
-            shotsBoard[k.getRow()][k.getColumn()] = v;
-        });
-        System.out.printf("%-3s", "");
-        List.of(PointDecoder.chars)
-                .forEach(letter -> System.out.printf("%-3s", " " + letter));
-        System.out.println();
-        IntStream.range(0, 10)
-                .forEach(row -> {
-                    System.out.printf("%-3s", row + 1);
-                    IntStream.range(0, 10)
-                            .forEach(column -> {
-                                System.out.printf("[");
-                                if (shotsBoard[row][column].equals(PointStatus.EMPTY)) {
-                                    System.out.printf(" ");
-                                } else if (shotsBoard[row][column].equals(PointStatus.HIT)) {
-                                    System.out.printf(ConsoleColor.ANSI_CYAN + "%s" + ConsoleColor.ANSI_RESET,
-                                            shotsBoard[row][column].getStatus());
-                                } else if (shotsBoard[row][column].equals(PointStatus.SUNK)) {
-                                    System.out.printf(ConsoleColor.ANSI_RED + "%s" + ConsoleColor.ANSI_RESET,
-                                            shotsBoard[row][column].getStatus());
-                                } else {
-                                    System.out.printf(shotsBoard[row][column].getStatus());
-                                }
-                                System.out.printf("]");
-                            });
-                    System.out.println();
+		IntStream.range(0, 10)
+		        .forEach(row -> {
+			        IntStream.range(0, 10)
+			                .forEach(column -> shotsBoard[row][column] = PointStatus.EMPTY);
+		        });
+		shots.forEach((k, v) -> {
+			shotsBoard[k.getRow()][k.getColumn()] = v;
+		});
+		System.out.printf("%-3s", "");
+		PointDecoder.chars.take(size)
+		        .forEach(letter -> System.out.printf("%-3s", " " + letter));
+		System.out.println();
+		IntStream.range(0, 10)
+		        .forEach(row -> {
+			        System.out.printf("%-3s", row + 1);
+			        IntStream.range(0, 10)
+			                .forEach(column -> {
+				                System.out.printf("[");
+				                if (shotsBoard[row][column].equals(PointStatus.EMPTY)) {
+					                System.out.printf(" ");
+				                } else if (shotsBoard[row][column].equals(PointStatus.HIT)) {
+					                System.out.printf(ConsoleColor.ANSI_CYAN + "%s" + ConsoleColor.ANSI_RESET,
+					                        shotsBoard[row][column].getStatus());
+				                } else if (shotsBoard[row][column].equals(PointStatus.SUNK)) {
+					                System.out.printf(ConsoleColor.ANSI_RED + "%s" + ConsoleColor.ANSI_RESET,
+					                        shotsBoard[row][column].getStatus());
+				                } else {
+					                System.out.printf(shotsBoard[row][column].getStatus());
+				                }
+				                System.out.printf("]");
+			                });
+			        System.out.println();
 
-                });
+		        });
 	}
 
 	@Override
@@ -178,6 +185,12 @@ public class ConsoleView implements View {
 		System.out.printf(yellow, playerName);
 		System.out.printf(cyan, "Please enter a point to shot like 'B1' Column must be between A-J, row between 1-10");
 		System.out.printf(ConsoleView.blue, ">>>");
+	}
+
+	@Override
+	public void showWinner(Player player) {
+		System.out.printf(ConsoleColor.ANSI_RED + "%s" + ConsoleColor.ANSI_RESET, player.getName()
+		        .toUpperCase() + "!!! You are absolutely awesome. Great job");
 
 	}
 

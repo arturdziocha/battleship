@@ -21,6 +21,7 @@ import battleship.ship.ShipClass;
 import battleship.ship.ShipImpl;
 import battleship.view.ConsoleView;
 import battleship.view.View;
+import battleship.view.vavr.ConsoleColor;
 
 public class ConsoleGame implements Game {
 	private Player firstPlayer, secondPlayer, currentPlayer;
@@ -42,8 +43,10 @@ public class ConsoleGame implements Game {
 			while (isGameFinished() == false) {
 				receiveShot();
 			}
-
 		}
+		Player winner = getWinner();
+		System.out.printf(ConsoleColor.ANSI_RED + "%s" + ConsoleColor.ANSI_RESET, winner.getName()
+		        .toUpperCase() + "!!! You are absolutely awesome. Great job");
 	}
 
 	private int setupGameMode() {
@@ -272,7 +275,6 @@ public class ConsoleGame implements Game {
 							System.out.printf(ConsoleView.cyan, "Yeah, you shot ship " + ship.getShipClass());
 							receiveShot();
 						}
-
 					});
 					if (!optShip.isPresent()) {
 						currentPlayer.setShot(shotPoint, PointStatus.MISS);
@@ -302,6 +304,10 @@ public class ConsoleGame implements Game {
 
 	private void switchPlayer() {
 		currentPlayer = currentPlayer.equals(firstPlayer) ? secondPlayer : firstPlayer;
+	}
+
+	private Player getWinner() {
+		return firstPlayer.hasLost() ? secondPlayer : firstPlayer;
 	}
 
 }
