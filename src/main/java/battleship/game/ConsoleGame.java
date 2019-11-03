@@ -99,6 +99,7 @@ public class ConsoleGame implements Game {
 
     private void setupHumanPlayers() {
         firstPlayer = setupPlayer(1);
+        view.showSpace();
         secondPlayer = setupPlayer(2);
 
     }

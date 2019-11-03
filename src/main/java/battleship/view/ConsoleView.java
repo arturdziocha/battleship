@@ -192,7 +192,7 @@ public class ConsoleView implements View {
 
 	@Override
 	public void showSpace() {
-		for (int i = 0; i < 25; i++) {
+		for (int i = 0; i < 15; i++) {
 			System.out.println();
 		}
 	}
