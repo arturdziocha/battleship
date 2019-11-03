@@ -2,6 +2,7 @@ package battleship.player;
 
 import battleship.fleet.Fleet;
 import battleship.point.Point;
+import battleship.point.PointImpl;
 import battleship.point.PointStatus;
 import io.vavr.control.Either;
 
@@ -30,9 +31,12 @@ public class HardComputerPlayer extends AbstractPlayer {
 	}
 
 	@Override
-	public Either<String, Point> prepareShot() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public Either<String, Point> prepareShot() {
+        Either<String, Point> point = new PointImpl.Builder().build();
+        while (isAlreadyShooted(point.get())) {
+            point = new PointImpl.Builder().build();
+        }
+        return point;
+    }
 
 }

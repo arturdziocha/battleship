@@ -6,9 +6,13 @@ import battleship.view.ConsoleView;
 import battleship.view.View;
 
 public class Main {
-	 public static void main(String[] args) {
-	        View view = new ConsoleView();
-	        Game game = new ConsoleGame(view);
-	        game.play();
-	    }
+	public static void main(String[] args) {
+		View view = new ConsoleView();
+		Game game = new ConsoleGame(view);
+		game.setupGame();
+		while (game.isStillGameOn()) {
+			game.play();
+		}
+		game.showWinner();
+	}
 }

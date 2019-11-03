@@ -1,7 +1,12 @@
 package battleship.game;
 
 public interface Game {
-    
-    public void play();
 
+    void play();
+
+    void setupGame();
+
+    boolean isStillGameOn();
+
+    void showWinner();
 }

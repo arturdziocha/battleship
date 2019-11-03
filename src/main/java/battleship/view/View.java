@@ -33,4 +33,5 @@ public interface View {
 	
 	void showWinner(Player player);
 
+    void showSpace();
 }

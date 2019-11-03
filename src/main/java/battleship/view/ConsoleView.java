@@ -28,9 +28,12 @@ public class ConsoleView implements View {
 
 	@Override
 	public void showInstructions() {
-		System.out.println("INSTRUCTIONS\n" + "- Before the game starts you will be asked to place your battleships\n"
+		System.out.println("INSTRUCTIONS\n" + "- If you wan't to close game before end please press Ctr+c\n"
+		        + "- First you have to select game mode\n" + "- Next you will be asked for player names\n"
+		        + "- Next you will be asked for ship placement mode\n"
+		        + "- Before the game starts you will be asked to place your battleships\n"
 		        + "- When the game starts you can select a position on the enemy board to fire on\n"
-		        + "- You cannot fire in the same place twice\n"
+		        + "- You cannot fire outside board\n" + "- You cannot fire in the same place twice\n"
 		        + "- The game is only over when either you or your enemy have no battleships are left\n");
 
 	}
@@ -69,8 +72,8 @@ public class ConsoleView implements View {
 		Iterator<ShipClass> shipClassIterator = shipsToPlace.iterator();
 		int i = 0;
 		while (shipClassIterator.hasNext()) {
-			System.out.println("[" + i + "]" + shipClassIterator.get()
-			        .getName());
+			ShipClass shipClass = shipClassIterator.get();
+			System.out.println("[" + i + "]" + shipClass.getName() + " - " + shipClass.getSize() + " long");
 			i++;
 		}
 	}
@@ -185,6 +188,13 @@ public class ConsoleView implements View {
 		System.out.printf(yellow, playerName);
 		System.out.printf(cyan, "Please enter a point to shot like 'B1' Column must be between A-J, row between 1-10");
 		System.out.printf(ConsoleView.blue, ">>>");
+	}
+
+	@Override
+	public void showSpace() {
+		for (int i = 0; i < 25; i++) {
+			System.out.println();
+		}
 	}
 
 	@Override

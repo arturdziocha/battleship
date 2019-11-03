@@ -26,294 +26,292 @@ import io.vavr.control.Try;
 
 public class ConsoleGame implements Game {
 
-	private Player firstPlayer, secondPlayer, currentPlayer;
-	private Scanner reader = new Scanner(System.in);
-	private View view;
+    private Player firstPlayer, secondPlayer, currentPlayer;
+    private Scanner reader = new Scanner(System.in);
+    private View view;
 
-	public ConsoleGame(View view) {
-		this.view = view;
-	}
+    public ConsoleGame(View view) {
+        this.view = view;
+    }
 
-	@Override
-	public void play() {
-		view.welcomeUsers();
-		view.showInstructions();
-		int gameMode = setupGameMode();
-		setupPlayers(gameMode);
-		currentPlayer = firstPlayer;
-		if (isReadyToStart()) {
-			do {
-				receiveShot();
-			} while (isGameFinished() == false);
-//			while (isGameFinished() == false) {
-//				receiveShot();
-//			}
-			Player winner = getWinner();
-			System.out.printf(ConsoleColor.ANSI_RED + "%s" + ConsoleColor.ANSI_RESET, winner.getName()
-			        .toUpperCase() + "!!! You are absolutely awesome. Great job");
-		}
-		Player winner = getWinner();
-		System.out.printf(ConsoleColor.ANSI_RED + "%s" + ConsoleColor.ANSI_RESET, winner.getName()
-		        .toUpperCase() + "!!! You are absolutely awesome. Great job");
-	}
+    @Override
+    public void setupGame() {
+        view.welcomeUsers();
+        view.showInstructions();
+        int gameMode = setupGameMode();
+        setupPlayers(gameMode);
+        currentPlayer = firstPlayer;
+        view.showSpace();
+    }
 
-	private int setupGameMode() {
-		boolean gameModeChecker = false;
-		int gameMode = -1;
-		while (gameModeChecker == false) {
-			view.showGameMode();
-			Try<Integer> intTry = Try.of(() -> reader.nextInt());
-			if (intTry.isSuccess()) {
-				gameMode = intTry.get();
-				if (gameMode == 0 || gameMode == 1 || gameMode == 2) {
-					gameModeChecker = true;
-				} else {
-					System.out.printf(ConsoleView.error, "Please select valid Game Mode");
-					gameModeChecker = false;
-				}
-			} else {
-				System.out.printf(ConsoleView.error, "Enter valid integer value!\n");
-				reader.next();
-			}
-		}
-		return gameMode;
-	}
+    @Override
+    public void play() {
+        receiveShot();
+    }
 
-	private void setupPlayers(int setupMode) {
+    @Override
+    public boolean isStillGameOn() {
+        return !firstPlayer.hasLost() && !secondPlayer.hasLost();
+    }
 
-		switch (setupMode) {
-		case 0:
-			setupHumanPlayers();
-			break;
-		case 1:
-		case 2:
-			setupHumanWithComputer(setupMode);
-			break;
+    @Override
+    public void showWinner() {
+        Player winner = getWinner();
+        System.out.printf(ConsoleColor.ANSI_RED + "%s" + ConsoleColor.ANSI_RESET, winner.getName()
+                .toUpperCase() + "!!! You are absolutely awesome. Great job");
+    }
 
-		}
-	}
+    private int setupGameMode() {
+        boolean gameModeChecker = false;
+        int gameMode = -1;
+        while (gameModeChecker == false) {
+            view.showGameMode();
+            Try<Integer> intTry = Try.of(() -> reader.nextInt());
+            if (intTry.isSuccess()) {
+                gameMode = intTry.get();
+                if (gameMode == 0 || gameMode == 1 || gameMode == 2) {
+                    gameModeChecker = true;
+                } else {
+                    System.out.printf(ConsoleView.error, "Please select valid Game Mode");
+                    gameModeChecker = false;
+                }
+            } else {
+                System.out.printf(ConsoleView.error, "Enter valid integer value!\n");
+                reader.next();
+            }
+        }
+        return gameMode;
+    }
 
-	private void setupHumanPlayers() {
-		firstPlayer = setupPlayer(1);
-		secondPlayer = setupPlayer(2);
+    private void setupPlayers(int setupMode) {
 
-	}
+        switch (setupMode) {
+            case 0:
+                setupHumanPlayers();
+                break;
+            case 1:
+            case 2:
+                setupHumanWithComputer(setupMode);
+                break;
 
-	private void setupHumanWithComputer(int setupMode) {
-		firstPlayer = setupPlayer(1);
-		Fleet secondPlayerFleet = setupRandomShips(new FleetImpl.Builder().build());
-		secondPlayer = setupMode == 1 ? new EasyComputerPlayer.Builder(secondPlayerFleet).build()
-		        : new HardComputerPlayer.Builder(secondPlayerFleet).build();
-	}
+        }
+    }
 
-	private Player setupPlayer(int playerId) {
-		String playerName = setupName(playerId);
-		Fleet fleet = setupFleet(playerName);
-		return new ConsolePlayer.Builder(playerName, fleet).build();
-	}
+    private void setupHumanPlayers() {
+        firstPlayer = setupPlayer(1);
+        secondPlayer = setupPlayer(2);
 
-	private String setupName(int playerId) {
-		view.showNameSelect(playerId);
-		return reader.next();
-	}
+    }
 
-	private Fleet setupFleet(String playerName) {
-		Fleet fleet = new FleetImpl.Builder().build();
-		int placementMode = setupPlacementMode(playerName);
+    private void setupHumanWithComputer(int setupMode) {
+        firstPlayer = setupPlayer(1);
+        Fleet secondPlayerFleet = setupRandomShips(new FleetImpl.Builder().build());
+        secondPlayer = setupMode == 1 ? new EasyComputerPlayer.Builder(secondPlayerFleet).build()
+                : new HardComputerPlayer.Builder(secondPlayerFleet).build();
+    }
 
-		if (placementMode == 1) {
-			fleet = setupRandomShips(fleet);
-		} else if (placementMode == 0) {
-			fleet = setupConsoleFleet(fleet, playerName);
-		}
-		return fleet;
-	}
+    private Player setupPlayer(int playerId) {
+        String playerName = setupName(playerId);
+        Fleet fleet = setupFleet(playerName);
+        return new ConsolePlayer.Builder(playerName, fleet).build();
+    }
 
-	private int setupPlacementMode(String playerName) {
-		boolean placementModeChecker = false;
-		int placementMode = -1;
-		while (placementModeChecker == false) {
-			view.showShipPlacementModeView(playerName);
-			Try<Integer> intTry = Try.of(() -> reader.nextInt());
-			if (intTry.isSuccess()) {
-				placementMode = intTry.get();
-				if (placementMode == 0 || placementMode == 1) {
-					placementModeChecker = true;
-				} else {
-					System.out.printf(ConsoleView.error, "Please select valid Placement mode");
-				}
-			} else {
-				System.out.printf(ConsoleView.error, "Enter valid valid integer value");
-				reader.next();
-			}
-		}
-		return placementMode;
-	}
+    private String setupName(int playerId) {
+        view.showNameSelect(playerId);
+        return reader.next();
+    }
 
-	private Fleet setupRandomShips(Fleet fleet) {
-		while (!fleet.isAllShipsPlaced()) {
-			fleet.placeAllShipsRandom();
-		}
-		return fleet;
-	}
+    private Fleet setupFleet(String playerName) {
+        Fleet fleet = new FleetImpl.Builder().build();
+        int placementMode = setupPlacementMode(playerName);
 
-	private Fleet setupConsoleFleet(Fleet fleet, String playerName) {
-		while (!fleet.isAllShipsPlaced()) {
-			ShipClass shipClass = setupShipToPlace(fleet, playerName);
-			Point startPoint = setupPoint(shipClass);
-			Direction direction = setupDirection(shipClass);
-			Either<String, Ship> ship = new ShipImpl.Builder(shipClass, startPoint, direction).build();
-			if (ship.isRight()) {
-				Either<String, List<Ship>> placeShip = fleet.placeShip(ship.get());
-				if (placeShip.isLeft()) {
-					System.out.printf(ConsoleView.error, placeShip.getLeft());
-				}
-			} else {
-				System.out.printf(ConsoleView.error, ship.getLeft());
-			}
-		}
-		return fleet;
-	}
+        if (placementMode == 1) {
+            fleet = setupRandomShips(fleet);
+        } else if (placementMode == 0) {
+            fleet = setupConsoleFleet(fleet, playerName);
+        }
+        return fleet;
+    }
 
-	private ShipClass setupShipToPlace(Fleet fleet, String playerName) {
-		ShipClass shipClass = ShipClass.BARCA;
-		boolean shipToPlaceChecker = false;
-		while (shipToPlaceChecker == false) {
-			List<ShipClass> shipsToPlace = fleet.shipsToPlace();
-			view.showFleetShips(fleet);
-			view.showShipsToPlace(playerName, fleet.shipsToPlace());
-			Try<Integer> shipId = Try.of(() -> reader.nextInt());
-			if (shipId.isSuccess()) {
-				Try<ShipClass> shipTry = Try.of(() -> shipsToPlace.get(shipId.get()));
-				if (shipTry.isSuccess()) {
-					shipClass = shipTry.get();
-					shipToPlaceChecker = true;
-				} else {
-					System.out.printf(ConsoleView.error, "Please select valid Ship to place");
-				}
-			} else {
-				System.out.printf(ConsoleView.error, "Enter valid valid integer value");
-				reader.next();
-			}
+    private int setupPlacementMode(String playerName) {
+        boolean placementModeChecker = false;
+        int placementMode = -1;
+        while (placementModeChecker == false) {
+            view.showShipPlacementModeView(playerName);
+            Try<Integer> intTry = Try.of(() -> reader.nextInt());
+            if (intTry.isSuccess()) {
+                placementMode = intTry.get();
+                if (placementMode == 0 || placementMode == 1) {
+                    placementModeChecker = true;
+                } else {
+                    System.out.printf(ConsoleView.error, "Please select valid Placement mode");
+                }
+            } else {
+                System.out.printf(ConsoleView.error, "Enter valid valid integer value");
+                reader.next();
+            }
+        }
+        return placementMode;
+    }
 
-		}
-		return shipClass;
-	}
+    private Fleet setupRandomShips(Fleet fleet) {
+        while (!fleet.isAllShipsPlaced()) {
+            fleet.placeAllShipsRandom();
+        }
+        return fleet;
+    }
 
-	private Point setupPoint(ShipClass shipClass) {
-		boolean pointChecker = false;
-		Either<String, Point> point = new PointImpl.Builder().build();
-		while (pointChecker == false) {
-			view.showShipPositioningView(shipClass);
-			Try<String> pointTry = Try.of(() -> reader.next());
-			if (pointTry.isSuccess()) {
-				point = new PointImpl.Builder(pointTry.get()).build();
-				if (point.isRight()) {
-					pointChecker = true;
-				} else if (point.isLeft()) {
-					System.out.printf(ConsoleView.error, point.getLeft());
-				}
-			} else {
-				reader.next();
-			}
+    private Fleet setupConsoleFleet(Fleet fleet, String playerName) {
+        while (!fleet.isAllShipsPlaced()) {
+            ShipClass shipClass = setupShipToPlace(fleet, playerName);
+            Point startPoint = setupPoint(shipClass);
+            Direction direction = setupDirection(shipClass);
+            Either<String, Ship> ship = new ShipImpl.Builder(shipClass, startPoint, direction).build();
+            if (ship.isRight()) {
+                Either<String, List<Ship>> placeShip = fleet.placeShip(ship.get());
+                if (placeShip.isLeft()) {
+                    System.out.printf(ConsoleView.error, placeShip.getLeft());
+                }
+            } else {
+                System.out.printf(ConsoleView.error, ship.getLeft());
+            }
+        }
+        return fleet;
+    }
 
-		}
-		return point.get();
-	}
+    private ShipClass setupShipToPlace(Fleet fleet, String playerName) {
+        ShipClass shipClass = ShipClass.BARCA;
+        boolean shipToPlaceChecker = false;
+        while (shipToPlaceChecker == false) {
+            List<ShipClass> shipsToPlace = fleet.shipsToPlace();
+            view.showFleetShips(fleet);
+            view.showShipsToPlace(playerName, fleet.shipsToPlace());
+            Try<Integer> shipId = Try.of(() -> reader.nextInt());
+            if (shipId.isSuccess()) {
+                Try<ShipClass> shipTry = Try.of(() -> shipsToPlace.get(shipId.get()));
+                if (shipTry.isSuccess()) {
+                    shipClass = shipTry.get();
+                    shipToPlaceChecker = true;
+                } else {
+                    System.out.printf(ConsoleView.error, "Please select valid Ship to place");
+                }
+            } else {
+                System.out.printf(ConsoleView.error, "Enter valid valid integer value");
+                reader.next();
+            }
 
-	private Direction setupDirection(ShipClass shipClass) {
-		boolean directionChecker = false;
-		Either<String, Direction> direction = Either.right(Direction.DOWN);
-		while (directionChecker == false) {
-			view.showShipDirectionView(shipClass);
-			Try<String> dirTry = Try.of(() -> reader.next());
-			if (dirTry.isSuccess()) {
-				direction = Direction.getFromShortName(dirTry.get()
-				        .charAt(0));
-				if (direction.isRight()) {
-					directionChecker = true;
-				} else {
-					System.out.printf(ConsoleView.error, direction.getLeft());
-				}
-			} else {
-				reader.next();
-			}
-		}
-		return direction.get();
-	}
+        }
+        return shipClass;
+    }
 
-	public boolean isReadyToStart() {
-		return firstPlayer.getFleet()
-		        .isAllShipsPlaced()
-		        && secondPlayer.getFleet()
-		                .isAllShipsPlaced();
-	}
+    private Point setupPoint(ShipClass shipClass) {
+        boolean pointChecker = false;
+        Either<String, Point> point = new PointImpl.Builder().build();
+        while (pointChecker == false) {
+            view.showShipPositioningView(shipClass);
+            Try<String> pointTry = Try.of(() -> reader.next());
+            if (pointTry.isSuccess()) {
+                point = new PointImpl.Builder(pointTry.get()).build();
+                if (point.isRight()) {
+                    pointChecker = true;
+                } else if (point.isLeft()) {
+                    System.out.printf(ConsoleView.error, point.getLeft());
+                }
+            } else {
+                reader.next();
+            }
 
-	private boolean isGameFinished() {
-		return firstPlayer.hasLost() || secondPlayer.hasLost();
-	}
+        }
+        return point.get();
+    }
 
-	private void receiveShot() {
-		if (currentPlayer instanceof ConsolePlayer) {
-			view.showShots(currentPlayer.getShots(), currentPlayer.getName());
-		}
-		Either<String, Point> pointEither = currentPlayer.prepareShot();
-		if (pointEither.isRight()) {
-			Point point = pointEither.get();
-			if (!point.isOutsideBoard()) {
-				if (!currentPlayer.isAlreadyShooted(point)) {
-					Option<Ship> optShip = getOponent().getFleet()
-					        .shipAt(point);
-					// TODO
-					optShip.peek(ship -> {
-						ship.shoot();
-						if (ship.isSunk()) {
-							currentPlayer.setShotSunk(ship);
-							System.out.printf(ConsoleView.cyan,
-							        "Yeah, you kill ship " + ship.getShipClass() + "-" + ship.getSize() + " at point "
-							                + PointDecoder.pointToString(point)
-							                        .get());
-						} else {
-							currentPlayer.setShot(point, PointStatus.HIT);
-							System.out.printf(ConsoleView.cyan,
-							        "Yeah, you shot ship " + ship.getShipClass() + "-" + ship.getSize() + " at point "
-							                + PointDecoder.pointToString(point)
-							                        .get());
-						}
-						receiveShot();
-					})
-					        .onEmpty(() -> setMissAndSwitchPlayer(point));
-				} else {
-					System.out.printf(ConsoleView.error, currentPlayer.getName() + "!. You already shooted this point");
-					switchPlayer();
-					receiveShot();
-				}
-			} else {
-				System.out.printf(ConsoleView.error, currentPlayer.getName() + "!. You shooted outside board");
-				switchPlayer();
-			}
+    private Direction setupDirection(ShipClass shipClass) {
+        boolean directionChecker = false;
+        Either<String, Direction> direction = Either.right(Direction.DOWN);
+        while (directionChecker == false) {
+            view.showShipDirectionView(shipClass);
+            Try<String> dirTry = Try.of(() -> reader.next());
+            if (dirTry.isSuccess()) {
+                direction = Direction.getFromShortName(dirTry.get()
+                        .charAt(0));
+                if (direction.isRight()) {
+                    directionChecker = true;
+                } else {
+                    System.out.printf(ConsoleView.error, direction.getLeft());
+                }
+            } else {
+                reader.next();
+            }
+        }
+        return direction.get();
+    }
 
-		} else {
-			System.out.printf(ConsoleView.error, pointEither.getLeft());
-			switchPlayer();
-		}
-	}
+    public boolean isReadyToStart() {
+        return firstPlayer.getFleet()
+                .isAllShipsPlaced()
+                && secondPlayer.getFleet()
+                .isAllShipsPlaced();
+    }
 
-	private void switchPlayer() {
-		currentPlayer = currentPlayer.equals(firstPlayer) ? secondPlayer : firstPlayer;
-	}
+    private void receiveShot() {
+        if (currentPlayer instanceof ConsolePlayer) {
+            view.showShots(currentPlayer.getShots(), currentPlayer.getName());
+        }
+        Either<String, Point> pointEither = currentPlayer.prepareShot();
+        if (pointEither.isRight()) {
+            Point point = pointEither.get();
+            if (!point.isOutsideBoard()) {
+                if (!currentPlayer.isAlreadyShooted(point)) {
+                    Option<Ship> optShip = getOpponent().getFleet()
+                            .shipAt(point);
+                    optShip.peek(ship -> {
+                        ship.shoot();
+                        if (ship.isSunk()) {
+                            currentPlayer.setShotSunk(ship);
+                            System.out.printf(ConsoleView.cyan,
+                                    "Yeah, you kill ship " + ship.getShipClass() + "-" + ship.getSize() + " at point "
+                                            + PointDecoder.pointToString(point)
+                                            .get());
+                        } else {
+                            currentPlayer.setShot(point, PointStatus.HIT);
+                            System.out.printf(ConsoleView.cyan,
+                                    "Yeah, you shot ship " + ship.getShipClass() + "-" + ship.getSize() + " at point "
+                                            + PointDecoder.pointToString(point)
+                                            .get());
+                        }
+                    })
+                            .onEmpty(() -> setMissAndSwitchPlayer(point));
+                } else {
+                    System.out.printf(ConsoleView.error, currentPlayer.getName() + "!. You already shooted this point");
+                    switchPlayer();
+                    receiveShot();
+                }
+            } else {
+                System.out.printf(ConsoleView.error, currentPlayer.getName() + "!. You shooted outside board");
+                switchPlayer();
+            }
 
-	private Player getOponent() {
-		return currentPlayer.equals(firstPlayer) ? secondPlayer : firstPlayer;
-	}
+        } else {
+            System.out.printf(ConsoleView.error, pointEither.getLeft());
+            switchPlayer();
+        }
+    }
 
-	private void setMissAndSwitchPlayer(Point point) {
-		currentPlayer.setShot(point, PointStatus.MISS);
-		switchPlayer();
-	}
+    private void switchPlayer() {
+        currentPlayer = currentPlayer.equals(firstPlayer) ? secondPlayer : firstPlayer;
+    }
 
-	private Player getWinner() {
-		return firstPlayer.hasLost() ? secondPlayer : firstPlayer;
-	}
+    private Player getOpponent() {
+        return currentPlayer.equals(firstPlayer) ? secondPlayer : firstPlayer;
+    }
+
+    private void setMissAndSwitchPlayer(Point point) {
+        currentPlayer.setShot(point, PointStatus.MISS);
+        switchPlayer();
+    }
+
+    private Player getWinner() {
+        return firstPlayer.hasLost() ? secondPlayer : firstPlayer;
+    }
 
 }
