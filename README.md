@@ -1,8 +1,9 @@
-#TODO
+#TODO<br>
 HardCompluterPlayer
 
-#Battleship Command Line Game
+#Battleship Command Line Game<br>
 The battleship commandline game written in Java
+
 ##Installation
 Before you start please install gradle.<br>
 Clone repository
