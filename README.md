@@ -17,15 +17,17 @@ Clone repository
 ```bash
 git clone git@github.com:arturdziocha/battleship.git
 ```
+
+## Start Game
+-----
+
 ```bash
 $ cd battleship/
 $ gradle run
 ```
-## Start Game
------
 
 
-Setting up the game...
+## Setting up the game...
 
 ```bash
 Please select game mode
