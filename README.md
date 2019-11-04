@@ -23,7 +23,9 @@ git clone git@github.com:arturdziocha/battleship.git
 
 ```bash
 $ cd battleship/
-$ gradle run
+$ ./gradlew build
+
+$ ./gradlew run
 ```
 
 
