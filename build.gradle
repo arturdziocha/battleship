@@ -18,6 +18,7 @@ run {
     standardInput = System.in
 }
 dependencies {
+	implementation 'org.projectlombok:lombok:1.18.10'
 	compile "io.vavr:vavr:0.9.3"
 	compile 'org.slf4j:slf4j-api:2.0.0-alpha1'
 	compile 'org.slf4j:slf4j-simple:2.0.0-alpha1'
