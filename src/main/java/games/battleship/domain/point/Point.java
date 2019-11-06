@@ -1,4 +1,4 @@
-package battleship.domain.point;
+package games.battleship.domain.point;
 
 import lombok.Builder;
 import lombok.Getter;

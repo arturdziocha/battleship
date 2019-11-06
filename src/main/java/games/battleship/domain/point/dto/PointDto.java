@@ -1,4 +1,4 @@
-package battleship.domain.point.dto;
+package games.battleship.domain.point.dto;
 
 import lombok.Builder;
 import lombok.Getter;

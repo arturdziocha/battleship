@@ -1,4 +1,4 @@
-package battleship.domain.common;
+package games.domain.common;
 import io.vavr.control.Either;
 
 public interface Error {
